@@ -1,7 +1,7 @@
 <?php
 
 // Transformers
-$transformers = ['images', 'alerts', 'includes'];
+$transformers = ['images', 'alerts', 'includes', 'dollarsign', 'versionadded'];
 
 // Docs
 $directory = __DIR__ . '/../docs/';
