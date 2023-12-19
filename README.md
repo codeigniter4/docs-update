@@ -37,6 +37,12 @@ php ./admin/convert.php
 > This will first delete all files and directories in the `./docs` directory, except for the `assets` directory,
 which contains images and other assets used by the documentation.
 
+After that, run [transformers](./admin/how_to_use_transformers.md):
+
+```bash
+php ./admin/transform.php
+```
+
 ### Previewing the converted files
 
 See the [How to Build Docs](./admin/how_to_build_docs.md) document for instructions on building and previewing the converted files.
