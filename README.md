@@ -11,13 +11,17 @@ From there, each section and file will be manually reviewed and cleaned up as ne
 Once the conversion is complete, we will start taking a look at the overall structure of the documentation and see what changes need
 to be made for consistency, clarity, and ease of understanding.
 
+## Requirements
+
+To convert, pandoc is required. To install it, see <https://pandoc.org/installing.html>.
+
 ## Next Steps:
 
-[x] Build converter script to convert all files from rst to md
-[ ] Modify converter to insert code samples and remove unnecessary files.
-[ ] Review and clean up converted files
-[ ] Review and clean up overall structure of documentation
-[ ] Standardize how pages are written to include cohesive structure and examples
+- [x] Build converter script to convert all files from rst to md
+- [ ] Modify converter to insert code samples and remove unnecessary files.
+- [ ] Review and clean up converted files
+- [ ] Review and clean up overall structure of documentation
+- [ ] Standardize how pages are written to include cohesive structure and examples
 
 ## Commands:
 
@@ -29,8 +33,15 @@ To convert all files from rst to md:
 php ./admin/convert.php
 ```
 
-Note: This will first delete all files and directories in the `./docs` directory, except for the `assets` directory,
+> [!NOTE]
+> This will first delete all files and directories in the `./docs` directory, except for the `assets` directory,
 which contains images and other assets used by the documentation.
+
+After that, run [transformers](./admin/how_to_use_transformers.md):
+
+```bash
+php ./admin/transform.php
+```
 
 ### Previewing the converted files
 
