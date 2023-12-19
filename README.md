@@ -11,6 +11,10 @@ From there, each section and file will be manually reviewed and cleaned up as ne
 Once the conversion is complete, we will start taking a look at the overall structure of the documentation and see what changes need
 to be made for consistency, clarity, and ease of understanding.
 
+## Requirements
+
+To convert, pandoc is required. To install it, see <https://pandoc.org/installing.html>.
+
 ## Next Steps:
 
 - [x] Build converter script to convert all files from rst to md
