@@ -1,0 +1,238 @@
+site_name: CodeIgniter
+site_description: Main user guide for the CodeIgniter 4 framework
+
+theme:
+  name: material
+  logo: assets/flame.svg
+  favicon: assets/favicon.ico
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: codeigniter
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - content.code.copy
+    - navigation.footer
+    - content.action.edit
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - search.share
+    - navigation.path
+    - navigation.indexes
+    - toc.follow
+
+extra:
+  homepage: https://codeigniter.com
+  generator: false
+
+  social:
+    - icon: material/github
+      link: https://github.com/codeigniter4/CodeIgniter4
+      name: GitHub
+    - icon: material/twitter
+      link: https://twitter.com/CodeIgniterPhp
+      name: X
+    - icon: material/forum
+      link: https://forum.codeigniter.com
+      name: Forum Codeigniter
+    - icon: material/slack
+      link: https://join.slack.com/t/codeigniterchat/shared_invite/zt-244xrrslc-l_I69AJSi5y2a2RVN~xIdQ
+      name: Slack
+
+repo_url: https://github.com/codeigniter4/CodeIgniter4
+edit_uri: edit/develop/docs/
+copyright: Copyright &copy; 2023 CodeIgniter Foundation.
+
+markdown_extensions:
+  - admonition
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      use_pygments: false
+  - toc:
+      toc_depth: 2
+  - tables
+
+extra_css:
+  - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/styles/github.min.css
+  - assets/css/codeigniter.css
+  - assets/css/codeigniter_dark_mode.css
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/highlight.min.js
+  - assets/js/hljs.js
+
+nav:
+  - Home: index.md
+  - Welcome to CodeIgniter:
+      - intro/index.md
+      - Server Requirements: intro/requirements.md
+      - Credits: intro/credits.md
+      - PSR Compliance: intro/psr.md
+      - License Agreement: license.md
+  - Installation:
+      - installation/index.md
+      - Composer Installation: installation/installing_composer.md
+      - Manual Installation: installation/installing_manual.md
+      - Running Your App: installation/running.md
+      - Troubleshooting: installation/troubleshooting.md
+      - Changelogs: changelogs/index.md
+      - Upgrading from a Previous Version: installation/upgrading.md
+      - CodeIgniter Repositories: installation/repositories.md
+  - Build Your First Application:
+      - tutorial/index.md
+      - Static Pages: tutorial/static_pages.md
+      - News Section: tutorial/news_section.md
+      - Create News Items: tutorial/create_news_items.md
+      - Conclusion: tutorial/conclusion.md
+  - CodeIgniter Overview:
+      - concepts/index.md
+      - Application Structure: concepts/structure.md
+      - Models, Views, and Controllers: concepts/mvc.md
+      - Autoloading Files: concepts/autoloader.md
+      - Services: concepts/services.md
+      - Factories: concepts/factories.md
+      - Working with HTTP Requests: concepts/http.md
+      - Security Guidelines: concepts/security.md
+  - General Topics:
+      - general/index.md
+      - Configuration: general/configuration.md
+      - CodeIgniter URLs: general/urls.md
+      - Helper Function: general/helpers.md
+      - Global Functions and Constants: general/common_functions.md
+      - Logging Information: general/logging.md
+      - Error Handling: general/errors.md
+      - Web Page Caching: general/caching.md
+      - AJAX Requests: general/ajax.md
+      - Code Modules: general/modules.md
+      - Managing Applications: general/managing_apps.md
+      - Handling Multiple Environments: general/environments.md
+  - Controllers and Routing:
+      - incoming/index.md
+      - URI Routing: incoming/routing.md
+      - Controllers: incoming/controllers.md
+      - Controller Filters: incoming/filters.md
+      - HTTP Messages: incoming/message.md
+      - Requests: incoming/request.md
+      - IncomingRequests: incoming/incomingrequest.md
+      - Content Negotiation: incoming/content_negotiation.md
+      - HTTP Method Spoofing: incoming/methodspoofing.md
+      - RESTful Resource Handling: incoming/restful.md
+  - Building Responses:
+      - outgoing/index.md
+      - Views: outgoing/views.md
+      - View Cells: outgoing/view_cells.md
+      - View Renderer: outgoing/view_renderer.md
+      - View Layouts: outgoing/view_layouts.md
+      - View Parser: outgoing/view_parser.md
+      - View Decorators: outgoing/view_decorators.md
+      - HTML Table Class: outgoing/table.md
+      - HTTP Responses: outgoing/response.md
+      - API Response Trait: outgoing/api_responses.md
+      - Localization: outgoing/localization.md
+      - Alternate PHP Syntax for View Files: outgoing/alternative_php.md
+  - Working With Databases:
+      - database/index.md
+      - Quick Start - Usage Examples: database/examples.md
+      - Database Configuration: database/configuration.md
+      - Connecting to a Database: database/connecting.md
+      - Running Queries: database/queries.md
+      - Generating Query Results: database/results.md
+      - Query Helper Functions: database/helpers.md
+      - Query Builder Class: database/query_builder.md
+      - Transactions: database/transactions.md
+      - Getting Metadata: database/metadata.md
+      - Custom Function Calls: database/call_function.md
+      - Database Events: database/events.md
+      - Database Utilities: database/utilities.md
+  - Modeling Data:
+      - models/index.md
+      - Using CodeIgniter's Model: models/model.md
+      - Using Entity Classes: models/entities.md
+  - Managing Databases:
+      - dbmgmt/index.md
+      - Database Manipulation with Forge: dbmgmt/forge.md
+      - Database Migrations: dbmgmt/migration.md
+      - Database Seeding: dbmgmt/seeds.md
+      - Database Commands: dbmgmt/db_commands.md
+  - Library Reference:
+      - libraries/index.md
+      - Caching Driver: libraries/caching.md
+      - Cookies: libraries/cookies.md
+      - CurlRequest Class: libraries/curlrequest.md
+      - Email Class: libraries/email.md
+      - Encryption Service: libraries/encryption.md
+      - Working with Files: libraries/files.md
+      - File Collections: libraries/file_collections.md
+      - HoneyPot Class: libraries/honeypot.md
+      - Image Manipulation Class: libraries/images.md
+      - Pagination: libraries/pagination.md
+      - Publisher: libraries/publisher.md
+      - Security: libraries/security.md
+      - Throttler: libraries/throttler.md
+      - Times and Dates: libraries/time.md
+      - Typography: libraries/typography.md
+      - Working with Uploaded Files: libraries/uploaded_files.md
+      - Working with URIs: libraries/uri.md
+      - User Agent Class: libraries/user_agent.md
+      - Validation: libraries/validation.md
+  - Helpers:
+      - helpers/index.md
+      - Array Helper: helpers/array_helper.md
+      - Cookie Helper: helpers/cookie_helper.md
+      - Date Helper: helpers/date_helper.md
+      - Filesystem Helper: helpers/filesystem_helper.md
+      - Form Helper: helpers/form_helper.md
+      - HTML Helper: helpers/html_helper.md
+      - Inflector Helper: helpers/inflector_helper.md
+      - Number Helper: helpers/number_helper.md
+      - Security Helper: helpers/security_helper.md
+      - Test Helper: helpers/test_helper.md
+      - Text Helper: helpers/text_helper.md
+      - URL Helper: helpers/url_helper.md
+      - XML Helper: helpers/xml_helper.md
+  - Testing:
+      - testing/index.md
+      - Getting Started: testing/overview.md
+      - Database: testing/database.md
+      - Generating Data: testing/fabricator.md
+      - Controller Testing: testing/controllers.md
+      - HTTP Testing: testing/feature.md
+      - Testing Responses: testing/response.md
+      - Benchmarking: testing/benchmark.md
+      - Debugging Your Application: testing/debugging.md
+      - Mocking: testing/mocking.md
+  - Command Line Usage:
+      - cli/index.md
+      - CLI Overview: cli/cli_overview.md
+      - Running Commands via CLI: cli/cli_commands.md
+      - Spark Commands: cli/spark_commands.md
+      - Creating Spark Commands: cli/cli_commands.md
+      - CLI Generators: cli/cli_generators.md
+      - CLI Library: cli/cli_library.md
+      - CLIRequest Class: cli/cli_request.md
+  - Extending CodeIgniter:
+      - extending/index.md
+      - Creating Core System Classes: extending/core_classes.md
+      - Replacing Common Functions: extending/common.md
+      - Events: extending/events.md
+      - Extending the Controller: extending/basecontroller.md
+      - Authentication: extending/authentication.md
+      - Creating Composer Packages: extending/composer_packages.md
+      - Contributing to CodeIgniter: extending/contributing.md
+  - Official Packages: libraries/official_packages.md
