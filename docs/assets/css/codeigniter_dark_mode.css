@@ -68,4 +68,39 @@
         mask-image: var(--md-admonition-icon--note);
     }
 
+    .md-typeset .admonition.warning,
+    .md-typeset details.warning {
+        border-color: #97631e;
+    }
+
+    .md-typeset .warning > .admonition-title:before,
+    .md-typeset .warning > summary:before {
+        background-color: #97631e;
+        -webkit-mask-image: var(--md-admonition-icon--warning);
+        mask-image: var(--md-admonition-icon--warning);
+    }
+
+    .md-typeset .admonition.important,
+    .md-typeset details.important {
+        border-color: #8a3111;
+    }
+
+    .md-typeset .important > .admonition-title:before,
+    .md-typeset .important > summary:before {
+        background-color: #8a3111;
+        -webkit-mask-image: var(--md-admonition-icon--warning);
+        mask-image: var(--md-admonition-icon--warning);
+    }
+
+    .md-typeset .admonition.success,
+    .md-typeset details.success {
+        border-color: #026f2f;
+    }
+
+    .md-typeset .success > .admonition-title:before,
+    .md-typeset .success > summary:before {
+        background-color: #026f2f;
+        -webkit-mask-image: var(--md-admonition-icon--success);
+        mask-image: var(--md-admonition-icon--success);
+    }
 }
