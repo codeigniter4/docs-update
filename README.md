@@ -29,7 +29,8 @@ To convert all files from rst to md:
 php ./admin/convert.php
 ```
 
-Note: This will first delete all files and directories in the `./docs` directory, except for the `assets` directory,
+> [!NOTE]
+> This will first delete all files and directories in the `./docs` directory, except for the `assets` directory,
 which contains images and other assets used by the documentation.
 
 ### Previewing the converted files
