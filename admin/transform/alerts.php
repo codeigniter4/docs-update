@@ -8,5 +8,5 @@ function transform_alerts($data, $folder) {
         return '!!! ' . strtolower($matches[1]);
     }, $data);
 
-    return preg_replace('/^> /m', '    ', $result);
+    return preg_replace('/^>/m', '    ', $result);
 }
