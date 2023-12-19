@@ -11,6 +11,14 @@ From there, each section and file will be manually reviewed and cleaned up as ne
 Once the conversion is complete, we will start taking a look at the overall structure of the documentation and see what changes need
 to be made for consistency, clarity, and ease of understanding.
 
+## Next Steps:
+
+[x] Build converter script to convert all files from rst to md
+[ ] Modify converter to insert code samples and remove unnecessary files.
+[ ] Review and clean up converted files
+[ ] Review and clean up overall structure of documentation
+[ ] Standardize how pages are written to include cohesive structure and examples
+
 ## Commands:
 
 ### Converting all files
