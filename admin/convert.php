@@ -43,7 +43,7 @@ function convert($source, $target) {
             continue;
         }
 
-        $sourceFile = $source . '/' . $file;
+        $sourceFile = realpath($source . '/' . $file);
         $targetFile = $target . '/' . $file;
 
         if (is_dir($sourceFile)) {

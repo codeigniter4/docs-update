@@ -17,7 +17,7 @@ $mdFiles = [];
 foreach ($iterator as $file) {
     if ($file->isFile() && $file->getExtension() == 'md') {
         $mdFiles[] = [
-            'path'   => $file->getPathname(),
+            'path'   => realpath($file->getPathname()),
             'folder' => $iterator->getSubPath(),
         ];
     }
