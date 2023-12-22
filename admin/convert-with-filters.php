@@ -4,15 +4,16 @@ define('SOURCE_DIR', __DIR__ . '/../docs-rst/');
 define('TARGET_DIR', __DIR__ . '/../docs/');
 
 define('BEFORE_FILTERS', [
-    //'classReference',
+    'docLink',
+    'classReference',
 ]);
 define('AFTER_FILTERS', [
-    //'images',
-    //'alerts',
-    //'includes',
-    //'dollarSign',
-    //'versionAdded',
-    //'classReference',
+    'images',
+    'alerts',
+    'includes',
+    'dollarSign',
+    'versionAdded',
+    'classReference',
 ]);
 
 // Load all filters
@@ -130,10 +131,9 @@ function convert($source, $target) {
             echo "Converting $sourceFile\n";
             $targetFile = preg_replace('/\.rst$/', '.md', $targetFile);
             // Work with source copy
-            $sourceFileCopy = $sourceFile;//applyBeforeFilters($sourceFile);
-            echo "pandoc -f rst -t gfm -o $targetFile $sourceFileCopy\n";
-            ///exec("pandoc -f rst -t gfm -o $targetFile $sourceFileCopy");
-            //applyAfterFilters($targetFile, $sourceFileCopy);
+            $sourceFileCopy = applyBeforeFilters($sourceFile);
+            exec("pandoc -f rst -t gfm -o $targetFile $sourceFileCopy");
+            applyAfterFilters($targetFile, $sourceFileCopy);
         } else {
             echo "Copying $sourceFile\n";
             copy($sourceFile, $targetFile);

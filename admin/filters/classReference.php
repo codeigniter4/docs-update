@@ -18,20 +18,22 @@ function before_filter_classReference($data, $folder) {
             $insideBlock = true;
         }
 
+        // Replace class
         if (str_starts_with($line, $stringClass)) {
-            $line = str_replace($stringClass, '##', $line);
+            $line = str_replace($stringClass, '###', $line) . ' Class Reference';
         }
 
+        // Replace method
         if (str_starts_with($line, $stringMethod)) {
-            $line = str_replace($stringMethod, '###', $line);
+            $line = str_replace($stringMethod, '####', $line);
         }
 
         if ($insideBlock) {
             $line = ltrim($line);
 
+            // Replace param
             if (str_starts_with($line, $stringParam)) {
                 $line = str_replace($stringParam, '-', $line);
-                //$line = rtrim($line, ':');
                 $line = preg_replace('/\$([^\s:]+):/', '``\$$1``', $line);
             }
         }
