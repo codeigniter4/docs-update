@@ -1,7 +1,7 @@
 <?php
 
 // Handle including code samples
-function transform_includes($data, $folder) {
+function after_filter_includes($data, $folder) {
     $pattern = '/<div class="literalinclude"\s*(?:lines="(-?\d+(?:-\d*)?)")?>\s*(.*?)\s*<\/div>/s';
 
     return preg_replace_callback($pattern, function($matches) use ($folder) {

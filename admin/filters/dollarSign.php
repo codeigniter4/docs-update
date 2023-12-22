@@ -1,5 +1,5 @@
 <?php
 
-function transform_dollarsign($data) {
+function after_filter_dollarSign($data) {
     return str_replace('\$', '$', $data);
 }

@@ -1,7 +1,7 @@
 <?php
 
 // Handle images
-function transform_images($data, $folder) {
+function after_filter_images($data, $folder) {
     $pattern = '/<img(?:[^>]*)\ssrc="([^"]+)"(?:[^>]*)\salt="([^"]+)"(?:[^>]*)>/';
 
     $replacement = '![${2}](${1})';
