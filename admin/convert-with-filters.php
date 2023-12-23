@@ -4,6 +4,7 @@ define('SOURCE_DIR', __DIR__ . '/../docs-rst/');
 define('TARGET_DIR', __DIR__ . '/../docs/');
 
 define('BEFORE_FILTERS', [
+    'includes',
     'docLink',
     'classReference',
 ]);
@@ -13,6 +14,7 @@ define('AFTER_FILTERS', [
     'includes',
     'dollarSign',
     'versionAdded',
+    'versionDeprecated',
     'classReference',
 ]);
 
@@ -111,10 +113,10 @@ function convert($source, $target) {
         mkdir($target);
     }
 
-//    $sourceFile     = realpath(SOURCE_DIR) . '/models/model.rst';
-//    $targetFile     = realpath(TARGET_DIR) . '/model.md';
+//    $sourceFile     = realpath(SOURCE_DIR) . '/libraries/email.rst';
+//    $targetFile     = realpath(TARGET_DIR) . '/email.md';
 //    $sourceFileCopy = applyBeforeFilters($sourceFile);
-//    exec("pandoc -f rst -t gfm -o $targetFile $sourceFileCopy");
+//    exec("pandoc -f rst -t gfm+hard_line_breaks -o $targetFile $sourceFileCopy");
 //    applyAfterFilters($targetFile, $sourceFileCopy);
 //    exit;
     while (($file = readdir($dir)) !== false) {
@@ -132,7 +134,7 @@ function convert($source, $target) {
             $targetFile = preg_replace('/\.rst$/', '.md', $targetFile);
             // Work with source copy
             $sourceFileCopy = applyBeforeFilters($sourceFile);
-            exec("pandoc -f rst -t gfm -o $targetFile $sourceFileCopy");
+            exec("pandoc -f rst -t gfm+hard_line_breaks -o $targetFile $sourceFileCopy");
             applyAfterFilters($targetFile, $sourceFileCopy);
         } else {
             echo "Copying $sourceFile\n";
