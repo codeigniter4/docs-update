@@ -1,6 +1,6 @@
 <?php
 
-function after_filter_versionAdded($data) {
+function after_filter_versionAdded($data, $folder) {
     $pattern = '/<div class="versionadded">\s*([\d.]+)\s*<\/div>/';
 
     $replacement = '!!! success "Available from version $1"';
