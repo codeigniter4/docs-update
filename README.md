@@ -37,10 +37,10 @@ php ./admin/convert.php
 > This will first delete all files and directories in the `./docs` directory, except for the `assets` directory,
 which contains images and other assets used by the documentation.
 
-After that, run [transformers](./admin/how_to_use_transformers.md):
+You can also run conversion with [filters](./admin/how_to_use_filters):
 
 ```bash
-php ./admin/transform.php
+php ./admin/convert-with-filters.php
 ```
 
 ### Previewing the converted files
