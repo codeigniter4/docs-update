@@ -18,6 +18,7 @@ define('AFTER_FILTERS', [
     'versionDeprecated',
     'classReference',
     'listIndentation',
+    'toctree',
 ]);
 
 // Load all filters
@@ -105,6 +106,16 @@ function clean($target) {
     closedir($dir);
 }
 
+// Core conversion function that handles the actual pandoc conversion
+function convertRstToMd($sourceFile, $targetFile) {
+    echo "Converting $sourceFile to $targetFile\n";
+
+    // Work with source copy
+    $sourceFileCopy = applyBeforeFilters($sourceFile);
+    exec("pandoc -f rst -t commonmark --wrap=none -o $targetFile $sourceFileCopy");
+    applyAfterFilters($targetFile, $sourceFileCopy);
+}
+
 // Recursively scan the source directory,
 // using pandoc to convert any .rst files to .md
 // and copying any other files and directories as-is
@@ -115,12 +126,6 @@ function convert($source, $target) {
         mkdir($target);
     }
 
-//    $sourceFile     = realpath(SOURCE_DIR) . '/libraries/email.rst';
-//    $targetFile     = realpath(TARGET_DIR) . '/email.md';
-//    $sourceFileCopy = applyBeforeFilters($sourceFile);
-//    exec("pandoc -f rst -t gfm+hard_line_breaks -o $targetFile $sourceFileCopy");
-//    applyAfterFilters($targetFile, $sourceFileCopy);
-//    exit;
     while (($file = readdir($dir)) !== false) {
         if ($file == '.' || $file == '..') {
             continue;
@@ -132,12 +137,8 @@ function convert($source, $target) {
         if (is_dir($sourceFile)) {
             convert($sourceFile, $targetFile);
         } else if (preg_match('/\.rst$/', $file)) {
-            echo "Converting $sourceFile\n";
             $targetFile = preg_replace('/\.rst$/', '.md', $targetFile);
-            // Work with source copy
-            $sourceFileCopy = applyBeforeFilters($sourceFile);
-            exec("pandoc -f rst -t commonmark --wrap=none -o $targetFile $sourceFileCopy");
-            applyAfterFilters($targetFile, $sourceFileCopy);
+            convertRstToMd($sourceFile, $targetFile);
         } else {
             echo "Copying $sourceFile\n";
             copy($sourceFile, $targetFile);
@@ -146,6 +147,40 @@ function convert($source, $target) {
     closedir($dir);
 }
 
-clean(TARGET_DIR);
-loadFilters();
-convert(SOURCE_DIR, TARGET_DIR);
+// Convert a single RST file
+function convertSingleFile($filename) {
+    loadFilters();
+
+    // Remove .rst extension if provided
+    $filename = preg_replace('/\.rst$/', '', $filename);
+
+    $sourceFile = realpath(SOURCE_DIR . $filename . '.rst');
+    $targetFile = TARGET_DIR . $filename . '.md';
+
+    if (!file_exists($sourceFile)) {
+        echo "Error: File '$filename.rst' not found in " . SOURCE_DIR . "\n";
+        return false;
+    }
+
+    // Ensure target directory exists
+    $targetDir = dirname($targetFile);
+    if (!is_dir($targetDir)) {
+        mkdir($targetDir, 0755, true);
+    }
+
+    convertRstToMd($sourceFile, $targetFile);
+
+    echo "Conversion completed successfully!\n";
+    return true;
+}
+
+// Check for CLI argument
+if (isset($argv[1])) {
+    $filename = $argv[1];
+    convertSingleFile($filename);
+} else {
+    // Do full conversion
+    clean(TARGET_DIR);
+    loadFilters();
+    convert(SOURCE_DIR, TARGET_DIR);
+}
