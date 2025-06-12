@@ -13,7 +13,7 @@ function after_filter_alerts($data, $folder) {
 
     // HTML version
     if (str_contains($result, '<div class="title">')) {
-        $pattern = '/<div class="(important|note)">\s*<div class="title">\s*(.*?)\s*<\/div>\s*(.*?)\s*<\/div>/s';
+        $pattern = '/<div class="(important|note|warning)">\s*<div class="title">\s*(.*?)\s*<\/div>\s*(.*?)\s*<\/div>/s';
 
         $result = preg_replace_callback($pattern, function ($matches) {
             $class   = $matches[1];
