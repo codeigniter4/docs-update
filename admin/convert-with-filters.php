@@ -7,6 +7,7 @@ define('BEFORE_FILTERS', [
     'includes',
     'docLink',
     'classReference',
+    'listIndentation',
 ]);
 define('AFTER_FILTERS', [
     'images',
@@ -16,6 +17,7 @@ define('AFTER_FILTERS', [
     'versionAdded',
     'versionDeprecated',
     'classReference',
+    'listIndentation',
 ]);
 
 // Load all filters
@@ -134,7 +136,7 @@ function convert($source, $target) {
             $targetFile = preg_replace('/\.rst$/', '.md', $targetFile);
             // Work with source copy
             $sourceFileCopy = applyBeforeFilters($sourceFile);
-            exec("pandoc -f rst -t gfm+hard_line_breaks -o $targetFile $sourceFileCopy");
+            exec("pandoc -f rst -t commonmark --wrap=none -o $targetFile $sourceFileCopy");
             applyAfterFilters($targetFile, $sourceFileCopy);
         } else {
             echo "Copying $sourceFile\n";
