@@ -23,9 +23,9 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
   features:
-    - navigation.instant
-    - navigation.instant.prefetch
-    - navigation.instant.progress
+    # - navigation.instant
+    # - navigation.instant.prefetch
+    # - navigation.instant.progress
     - content.code.copy
     - navigation.footer
     - content.action.edit
@@ -62,7 +62,7 @@ copyright: Copyright &copy; 2023 CodeIgniter Foundation.
 markdown_extensions:
   - admonition
   - pymdownx.snippets:
-      base_path: ['docs']
+      base_path: ["docs"]
       check_paths: false
   - pymdownx.superfences
   - pymdownx.highlight:
@@ -78,6 +78,7 @@ extra_css:
 
 extra_javascript:
   - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/highlight.min.js
+  - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/languages/apache.min.js
   - assets/js/hljs.js
 
 nav:
