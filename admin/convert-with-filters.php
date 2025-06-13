@@ -19,6 +19,7 @@ define('AFTER_FILTERS', [
     'classReference',
     'listIndentation',
     'toctree',
+    'contents',
 ]);
 
 // Load all filters
