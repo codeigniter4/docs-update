@@ -12,6 +12,47 @@
 
     --md-code-bg-color: #282b2d;
 
+    /* Enhanced heading styles for better visibility in dark mode */
+    .md-typeset h1 {
+        font-weight: 700;
+        font-size: 2.2em;
+        color: #f8f9fa;
+        border-bottom: 2px solid #ed6436;
+        padding-bottom: 0.3em;
+    }
+
+    .md-typeset h2 {
+        font-weight: 600;
+        font-size: 1.8em;
+        color: #e9ecef;
+        border-bottom: 1px solid #495057;
+        padding-bottom: 0.2em;
+    }
+
+    .md-typeset h3 {
+        font-weight: 600;
+        font-size: 1.4em;
+        color: #f8f9fa;
+    }
+
+    .md-typeset h4 {
+        font-weight: 600;
+        font-size: 1.2em;
+        color: #e9ecef;
+    }
+
+    .md-typeset h5 {
+        font-weight: 600;
+        font-size: 1.1em;
+        color: #f8f9fa;
+    }
+
+    .md-typeset h6 {
+        font-weight: 600;
+        font-size: 1em;
+        color: #e9ecef;
+    }
+
     .hljs-title,
     .hljs-title.class_,
     .hljs-title.class_.inherited__,
@@ -102,5 +143,30 @@
         background-color: #026f2f;
         -webkit-mask-image: var(--md-admonition-icon--success);
         mask-image: var(--md-admonition-icon--success);
+    }
+
+    /* Table of Contents list styling for dark mode */
+    .md-typeset ul li {
+        margin-bottom: 0; /* Reduce vertical spacing between list items */
+        margin-top: 0;
+    }
+
+    /* Nested list bullet styles */
+    .md-typeset ul {
+        list-style-type: disc; /* Top level uses solid disc */
+    }
+
+    .md-typeset ul ul {
+        list-style-type: circle; /* Second level uses outline circle */
+    }
+
+    .md-typeset ul ul ul {
+        list-style-type: square; /* Third level uses square */
+    }
+
+    /* Additional spacing adjustments for nested lists */
+    .md-typeset ul ul {
+        margin-top: 0;
+        margin-bottom: 0;
     }
 }
