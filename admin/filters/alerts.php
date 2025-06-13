@@ -9,7 +9,12 @@ function after_filter_alerts($data, $folder) {
         return '!!! ' . strtolower($matches[1]);
     }, $data);
 
-    $result = preg_replace('/^>/m', '    ', $result);
+    // Handle blockquotes, but NOT numbered lists
+    // Convert blockquotes to indented content, but preserve numbered lists
+    $result = preg_replace('/^> (?!\d+\.)/m', '    ', $result);
+    
+    // Convert numbered list blockquotes to proper numbered lists
+    $result = preg_replace('/^> (\d+\.\s+)/m', '$1', $result);
 
     // HTML version
     if (str_contains($result, '<div class="title">')) {
