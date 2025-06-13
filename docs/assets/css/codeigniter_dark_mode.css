@@ -93,8 +93,19 @@
         color: #ddba52
     }
 
-    .md-typeset code {
+    /* Inline code styling - orange color like links */
+    .md-typeset p code,
+    .md-typeset li code,
+    .md-typeset td code,
+    .md-typeset th code {
         border: 1px solid #3f4547;
+        color: #ed6436; /* Same orange color as links */
+    }
+
+    /* Code blocks should keep default styling */
+    .md-typeset pre code {
+        border: none;
+        color: inherit; /* Use default code block colors */
     }
 
     .md-typeset .admonition.note,
