@@ -20,6 +20,7 @@ define('AFTER_FILTERS', [
     'listIndentation',
     'toctree',
     'contents',
+    'docLink',
 ]);
 
 // Load all filters

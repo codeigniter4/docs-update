@@ -14,11 +14,11 @@ function after_filter_alerts($data, $folder) {
     // Only convert blockquotes that are specifically code blocks, not admonitions
     $result = preg_replace('/^  > ``` /m', '    ``` ', $result);
     $result = preg_replace('/^  > ([^!])/m', '    $1', $result);
-    
+
     // Handle blockquotes, but NOT numbered lists or admonitions
     // Convert blockquotes to indented content, but preserve numbered lists and admonitions
     $result = preg_replace('/^> (?!\d+\.|!)/', '    ', $result);
-    
+
     // Convert numbered list blockquotes to proper numbered lists
     $result = preg_replace('/^> (\d+\.\s+)/m', '$1', $result);
 
