@@ -79,6 +79,7 @@ extra_css:
 extra_javascript:
   - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/highlight.min.js
   - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/languages/apache.min.js
+  - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/languages/nginx.min.js
   - assets/js/hljs.js
 
 nav:
