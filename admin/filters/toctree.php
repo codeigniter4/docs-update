@@ -2,21 +2,28 @@
 
 // Handle toctree functionality from RST
 function after_filter_toctree($data, $folder) {
-    // Look for HTML toctree divs created by pandoc - handle both with and without <p> tags
-    $pattern = '/<div class="toctree"[^>]*>\s*(?:<p>\s*)?([^<]+?)(?:\s*<\/p>)?\s*<\/div>/s';
+    // Look for HTML toctree divs created by pandoc with --wrap=none
+    $pattern = '/<div class="toctree"[^>]*>\s*(.*?)\s*<\/div>/s';
 
     return preg_replace_callback($pattern, function($matches) use ($folder) {
         $content = trim($matches[1]);
 
-        // Split the content by whitespace to get individual filenames
-        $filenames = preg_split('/\s+/', $content);
+        // Parse the toctree content which can be in two formats:
+        // 1. "Title \<filename\> Title \<filename\> ..." (with titles)
+        // 2. "filename filename filename ..." (bare filenames)
 
         $result = [];
 
-        foreach ($filenames as $filename) {
-            if (empty($filename)) continue;
+        // First try to match title \<filename\> pairs
+        preg_match_all('/([^\\\\]+?)\s*\\\\<([^\\\\>]+?)\\\\>/', $content, $entryMatches, PREG_SET_ORDER);
 
-            $filename = trim($filename);
+        if (count($entryMatches) > 0) {
+            // Handle format: "Title \<filename\>"
+            foreach ($entryMatches as $match) {
+                $title = trim($match[1]);
+                $filename = trim($match[2]);
+
+            if (empty($filename)) continue;
 
             // Check if this is a subdirectory index reference (e.g., "changelogs/index" or "../changelogs/index")
             if ((strpos($filename, '/index') !== false) &&
@@ -28,15 +35,19 @@ function after_filter_toctree($data, $folder) {
                 }
             }
 
-            // Try to get the first header from the target file
-            $headerDisplayName = getFirstHeaderFromFile($filename, $folder);
-
-            // Use the header-based name if we found one, otherwise create a fallback
-            if ($headerDisplayName) {
-                $displayName = $headerDisplayName;
+            // Use the title from the toctree if available, otherwise try to get header from file
+            if (!empty($title)) {
+                $displayName = $title;
             } else {
-                // Create a fallback display name from filename
-                $displayName = ucwords(str_replace(['_', '-'], ' ', basename($filename, '.md')));
+                // Try to get the first header from the target file
+                $headerDisplayName = getFirstHeaderFromFile($filename, $folder);
+
+                if ($headerDisplayName) {
+                    $displayName = $headerDisplayName;
+                } else {
+                    // Create a fallback display name from filename
+                    $displayName = ucwords(str_replace(['_', '-'], ' ', basename($filename, '.md')));
+                }
             }
 
             // Add .md extension if not present and not a relative path
@@ -49,22 +60,68 @@ function after_filter_toctree($data, $folder) {
 
             $result[] = "- [$displayName]($linkPath)";
         }
+        } else {
+            // Handle format: bare filenames separated by whitespace/newlines
+            $lines = preg_split('/\s+/', $content);
+
+            foreach ($lines as $filename) {
+                $filename = trim($filename);
+                if (empty($filename)) continue;
+
+                // Check if this is a subdirectory index reference
+                if ((strpos($filename, '/index') !== false) &&
+                    (strpos($filename, '/') !== false)) {
+                    $subdirToctree = getSubdirectoryToctree($filename, $folder);
+                    if ($subdirToctree) {
+                        $result = array_merge($result, $subdirToctree);
+                        continue;
+                    }
+                }
+
+                // Try to get the first header from the target file
+                $headerDisplayName = getFirstHeaderFromFile($filename, $folder);
+
+                if ($headerDisplayName) {
+                    $displayName = $headerDisplayName;
+                } else {
+                    // Create a fallback display name from filename
+                    $displayName = ucwords(str_replace(['_', '-'], ' ', basename($filename, '.md')));
+                }
+
+                // Add .md extension if not present and not a relative path
+                $linkPath = $filename;
+                if (strpos($filename, '../') !== 0 && !str_ends_with($filename, '.md')) {
+                    $linkPath = $filename . '.md';
+                } elseif (strpos($filename, '../') === 0 && !str_ends_with($filename, '.md')) {
+                    $linkPath = $filename . '.md';
+                }
+
+                $result[] = "- [$displayName]($linkPath)";
+            }
+        }
 
         return implode("\n", $result);
     }, $data);
 }
 
 function getSubdirectoryToctree($subdirPath, $folder) {
-    // Construct the path to the subdirectory's RST index file
-    $rstPath = realpath($folder);
+    // Convert the target folder (docs) back to source folder (docs-rst)
+    $targetPath = realpath($folder);
+
+    // Handle both '/docs/' (middle of path) and '/docs' (end of path)
+    if (str_ends_with($targetPath, '/docs')) {
+        $sourcePath = substr($targetPath, 0, -5) . '/docs-rst';
+    } else {
+        $sourcePath = str_replace('/docs/', '/docs-rst/', $targetPath);
+    }
 
     // Handle relative paths properly
     if (strpos($subdirPath, '../') === 0) {
         // For paths like ../changelogs/index, we need to go up one directory
         $relativePath = substr($subdirPath, 3); // Remove '../'
-        $subdirRstFile = dirname($rstPath) . '/' . $relativePath . '.rst';
+        $subdirRstFile = dirname($sourcePath) . '/' . $relativePath . '.rst';
     } else {
-        $subdirRstFile = $rstPath . '/' . $subdirPath . '.rst';
+        $subdirRstFile = $sourcePath . '/' . $subdirPath . '.rst';
     }
 
     if (!file_exists($subdirRstFile)) {
@@ -86,6 +143,21 @@ function getSubdirectoryToctree($subdirPath, $folder) {
             $trimmed = trim($line);
             if (empty($trimmed)) continue;
 
+            // Parse the toctree entry which can be in format:
+            // 1. "filename" (bare filename)
+            // 2. "Title <filename>" (title with filename in angle brackets)
+            $displayName = '';
+            $filename = '';
+
+            if (preg_match('/^(.+?)\s*<(.+?)>$/', $trimmed, $matches)) {
+                // Format: "Title <filename>"
+                $displayName = trim($matches[1]);
+                $filename = trim($matches[2]);
+            } else {
+                // Format: bare filename
+                $filename = $trimmed;
+            }
+
             // Determine the subdirectory name for building proper paths
             if (strpos($subdirPath, '../') === 0) {
                 // For ../changelogs/index, the subdir is changelogs
@@ -99,25 +171,62 @@ function getSubdirectoryToctree($subdirPath, $folder) {
                 }
             }
 
-            // Try to get the first header from the target file in the subdirectory
-            $subdirFile = $subdirName . '/' . $trimmed;
-            $headerDisplayName = getFirstHeaderFromFile($subdirFile, dirname($folder));
+            // Handle relative paths in filename
+            if (strpos($filename, '../') === 0) {
+                // Check if this is a relative path to another index file
+                if (str_ends_with($filename, '/index')) {
+                    // For relative paths, we need to call getSubdirectoryToctree with the current subdirectory context
+                    // The current context is derived from $subdirPath (e.g., installation/index)
+                    $currentSubdirPath = dirname($subdirPath);
+                    if ($currentSubdirPath === '.') {
+                        $currentSubdirPath = '';
+                    }
 
-            // Use the header-based name if we found one, otherwise create a fallback
-            if ($headerDisplayName) {
-                $displayName = $headerDisplayName;
+                    $contextFolder = $folder;
+                    if (!empty($currentSubdirPath)) {
+                        $contextFolder = $folder . '/' . $currentSubdirPath;
+                    }
+
+                    $subdirToctree = getSubdirectoryToctree($filename, $contextFolder);
+                    if ($subdirToctree) {
+                        $entries = array_merge($entries, $subdirToctree);
+                        continue;
+                    }
+                }
+
+                // For "../license", use the filename as-is for link path
+                $linkPath = $filename;
+                if (!str_ends_with($linkPath, '.md')) {
+                    $linkPath .= '.md';
+                }
+
+                // Use provided display name or get header from file
+                if (!empty($displayName)) {
+                    $finalDisplayName = $displayName;
+                } else {
+                    $headerDisplayName = getFirstHeaderFromFile($filename, dirname($folder));
+                    $finalDisplayName = $headerDisplayName ?: ucwords(str_replace(['_', '-'], ' ', basename($filename, '.md')));
+                }
             } else {
-                // Create a fallback display name from filename
-                $displayName = ucwords(str_replace(['_', '-'], ' ', basename($trimmed, '.md')));
+                // Regular subdirectory file
+                $subdirFile = $subdirName . '/' . $filename;
+
+                // Build the correct link path
+                $linkPath = $subdirFile;
+                if (!str_ends_with($linkPath, '.md')) {
+                    $linkPath .= '.md';
+                }
+
+                // Use provided display name or get header from file
+                if (!empty($displayName)) {
+                    $finalDisplayName = $displayName;
+                } else {
+                    $headerDisplayName = getFirstHeaderFromFile($subdirFile, dirname($folder));
+                    $finalDisplayName = $headerDisplayName ?: ucwords(str_replace(['_', '-'], ' ', basename($filename, '.md')));
+                }
             }
 
-            // Build the correct link path
-            $linkPath = $subdirName . '/' . $trimmed;
-            if (!str_ends_with($linkPath, '.md')) {
-                $linkPath .= '.md';
-            }
-
-            $entries[] = "- [$displayName]($linkPath)";
+            $entries[] = "- [$finalDisplayName]($linkPath)";
         }
 
         return $entries;
