@@ -40,7 +40,7 @@ Every controller you create should extend `BaseController` class. This class pro
 
 ## Constructor
 
-The CodeIgniter's Controller has a special constructor `initController()`. It will be called by the framework after PHP's constructor `__construct()` execution.
+The CodeIgniter's Controller has a special constructor `initController()[. It will be called by the framework after PHP's constructor ]_construct()` execution.
 
 If you want to override the `initController()`, don't forget to add `parent::initController($request, $response, $logger);` in the method:
 
@@ -128,7 +128,7 @@ incoming/controllers/006.php
 The controller also provides the convenience method `validate()`.
 
 !!! warning "Warning"
-    Instead of `validate()`, use `validateData()` to validate POST data only. `validate()` uses `$request->getVar()` which returns `$_GET`, `$_POST` or `$_COOKIE` data in that order (depending on php.ini [request-order](https://www.php.net/manual/en/ini.core.php#ini.request-order)). Newer values override older values. POST values may be overridden by the cookies if they have the same name.
+    Instead of `validate()`, use `validateData()` to validate POST data only. `validate()` uses `$request->getVar()` which returns `$_GET`, `$_POST` or `$_COOKIE` data in that order (depending on php.ini <a href="https://www.php.net/manual/en/ini.core.php#ini.request-order" target="_blank">request-order</a>). Newer values override older values. POST values may be overridden by the cookies if they have the same name.
 
 The method accepts an array of rules in the first parameter, and in the optional second parameter, an array of custom error messages to display if the items are not valid.
 
@@ -597,7 +597,7 @@ If you now browse to your site without specifying any URI segments you'll see th
 !!! note "Note"
     The line `$routes->get('/', 'Home::index');` is an optimization that you will want to use in a "real-world" app. But for demonstration purposes we don't want to use that feature. `$routes->get()` is explained in [URI Routing](#routing)
 
-For more information, please refer to the `routes-configuration-options` section of the [URI Routing](#routing-auto-routing-legacy-configuration-options) documentation.
+For more information, please refer to the `routes-configuration-options[ section of the [URI Routing](#routing-auto-routing-legacy-configuration-options) documentation.
 
 ### Organizing Your Controllers into Sub-directories (Legacy)
 
@@ -628,26 +628,26 @@ CodeIgniter also permits you to map your URIs using its [Defined Route Routing](
 !!! note "Note"
     **Auto Routing (Improved)** does not support this feature intentionally.
 
-As noted above, the second segment of the URI typically determines which method in the controller gets called. CodeIgniter permits you to override this behavior through the use of the `_remap()` method:
+As noted above, the second segment of the URI typically determines which method in the controller gets called. CodeIgniter permits you to override this behavior through the use of the ]remap()` method:
 
 ```php
 --8<--
 incoming/controllers/017.php
 --8<--
-```
+``[
 
 !!! important "Important"
-    If your controller contains a method named `_remap()`, it will **always** get called regardless of what your URI contains. It overrides the normal behavior in which the URI determines which method is called, allowing you to define your own method routing rules.
+    If your controller contains a method named ]remap()[, it will **always** get called regardless of what your URI contains. It overrides the normal behavior in which the URI determines which method is called, allowing you to define your own method routing rules.
 
-The overridden method call (typically the second segment of the URI) will be passed as a parameter to the `_remap()` method:
+The overridden method call (typically the second segment of the URI) will be passed as a parameter to the ]remap()` method:
 
 ```php
 --8<--
 incoming/controllers/018.php
 --8<--
-```
+``[
 
-Any extra segments after the method name are passed into `_remap()`. These parameters can be passed to the method to emulate CodeIgniter's default behavior.
+Any extra segments after the method name are passed into ]remap()`. These parameters can be passed to the method to emulate CodeIgniter's default behavior.
 
 Example:
 

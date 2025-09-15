@@ -219,7 +219,7 @@ database/configuration/009.php
 <td><strong>foreignKeys</strong></td>
 <td><p>true/false (boolean) - Whether or not to enable Foreign Key constraint (<code>SQLite3</code> only).</p>
 !!! important "<p>Important</p>"
-    <p>SQLite3 Foreign Key constraint is disabled by default. See <a href="https://www.sqlite.org/pragma.html#pragma_foreign_keys">SQLite documentation</a>. To enforce Foreign Key constraint, set this config item to true.</p></td>
+    <p>SQLite3 Foreign Key constraint is disabled by default. See <a href="https://www.sqlite.org/pragma.html#pragma_foreign_keys" target="_blank">SQLite documentation</a>. To enforce Foreign Key constraint, set this config item to true.</p></td>
 </tr>
 <tr>
 <td><strong>busyTimeout</strong></td>

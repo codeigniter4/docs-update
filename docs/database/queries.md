@@ -151,7 +151,7 @@ database/queries/010.php
 
 ### 3. $db-\>escapeLikeString()
 
-This method should be used when strings are to be used in LIKE conditions so that LIKE wildcards (`%`, `_`) in the string are also properly escaped.
+This method should be used when strings are to be used in LIKE conditions so that LIKE wildcards (`%[, ]`) in the string are also properly escaped.
 
 ```php
 --8<--

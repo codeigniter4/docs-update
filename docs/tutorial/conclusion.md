@@ -8,6 +8,6 @@ Every intermediate PHP programmer should be able to get the hang of CodeIgniter 
 
 If you still have questions about the framework or your own CodeIgniter code, you can:
 
-- Check out our [Forum](https://forum.codeigniter.com/)
+- Check out our <a href="https://forum.codeigniter.com/" target="_blank">Forum</a>
 
-- Check out our [Slack](https://join.slack.com/t/codeigniterchat/shared_invite/zt-rl30zw00-obL1Hr1q1ATvkzVkFp8S0Q)
+- Check out our <a href="https://join.slack.com/t/codeigniterchat/shared_invite/zt-rl30zw00-obL1Hr1q1ATvkzVkFp8S0Q" target="_blank">Slack</a>

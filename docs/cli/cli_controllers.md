@@ -62,7 +62,7 @@ If you did it right, you should see "Hello World!" printed.
 
 ``` bash
 $ php index.php tools message "John Smith"
-```
+``[
 
 Here we are passing it an argument in the same way that URL parameters work. "John Smith" is passed as an argument and output is:
 
@@ -70,10 +70,10 @@ Here we are passing it an argument in the same way that URL parameters work. "Jo
 
 ## That's the Basics!
 
-That, in a nutshell, is all there is to know about controllers on the command line. Remember that this is just a normal controller, so routing and `_remap()` works fine.
+That, in a nutshell, is all there is to know about controllers on the command line. Remember that this is just a normal controller, so routing and ]remap()[ works fine.
 
 !!! note "Note"
-    `_remap()` does not work with `auto-routing-improved`.
+    ]remap()` does not work with `auto-routing-improved`.
 
 If you want to make sure running via CLI, check the return value of `is_cli()`.
 

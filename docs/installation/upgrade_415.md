@@ -44,7 +44,7 @@ The types of the following columns in the session table have been changed for op
 
 Update the definition of the session table. See the [Sessions](../libraries/sessions.md) for the new definition.
 
-The change was introduced in v4.1.2. But due to [a bug](https://github.com/codeigniter4/CodeIgniter4/issues/4807), the DatabaseHandler Driver did not work properly.
+The change was introduced in v4.1.2. But due to <a href="https://github.com/codeigniter4/CodeIgniter4/issues/4807" target="_blank">a bug</a>, the DatabaseHandler Driver did not work properly.
 
 ### CSRF Protection
 
@@ -118,7 +118,7 @@ See `applying-filters` for the functionality.
 
 ## Project Files
 
-Numerous files in the project space (root, app, public, writable) received updates. Due to these files being outside of the system scope they will not be changed without your intervention. There are some third-party CodeIgniter modules available to assist with merging changes to the project space: [Explore on Packagist](https://packagist.org/explore/?query=codeigniter4%20updates).
+Numerous files in the project space (root, app, public, writable) received updates. Due to these files being outside of the system scope they will not be changed without your intervention. There are some third-party CodeIgniter modules available to assist with merging changes to the project space: <a href="https://packagist.org/explore/?query=codeigniter4%20updates" target="_blank">Explore on Packagist</a>.
 
 !!! note "Note"
     Except in very rare cases for bug fixes, no changes made to files for the project space will break your application. All changes noted here are optional until the next major version, and any mandatory changes will be covered in the sections above.

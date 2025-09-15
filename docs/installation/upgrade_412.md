@@ -24,7 +24,7 @@ Please refer to the upgrade instructions corresponding to your installation meth
 
 ### current_url() and indexPage
 
-Due to [a bug](https://github.com/codeigniter4/CodeIgniter4/issues/4116) in `current_url()`, the resulting URIs could be incorrect for a project's configuration, most importantly: `indexPage` would *not* be included. Projects using `App::$indexPage` should expect altered values from `current_url()` and all its dependencies (including Response Testing, Pager, Form Helper, Pager, and View Parser). Update your projects accordingly.
+Due to <a href="https://github.com/codeigniter4/CodeIgniter4/issues/4116" target="_blank">a bug</a> in `current_url()`, the resulting URIs could be incorrect for a project's configuration, most importantly: `indexPage` would *not* be included. Projects using `App::$indexPage` should expect altered values from `current_url()` and all its dependencies (including Response Testing, Pager, Form Helper, Pager, and View Parser). Update your projects accordingly.
 
 ### Cache Keys
 
@@ -74,7 +74,7 @@ The tools for testing responses have been consolidated and improved. A new `Test
 
 ## Project Files
 
-Numerous files in the project space (root, app, public, writable) received updates. Due to these files being outside of the system scope they will not be changed without your intervention. There are some third-party CodeIgniter modules available to assist with merging changes to the project space: [Explore on Packagist](https://packagist.org/explore/?query=codeigniter4%20updates).
+Numerous files in the project space (root, app, public, writable) received updates. Due to these files being outside of the system scope they will not be changed without your intervention. There are some third-party CodeIgniter modules available to assist with merging changes to the project space: <a href="https://packagist.org/explore/?query=codeigniter4%20updates" target="_blank">Explore on Packagist</a>.
 
 !!! note "Note"
     Except in very rare cases for bug fixes, no changes made to files for the project space will break your application. All changes noted here are optional until the next major version, and any mandatory changes will be covered in the sections above.

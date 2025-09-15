@@ -355,7 +355,7 @@ libraries/validation/011.php:2:
     This method exists only for backward compatibility. Do not use it in new projects. Even if you are already using it, we recommend that you use another, more appropriate method.
 
 !!! warning "Warning"
-    If you want to validate POST data only, don't use `withRequest()`. This method uses [$request-\>getVar()](#incomingrequest-getting-data) which returns `$_GET`, `$_POST` or `$_COOKIE` data in that order (depending on php.ini [request-order](https://www.php.net/manual/en/ini.core.php#ini.request-order)). Newer values override older values. POST values may be overridden by the cookies if they have the same name.
+    If you want to validate POST data only, don't use `withRequest()`. This method uses [$request-\>getVar()](#incomingrequest-getting-data) which returns `$_GET`, `$_POST` or `$_COOKIE` data in that order (depending on php.ini <a href="https://www.php.net/manual/en/ini.core.php#ini.request-order" target="_blank">request-order</a>). Newer values override older values. POST values may be overridden by the cookies if they have the same name.
 
 One of the most common times you will use the validation library is when validating data that was input from an HTTP Request. If desired, you can pass an instance of the current Request object and it will take all of the input data and set it as the data to be validated:
 
@@ -458,11 +458,11 @@ You can specify the group to use when you call the `run()` method:
 --8<--
 libraries/validation/014.php:2:
 --8<--
-```
+``[
 
 #### How to Save Error Messages
 
-You can also store custom error messages in this configuration file by naming the property the same as the group, and appended with `_errors`. These will automatically be used for any errors when this group is used:
+You can also store custom error messages in this configuration file by naming the property the same as the group, and appended with ]errors`. These will automatically be used for any errors when this group is used:
 
 ```php
 --8<--

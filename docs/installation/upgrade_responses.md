@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- [Output Class Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/libraries/output.html)
+- <a href="http://codeigniter.com/userguide3/libraries/output.html" target="_blank">Output Class Documentation CodeIgniter 3.X</a>
 
 - [HTTP Responses Documentation CodeIgniter 4.X](#/outgoing/response)
 

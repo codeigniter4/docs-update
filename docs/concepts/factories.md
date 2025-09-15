@@ -292,7 +292,7 @@ For example, by default `Factories` assumes that you want to locate a shared ins
 --8<--
 concepts/factories/007.php:2:
 --8<--
-```
+``[
 
 ## Config Caching
 
@@ -307,7 +307,7 @@ To improve performance, Config Caching has been implemented.
 
 - To use this feature, the properties of all Config objects instantiated in Factories must not be modified after instantiation. Put another way, the Config classes must be an immutable or readonly classes.
 
-- By default, every Config class that is cached must implement `__set_state()` method.
+- By default, every Config class that is cached must implement ]_set_state()` method.
 
 ### How It Works
 

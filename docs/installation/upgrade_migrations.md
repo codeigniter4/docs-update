@@ -10,7 +10,7 @@
 
 ## Documentations
 
-- [Database Migrations Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/libraries/migration.html)
+- <a href="http://codeigniter.com/userguide3/libraries/migration.html" target="_blank">Database Migrations Documentation CodeIgniter 3.X</a>
 
 - [Database Migrations Documentation CodeIgniter 4.X](#/dbmgmt/migration)
 

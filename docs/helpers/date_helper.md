@@ -55,9 +55,9 @@ If you do not intend to set your master time reference to any other PHP supporte
 
 - **$default** `string` Default value for initial selection
 
-- **$what** `int` DateTimeZone class constants (see [listIdentifiers](https://www.php.net/manual/en/datetimezone.listidentifiers.php))
+- **$what** `int` DateTimeZone class constants (see <a href="https://www.php.net/manual/en/datetimezone.listidentifiers.php" target="_blank">listIdentifiers</a>)
 
-- **$country** `string` A two-letter ISO 3166-1 compatible country code (see [listIdentifiers](https://www.php.net/manual/en/datetimezone.listidentifiers.php))
+- **$country** `string` A two-letter ISO 3166-1 compatible country code (see <a href="https://www.php.net/manual/en/datetimezone.listidentifiers.php" target="_blank">listIdentifiers</a>)
 
 - **Returns**: Preformatted HTML select field
 

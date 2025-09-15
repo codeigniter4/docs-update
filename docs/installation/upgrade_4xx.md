@@ -80,13 +80,13 @@ To upgrade your project, we figured out two major tasks you have to work on. Fir
 
 - Input  
 
-- CI3's [Input](http://codeigniter.com/userguide3/libraries/input.html) corresponds to CI4's [IncomingRequest](#/incoming/incomingrequest).
+- CI3's <a href="http://codeigniter.com/userguide3/libraries/input.html" target="_blank">Input</a> corresponds to CI4's [IncomingRequest](#/incoming/incomingrequest).
 
 - For historical reasons, CI3 and CI4 used incorrect HTTP method names like "get", "post". Since v4.5.0, CI4 uses the correct HTTP method names like "GET", "POST".
 
 - Output  
 
-- CI3's [Output](http://codeigniter.com/userguide3/libraries/output.html) corresponds to CI4's [Responses](#/outgoing/response).
+- CI3's <a href="http://codeigniter.com/userguide3/libraries/output.html" target="_blank">Output</a> corresponds to CI4's [Responses](#/outgoing/response).
 
 ### Class Loading
 
@@ -112,23 +112,23 @@ To upgrade your project, we figured out two major tasks you have to work on. Fir
 
 - Since v4.3.0, you can autoload helpers by **app/Config/Autoload.php** as well as CI3.
 
-- Some helpers from CodeIgniter 3 no longer exists in Version 4. For all these helpers, you have to find a new way to implement your functions. These helpers are [CAPTCHA Helper](https://www.codeigniter.com/userguide3/helpers/captcha_helper.html), [Email Helper](https://www.codeigniter.com/userguide3/helpers/email_helper.html). [Path Helper](https://www.codeigniter.com/userguide3/helpers/path_helper.html). and [Smiley Helper](https://www.codeigniter.com/userguide3/helpers/smiley_helper.html).
+- Some helpers from CodeIgniter 3 no longer exists in Version 4. For all these helpers, you have to find a new way to implement your functions. These helpers are <a href="https://www.codeigniter.com/userguide3/helpers/captcha_helper.html" target="_blank">CAPTCHA Helper</a>, <a href="https://www.codeigniter.com/userguide3/helpers/email_helper.html" target="_blank">Email Helper</a>. <a href="https://www.codeigniter.com/userguide3/helpers/path_helper.html" target="_blank">Path Helper</a>. and <a href="https://www.codeigniter.com/userguide3/helpers/smiley_helper.html" target="_blank">Smiley Helper</a>.
 
-- [Download Helper](https://www.codeigniter.com/userguide3/helpers/download_helper.html) in CI3 was removed. You need to use Response object where you are using `force_download()`. See `force-file-download`.
+- <a href="https://www.codeigniter.com/userguide3/helpers/download_helper.html" target="_blank">Download Helper</a> in CI3 was removed. You need to use Response object where you are using `force_download()`. See `force-file-download`.
 
-- [Language Helper](https://www.codeigniter.com/userguide3/helpers/language_helper.html) in CI3 was removed. But `lang()` is always available in CI4. See `lang()`.
+- <a href="https://www.codeigniter.com/userguide3/helpers/language_helper.html" target="_blank">Language Helper</a> in CI3 was removed. But `lang()` is always available in CI4. See `lang()`.
 
-- [Typography Helper](https://www.codeigniter.com/userguide3/helpers/typography_helper.html) in CI3 wll be [Typography Library](../general/../libraries/typography.md) in CI4.
+- <a href="https://www.codeigniter.com/userguide3/helpers/typography_helper.html" target="_blank">Typography Helper</a> in CI3 wll be [Typography Library](../general/../libraries/typography.md) in CI4.
 
-- [Directory Helper](https://www.codeigniter.com/userguide3/helpers/directory_helper.html) and [File Helper](https://www.codeigniter.com/userguide3/helpers/file_helper.html) in CI3 will be [Filesystem Helper](../helpers/filesystem_helper.md) in CI4.
+- <a href="https://www.codeigniter.com/userguide3/helpers/directory_helper.html" target="_blank">Directory Helper</a> and <a href="https://www.codeigniter.com/userguide3/helpers/file_helper.html" target="_blank">File Helper</a> in CI3 will be [Filesystem Helper](../helpers/filesystem_helper.md) in CI4.
 
-- [String Helper](https://www.codeigniter.com/userguide3/helpers/string_helper.html) functions in CI3 are included in [Text Helper](../helpers/text_helper.md) in CI4.
+- <a href="https://www.codeigniter.com/userguide3/helpers/string_helper.html" target="_blank">String Helper</a> functions in CI3 are included in [Text Helper](../helpers/text_helper.md) in CI4.
 
 - In CI4, `redirect()` is completely changed from CI3's.  
 
-- [redirect() Documentation CodeIgniter 3.X](https://codeigniter.com/userguide3/helpers/url_helper.html#redirect)
+- <a href="https://codeigniter.com/userguide3/helpers/url_helper.html#redirect" target="_blank">redirect() Documentation CodeIgniter 3.X</a>
 
-- \[redirect() Documentation CodeIgniter 4.X](#../general/common-functions.md#redirect)\_
+- \[redirect() Documentation CodeIgniter 4.X](#../general/common-functions.md#redirect)
 
 - In CI4, `redirect()` returns a `RedirectResponse` instance instead of redirecting and terminating script execution. You must return it from Controllers or Controller Filters.
 
@@ -138,7 +138,7 @@ To upgrade your project, we figured out two major tasks you have to work on. Fir
 
 ### Hooks
 
-- [Hooks](https://www.codeigniter.com/userguide3/general/hooks.html) have been replaced by [Events](../extending/events.md).
+- <a href="https://www.codeigniter.com/userguide3/general/hooks.html" target="_blank">Hooks</a> have been replaced by [Events](../extending/events.md).
 
 - Instead of CI3's `$hook['post_controller_constructor']` you now use `Events::on('post_controller_constructor', ['MyClass', 'MyFunction']);`, with the namespace `CodeIgniter\Events\Events;`.
 
@@ -166,7 +166,7 @@ To upgrade your project, we figured out two major tasks you have to work on. Fir
 
 - Instead of CI3's `$this->load->library('x');` you can now use `$this->x = new \App\Libraries\X();`, following namespaced conventions for your component. Alternatively, you can use [Factories](../concepts/factories.md): `$this->x = \CodeIgniter\Config\Factories::libraries('X');`.
 
-- Some libraries from CodeIgniter 3 no longer exists in Version 4. For all these libraries, you have to find a new way to implement your functions. These libraries are [Calendaring](http://codeigniter.com/userguide3/libraries/calendar.html), [FTP](http://codeigniter.com/userguide3/libraries/ftp.html), [Javascript](http://codeigniter.com/userguide3/libraries/javascript.html), [Shopping Cart](http://codeigniter.com/userguide3/libraries/cart.html), [Trackback](http://codeigniter.com/userguide3/libraries/trackback.html), [XML-RPC /-Server](http://codeigniter.com/userguide3/libraries/xmlrpc.html), and [Zip Encoding](http://codeigniter.com/userguide3/libraries/zip.html).
+- Some libraries from CodeIgniter 3 no longer exists in Version 4. For all these libraries, you have to find a new way to implement your functions. These libraries are <a href="http://codeigniter.com/userguide3/libraries/calendar.html" target="_blank">Calendaring</a>, <a href="http://codeigniter.com/userguide3/libraries/ftp.html" target="_blank">FTP</a>, <a href="http://codeigniter.com/userguide3/libraries/javascript.html" target="_blank">Javascript</a>, <a href="http://codeigniter.com/userguide3/libraries/cart.html" target="_blank">Shopping Cart</a>, <a href="http://codeigniter.com/userguide3/libraries/trackback.html" target="_blank">Trackback</a>, <a href="http://codeigniter.com/userguide3/libraries/xmlrpc.html" target="_blank">XML-RPC /-Server</a>, and <a href="http://codeigniter.com/userguide3/libraries/zip.html" target="_blank">Zip Encoding</a>.
 
 - All the other libraries, which exist in both CodeIgniter versions, can be upgraded with some adjustments. The most important and mostly used libraries received an Upgrade Guide, which will help you with simple steps and examples to adjust your code.
 

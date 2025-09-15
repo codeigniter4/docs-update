@@ -46,7 +46,7 @@ outgoing/localization/001.php
 --8<--
 ```
 
-The value can be any string that your application uses to manage text strings and other formats. It is recommended that a [BCP 47](http://www.rfc-editor.org/rfc/bcp/bcp47.txt) language code is used. This results in language codes like en-US for American English, or fr-FR, for French/France. A more readable introduction to this can be found on the [W3C's site](https://www.w3.org/International/articles/language-tags/).
+The value can be any string that your application uses to manage text strings and other formats. It is recommended that a <a href="http://www.rfc-editor.org/rfc/bcp/bcp47.txt" target="_blank">BCP 47</a> language code is used. This results in language codes like en-US for American English, or fr-FR, for French/France. A more readable introduction to this can be found on the <a href="https://www.w3.org/International/articles/language-tags/" target="_blank">W3C's site</a>.
 
 The system is smart enough to fall back to more generic language codes if an exact match cannot be found. If the locale code was set to `en-US` and we only have language files set up for `en` then those will be used since nothing exists for the more specific `en-US`. If, however, a language directory existed at the **app/Language/en-US** directory then that would be used first.
 
@@ -184,7 +184,7 @@ If the requested language key doesn't exist in the file for the current locale, 
 #### Replacing Parameters
 
 !!! note "Note"
-    The following functions all require the [intl](https://www.php.net/manual/en/book.intl.php) extension to be loaded on your system in order to work. If the extension is not loaded, no replacement will be attempted. A great overview can be found over at [Sitepoint](https://www.sitepoint.com/localization-demystified-understanding-php-intl/).
+    The following functions all require the <a href="https://www.php.net/manual/en/book.intl.php" target="_blank">intl</a> extension to be loaded on your system in order to work. If the extension is not loaded, no replacement will be attempted. A great overview can be found over at <a href="https://www.sitepoint.com/localization-demystified-understanding-php-intl/" target="_blank">Sitepoint</a>.
 
 You can pass an array of values to replace placeholders in the language string as the second parameter to the `lang()` function. This allows for very simple number translations and formatting:
 
@@ -210,7 +210,7 @@ outgoing/localization/014.php
 --8<--
 ```
 
-Obviously, you can do more than just number replacement. According to the [official ICU docs](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classMessageFormat.html#details) for the underlying library, the following types of data can be replaced:
+Obviously, you can do more than just number replacement. According to the <a href="https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classMessageFormat.html#details" target="_blank">official ICU docs</a> for the underlying library, the following types of data can be replaced:
 
 - numbers - integer, currency, percent
 
@@ -266,7 +266,7 @@ So, if you are using the locale `fr-CA`, then a localized message will first be 
 
 ### Message Translations
 
-We have an "official" set of translations in their [own repository](https://github.com/codeigniter4/translations).
+We have an "official" set of translations in their <a href="https://github.com/codeigniter4/translations" target="_blank">own repository</a>.
 
 You could download that repository, and copy its **Language** folder into your **app** folder. The incorporated translations will be automatically picked up because the `App` namespace is mapped to your **app** folder.
 

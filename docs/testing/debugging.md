@@ -11,7 +11,7 @@
 
 ## Replace var_dump
 
-While using XDebug and a good IDE can be indispensable to debug your application, sometimes a quick `var_dump()` is all you need. CodeIgniter makes that even better by bundling in the excellent [Kint](https://kint-php.github.io/kint/) debugging tool for PHP. This goes way beyond your usual tool, providing many alternate pieces of data, like formatting timestamps into recognizable dates, showing you hexcodes as colors, display array data like a table for easy reading, and much, much more.
+While using XDebug and a good IDE can be indispensable to debug your application, sometimes a quick `var_dump()` is all you need. CodeIgniter makes that even better by bundling in the excellent <a href="https://kint-php.github.io/kint/" target="_blank">Kint</a> debugging tool for PHP. This goes way beyond your usual tool, providing many alternate pieces of data, like formatting timestamps into recognizable dates, showing you hexcodes as colors, display array data like a table for easy reading, and much, much more.
 
 ### Enabling Kint
 
@@ -43,7 +43,7 @@ testing/debugging/002.php
 --8<--
 ```
 
-For more information, see [Kint's page](https://kint-php.github.io/kint//).
+For more information, see <a href="https://kint-php.github.io/kint//" target="_blank">Kint's page</a>.
 
 ## The Debug Toolbar
 

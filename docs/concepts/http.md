@@ -28,7 +28,7 @@ The request would look something like this:
 
 This message displays all of the information necessary to know what the client is requesting. It tells the method for the request (GET, POST, DELETE, etc), and the version of HTTP it supports.
 
-The request also includes a number of optional request headers that can contain a wide variety of information such as what languages the client wants the content displayed as, the types of formats the client accepts, and much more. Wikipedia has an article that lists [all header fields](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields) if you want to look it over.
+The request also includes a number of optional request headers that can contain a wide variety of information such as what languages the client wants the content displayed as, the types of formats the client accepts, and much more. Wikipedia has an article that lists <a href="https://en.wikipedia.org/wiki/List_of_HTTP_header_fields" target="_blank">all header fields</a> if you want to look it over.
 
 ### The Response
 
@@ -43,7 +43,7 @@ Once the server receives the request, your application will take that informatio
     . . .
     </html>
 
-The response tells the client what version of the HTTP specification that it's using and, probably most importantly, the status code (200). The status code is one of a number of codes that have been standardized to have a very specific meaning to the client. This can tell them that it was successful (200), or that the page wasn't found (404). Head over to IANA for a [full list of HTTP status codes](https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml).
+The response tells the client what version of the HTTP specification that it's using and, probably most importantly, the status code (200). The status code is one of a number of codes that have been standardized to have a very specific meaning to the client. This can tell them that it was successful (200), or that the page wasn't found (404). Head over to IANA for a <a href="https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml" target="_blank">full list of HTTP status codes</a>.
 
 ## Working with Requests and Responses
 

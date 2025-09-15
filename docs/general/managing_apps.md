@@ -99,7 +99,7 @@ general/managing_apps/005.php
 ```
 
 !!! note "Note"
-    If you install CodeIgniter from the Zip file, the `$systemDirectory` would be `__DIR__ . '/../../../codeigniter4/system'`.
+    If you install CodeIgniter from the Zip file, the `$systemDirectory[ would be ]_DIR__ . '/../../../codeigniter4/system'`.
 
 And modify the `COMPOSER_PATH` constant in **app/Config/Constants.php** inside each of those:
 

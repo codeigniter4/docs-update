@@ -9,7 +9,7 @@
 
 ## Documentations of Library
 
-- [Form Validation Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/libraries/form_validation.html)
+- <a href="http://codeigniter.com/userguide3/libraries/form_validation.html" target="_blank">Form Validation Documentation CodeIgniter 3.X</a>
 
 - [Validation Documentation CodeIgniter 4.X](#/libraries/validation)
 
@@ -17,11 +17,11 @@
 
 - If you want to change validation error display, you have to set CI4 [validation View templates](#validation-customizing-error-display).
 
-- CI4 validation has no [Callbacks](http://www.codeigniter.com/userguide3/libraries/form_validation.html#callbacks-your-own-validation-methods) in CI3. Use [Callable Rules](#validation-using-callable-rule) (since v4.5.0) or [Closure Rules](#validation-using-closure-rule) (since v4.3.0) or [Rule Classes](#validation-using-rule-classes) instead.
+- CI4 validation has no <a href="http://www.codeigniter.com/userguide3/libraries/form_validation.html#callbacks-your-own-validation-methods" target="_blank">Callbacks</a> in CI3. Use [Callable Rules](#validation-using-callable-rule) (since v4.5.0) or [Closure Rules](#validation-using-closure-rule) (since v4.3.0) or [Rule Classes](#validation-using-rule-classes) instead.
 
 - In CI3, Callbacks/Callable rules were prioritized, but in CI4, Closure/Callable Rules are not prioritized, and are checked in the order in which they are listed.
 
-- Since v4.5.0, [Callable Rules](#validation-using-callable-rule) has been introduced, but it is a bit different from CI3's [Callable](http://www.codeigniter.com/userguide3/libraries/form_validation.html#callable-use-anything-as-a-rule).
+- Since v4.5.0, [Callable Rules](#validation-using-callable-rule) has been introduced, but it is a bit different from CI3's <a href="http://www.codeigniter.com/userguide3/libraries/form_validation.html#callable-use-anything-as-a-rule" target="_blank">Callable</a>.
 
 - CI4 validation format rules do not permit empty string.
 

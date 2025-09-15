@@ -6,11 +6,11 @@
 
 ## PHP and Required Extensions
 
-[PHP](https://www.php.net/) version 8.1 or newer is required, with the following PHP extensions are enabled:
+<a href="https://www.php.net/" target="_blank">PHP</a> version 8.1 or newer is required, with the following PHP extensions are enabled:
 
-> - [intl](https://www.php.net/manual/en/intl.requirements.php)
-> - [mbstring](https://www.php.net/manual/en/mbstring.requirements.php)
-> - [json](https://www.php.net/manual/en/json.requirements.php)
+> - <a href="https://www.php.net/manual/en/intl.requirements.php" target="_blank">intl</a>
+> - <a href="https://www.php.net/manual/en/mbstring.requirements.php" target="_blank">mbstring</a>
+> - <a href="https://www.php.net/manual/en/json.requirements.php" target="_blank">json</a>
 
 !!! warning "Warning"
     The end of life date for PHP 7.4 was November 28, 2022. If you are still using PHP 7.4, you should upgrade immediately. The end of life date for PHP 8.0 will be November 26, 2023.
@@ -19,23 +19,23 @@
 
 The following PHP extensions should be enabled on your server:
 
-> - [mysqlnd](https://www.php.net/manual/en/mysqlnd.install.php) (if you use MySQL)
-> - [curl](https://www.php.net/manual/en/curl.requirements.php) (if you use [CURLRequest](#/libraries/curlrequest))
-> - [imagick](https://www.php.net/manual/en/imagick.requirements.php) (if you use [Image](#/libraries/images) class ImageMagickHandler)
-> - [gd](https://www.php.net/manual/en/image.requirements.php) (if you use [Image](#/libraries/images) class GDHandler)
-> - [simplexml](https://www.php.net/manual/en/simplexml.requirements.php) (if you format XML)
+> - <a href="https://www.php.net/manual/en/mysqlnd.install.php" target="_blank">mysqlnd</a> (if you use MySQL)
+> - <a href="https://www.php.net/manual/en/curl.requirements.php" target="_blank">curl</a> (if you use [CURLRequest](#/libraries/curlrequest))
+> - <a href="https://www.php.net/manual/en/imagick.requirements.php" target="_blank">imagick</a> (if you use [Image](#/libraries/images) class ImageMagickHandler)
+> - <a href="https://www.php.net/manual/en/image.requirements.php" target="_blank">gd</a> (if you use [Image](#/libraries/images) class GDHandler)
+> - <a href="https://www.php.net/manual/en/simplexml.requirements.php" target="_blank">simplexml</a> (if you format XML)
 
 The following PHP extensions are required when you use a Cache server:
 
-> - [memcache](https://www.php.net/manual/en/memcache.requirements.php) (if you use [Cache](#/libraries/caching) class MemcachedHandler with Memcache)
-> - [memcached](https://www.php.net/manual/en/memcached.requirements.php) (if you use [Cache](#/libraries/caching) class MemcachedHandler with Memcached)
-> - [redis](https://github.com/phpredis/phpredis) (if you use [Cache](#/libraries/caching) class RedisHandler)
+> - <a href="https://www.php.net/manual/en/memcache.requirements.php" target="_blank">memcache</a> (if you use [Cache](#/libraries/caching) class MemcachedHandler with Memcache)
+> - <a href="https://www.php.net/manual/en/memcached.requirements.php" target="_blank">memcached</a> (if you use [Cache](#/libraries/caching) class MemcachedHandler with Memcached)
+> - <a href="https://github.com/phpredis/phpredis" target="_blank">redis</a> (if you use [Cache](#/libraries/caching) class RedisHandler)
 
 The following PHP extensions are required when you use PHPUnit:
 
-> - [dom](https://www.php.net/manual/en/dom.requirements.php) (if you use [TestResponse](#/testing/response) class)
-> - [libxml](https://www.php.net/manual/en/libxml.requirements.php) (if you use [TestResponse](#/testing/response) class)
-> - [xdebug](https://xdebug.org/docs/install) (if you use `CIUnitTestCase::assertHeaderEmitted()`)
+> - <a href="https://www.php.net/manual/en/dom.requirements.php" target="_blank">dom</a> (if you use [TestResponse](#/testing/response) class)
+> - <a href="https://www.php.net/manual/en/libxml.requirements.php" target="_blank">libxml</a> (if you use [TestResponse](#/testing/response) class)
+> - <a href="https://xdebug.org/docs/install" target="_blank">xdebug</a> (if you use `CIUnitTestCase::assertHeaderEmitted()`)
 
 ## Supported Databases
 

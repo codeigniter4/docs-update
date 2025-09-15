@@ -110,7 +110,7 @@ concepts/services/005.php
 
 ## Defining Services
 
-To make services work well, you have to be able to rely on each class having a constant API, or [interface](https://www.php.net/manual/en/language.oop5.interfaces.php), to use. Almost all of CodeIgniter's classes provide an interface that they adhere to. When you want to extend or replace core classes, you only need to ensure you meet the requirements of the interface and you know that the classes are compatible.
+To make services work well, you have to be able to rely on each class having a constant API, or <a href="https://www.php.net/manual/en/language.oop5.interfaces.php" target="_blank">interface</a>, to use. Almost all of CodeIgniter's classes provide an interface that they adhere to. When you want to extend or replace core classes, you only need to ensure you meet the requirements of the interface and you know that the classes are compatible.
 
 For example, the `RouteCollection` class implements the `RouteCollectionInterface`. When you want to create a replacement that provides a different way to create routes, you just need to create a new class that implements the `RouteCollectionInterface`:
 

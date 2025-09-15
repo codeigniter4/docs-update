@@ -70,11 +70,11 @@ E.g.:
 #### CSRF Protection Methods
 
 !!! warning "Warning"
-    If you use [Session](../libraries/./sessions.md), be sure to use Session based CSRF protection. Cookie based CSRF protection will not prevent Same-site attacks. See [GHSA-5hm8-vh6r-2cjq](https://github.com/codeigniter4/shield/security/advisories/GHSA-5hm8-vh6r-2cjq) for details.
+    If you use [Session](../libraries/./sessions.md), be sure to use Session based CSRF protection. Cookie based CSRF protection will not prevent Same-site attacks. See <a href="https://github.com/codeigniter4/shield/security/advisories/GHSA-5hm8-vh6r-2cjq" target="_blank">GHSA-5hm8-vh6r-2cjq</a> for details.
 
-By default, the Cookie based CSRF Protection is used. It is [Double Submit Cookie](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#double-submit-cookie) on OWASP Cross-Site Request Forgery Prevention Cheat Sheet.
+By default, the Cookie based CSRF Protection is used. It is <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#double-submit-cookie" target="_blank">Double Submit Cookie</a> on OWASP Cross-Site Request Forgery Prevention Cheat Sheet.
 
-You can also use Session based CSRF Protection. It is [Synchronizer Token Pattern](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern).
+You can also use Session based CSRF Protection. It is <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern" target="_blank">Synchronizer Token Pattern</a>.
 
 You can set to use the Session based CSRF protection by editing the following config parameter value in **app/Config/Security.php**:
 
@@ -86,7 +86,7 @@ libraries/security/002.php
 
 #### Token Randomization
 
-To mitigate compression side-channel attacks like [BREACH](https://en.wikipedia.org/wiki/BREACH), and prevent an attacker from guessing the CSRF tokens, you can configure token randomization (off by default).
+To mitigate compression side-channel attacks like <a href="https://en.wikipedia.org/wiki/BREACH" target="_blank">BREACH</a>, and prevent an attacker from guessing the CSRF tokens, you can configure token randomization (off by default).
 
 If you enable it, a random mask is added to the token and used to scramble it.
 

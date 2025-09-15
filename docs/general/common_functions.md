@@ -171,7 +171,7 @@ See also the [Using CodeIgniter's Model](#accessing-models).
 
 - **$default** `string|null` The default value to return if $key doesn't exist.
 
-- **$escape** `false|string` An \[escape](##esc)\_ context or false to disable it.
+- **$escape** `false|string` An \[escape](##esc) context or false to disable it.
 
 - **Returns**: The value of the defined key, or the default value.
 

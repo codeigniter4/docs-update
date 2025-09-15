@@ -148,7 +148,7 @@ Namespaced variables use a dot notation to qualify variable names so they will b
 
 #### Namespace Separator
 
-Some environments, e.g., Docker, CloudFormation, do not permit variable name with dots (`.`). In such case, since v4.1.5, you could also use underscores (`_`) as a separator.
+Some environments, e.g., Docker, CloudFormation, do not permit variable name with dots (`.[). In such case, since v4.1.5, you could also use underscores (]`) as a separator.
 
     // namespaced variables with underscore
     app_forceGlobalSecureRequests = true

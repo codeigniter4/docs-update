@@ -107,9 +107,9 @@ Use `CodeIgniter\\HTTP\\Request::withMethod()` instead.
 
 - **$index** `mixed` Value name
 
-- **$filter** `int` The type of filter to apply. A list of filters can be found in [PHP manual](https://www.php.net/manual/en/filter.filters.php).
+- **$filter** `int` The type of filter to apply. A list of filters can be found in <a href="https://www.php.net/manual/en/filter.filters.php" target="_blank">PHP manual</a>\_.
 
-- **$flags** `int|array` Flags to apply. A list of flags can be found in [PHP manual](https://www.php.net/manual/en/filter.filters.flags.php).
+- **$flags** `int|array` Flags to apply. A list of flags can be found in <a href="https://www.php.net/manual/en/filter.filters.flags.php" target="_blank">PHP manual</a>\_.
 
 - **Returns**: `$_SERVER` item value if found, null if not
 
@@ -145,9 +145,9 @@ incoming/request/005.php
 
 - **$index** `mixed` Value name
 
-- **$filter** `int` The type of filter to apply. A list of filters can be found in [PHP manual](https://www.php.net/manual/en/filter.filters.php).
+- **$filter** `int` The type of filter to apply. A list of filters can be found in <a href="https://www.php.net/manual/en/filter.filters.php" target="_blank">PHP manual</a>\_.
 
-- **$flags** `int|array` Flags to apply. A list of flags can be found in [PHP manual](https://www.php.net/manual/en/filter.filters.flags.php).
+- **$flags** `int|array` Flags to apply. A list of flags can be found in <a href="https://www.php.net/manual/en/filter.filters.flags.php" target="_blank">PHP manual</a>\_.
 
 - **Returns**: `$_ENV` item value if found, null if not
 
@@ -191,9 +191,9 @@ Allows manually setting the value of PHP global, like `$_GET`, `$_POST`, etc.
 
 - **$index** `mixed` Value name
 
-- **$filter** `int` The type of filter to apply. A list of filters can be found in [PHP manual](https://www.php.net/manual/en/filter.filters.php).
+- **$filter** `int` The type of filter to apply. A list of filters can be found in <a href="https://www.php.net/manual/en/filter.filters.php" target="_blank">PHP manual</a>\_.
 
-- **$flags** `int|array` Flags to apply. A list of flags can be found in [PHP manual](https://www.php.net/manual/en/filter.filters.flags.php).
+- **$flags** `int|array` Flags to apply. A list of flags can be found in <a href="https://www.php.net/manual/en/filter.filters.flags.php" target="_blank">PHP manual</a>\_.
 
 - **Return type**: `mixed`
 

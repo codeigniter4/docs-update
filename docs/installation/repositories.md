@@ -6,7 +6,7 @@
 
 ## codeigniter4 organization
 
-The CodeIgniter 4 open source project has its own [GitHub organization](https://github.com/codeigniter4).
+The CodeIgniter 4 open source project has its own <a href="https://github.com/codeigniter4" target="_blank">GitHub organization</a>.
 
 There are several development repositories, of interest to potential contributors:
 
@@ -105,29 +105,29 @@ In all the above, the latest version of a repository can be downloaded by select
 
 ## Composer Packages
 
-We also maintain composer-installable packages on [packagist.org](https://packagist.org/search/?query=codeigniter4). These correspond to the repositories mentioned above:
+We also maintain composer-installable packages on <a href="https://packagist.org/search/?query=codeigniter4" target="_blank">packagist.org</a>. These correspond to the repositories mentioned above:
 
-- [codeigniter4/framework](https://packagist.org/packages/codeigniter4/framework)
+- <a href="https://packagist.org/packages/codeigniter4/framework" target="_blank">codeigniter4/framework</a>
 
-- [codeigniter4/appstarter](https://packagist.org/packages/codeigniter4/appstarter)
+- <a href="https://packagist.org/packages/codeigniter4/appstarter" target="_blank">codeigniter4/appstarter</a>
 
-- [codeigniter4/translations](https://packagist.org/packages/codeigniter4/translations)
+- <a href="https://packagist.org/packages/codeigniter4/translations" target="_blank">codeigniter4/translations</a>
 
-- [codeigniter/coding-standard](https://packagist.org/packages/codeigniter/coding-standard)
+- <a href="https://packagist.org/packages/codeigniter/coding-standard" target="_blank">codeigniter/coding-standard </a>
 
-- [codeigniter4/devkit](https://packagist.org/packages/codeigniter4/devkit)
+- <a href="https://packagist.org/packages/codeigniter4/devkit" target="_blank">codeigniter4/devkit</a>
 
-- [codeigniter4/settings](https://packagist.org/packages/codeigniter4/settings)
+- <a href="https://packagist.org/packages/codeigniter4/settings" target="_blank">codeigniter4/settings</a>
 
-- [codeigniter4/shield](https://packagist.org/packages/codeigniter4/shield)
+- <a href="https://packagist.org/packages/codeigniter4/shield" target="_blank">codeigniter4/shield</a>
 
-- [codeigniter4/cache](https://packagist.org/packages/codeigniter4/cache)
+- <a href="https://packagist.org/packages/codeigniter4/cache" target="_blank">codeigniter4/cache</a>
 
 See the [Installation](#/installation/index) page for more information.
 
 ## CodeIgniter 4 Projects
 
-We maintain a [codeigniter4projects](https://github.com/codeigniter4projects) organization on GitHub as well, with projects that are not part of the framework, but which showcase it or make it easier to work with!
+We maintain a <a href="https://github.com/codeigniter4projects" target="_blank">codeigniter4projects</a> organization on GitHub as well, with projects that are not part of the framework, but which showcase it or make it easier to work with!
 
 <table style="width:99%;">
 <colgroup>

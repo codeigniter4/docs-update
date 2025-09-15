@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- [View Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/general/views.html)
+- <a href="http://codeigniter.com/userguide3/general/views.html" target="_blank">View Documentation CodeIgniter 3.X</a>
 
 - [View Documentation CodeIgniter 4.X](#/outgoing/views)
 

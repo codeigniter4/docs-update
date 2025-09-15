@@ -12,4 +12,4 @@ However, the code is not mature and bug fixes may break compatibility in minor r
 
 - System messages defined in **system/Language/en/** are strictly for internal framework use and are not covered by backwards compatibility (BC) promise. If developers are relying on language string output they should be checking it against the function call (`lang('...')`), not the content.
 
-- [Named arguments](https://www.php.net/manual/en/functions.arguments.php#functions.named-arguments) are not covered by backwards compatibility (BC) promise. We may choose to rename method/function parameter names when necessary in order to improve the codebase.
+- <a href="https://www.php.net/manual/en/functions.arguments.php#functions.named-arguments" target="_blank">Named arguments</a> are not covered by backwards compatibility (BC) promise. We may choose to rename method/function parameter names when necessary in order to improve the codebase.

@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- [Controller Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/general/controllers.html)
+- <a href="http://codeigniter.com/userguide3/general/controllers.html" target="_blank">Controller Documentation CodeIgniter 3.X</a>
 
 - [Controller Documentation CodeIgniter 4.X](#/incoming/controllers)
 

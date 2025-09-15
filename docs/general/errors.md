@@ -1,6 +1,6 @@
 # Error Handling
 
-CodeIgniter builds error reporting into your system through Exceptions, both the [SPL collection](https://www.php.net/manual/en/spl.exceptions.php), as well as a few exceptions that are provided by the framework.
+CodeIgniter builds error reporting into your system through Exceptions, both the <a href="https://www.php.net/manual/en/spl.exceptions.php" target="_blank">SPL collection</a>, as well as a few exceptions that are provided by the framework.
 
 Depending on your environment's setup, the default action when an error or exception is thrown is to display a detailed error report unless the application is running under the `production` environment. In the `production` environment, a more generic message is displayed to keep the best user experience for your users.
 
@@ -184,7 +184,7 @@ When an exception implementing `HasExitCodeInterface` is caught by CodeIgniter's
 
 !!! success "Available from version 4.3.0"
 
-By default, all errors reported by `error_reporting()` will be thrown as an `ErrorException` object. These include both `E_DEPRECATED` and `E_USER_DEPRECATED` errors. With the surge in use of PHP 8.1+, many users may see exceptions thrown for [passing null to non-nullable arguments of internal functions](https://wiki.php.net/rfc/deprecate_null_to_scalar_internal_arg). To ease the migration to PHP 8.1, you can instruct CodeIgniter to log the deprecations instead of throwing them.
+By default, all errors reported by `error_reporting()` will be thrown as an `ErrorException` object. These include both `E_DEPRECATED` and `E_USER_DEPRECATED` errors. With the surge in use of PHP 8.1+, many users may see exceptions thrown for <a href="https://wiki.php.net/rfc/deprecate_null_to_scalar_internal_arg" target="_blank">passing null to non-nullable arguments of internal functions</a>. To ease the migration to PHP 8.1, you can instruct CodeIgniter to log the deprecations instead of throwing them.
 
 First, make sure your copy of `Config\Exceptions` is updated with the two new properties and set as follows:
 

@@ -338,7 +338,7 @@ libraries/uploaded_files/015.php
 
 !!! success "Available from version 4.4.0"
 
-Returns the [webkit relative path](https://developer.mozilla.org/en-US/docs/Web/API/File/webkitRelativePath) of the uploaded file when the client has uploaded files via directory upload. In PHP versions below 8.1, this returns `null`
+Returns the <a href="https://developer.mozilla.org/en-US/docs/Web/API/File/webkitRelativePath" target="_blank">webkit relative path</a> of the uploaded file when the client has uploaded files via directory upload. In PHP versions below 8.1, this returns `null`
 
 ```php
 --8<--

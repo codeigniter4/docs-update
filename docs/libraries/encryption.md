@@ -1,7 +1,7 @@
 # Encryption Service
 
 !!! important "Important"
-    DO NOT use this or any other *encryption* library for password storage! Passwords must be *hashed* instead, and you should do that through PHP's [Password Hashing extension](https://www.php.net/password).
+    DO NOT use this or any other *encryption* library for password storage! Passwords must be *hashed* instead, and you should do that through PHP's <a href="https://www.php.net/password" target="_blank">Password Hashing extension </a>.
 
 The Encryption Service provides two-way symmetric (secret key) data encryption. The service will instantiate and/or initialize an encryption **handler** to suit your parameters as explained below.
 
@@ -9,11 +9,11 @@ Encryption Service handlers must implement CodeIgniter's simple `EncrypterInterf
 
 The following PHP extensions are currently supported:
 
-- [OpenSSL](https://www.php.net/openssl)
+- <a href="https://www.php.net/openssl" target="_blank">OpenSSL</a>
 
-- [Sodium](https://www.php.net/manual/en/book.sodium)
+- <a href="https://www.php.net/manual/en/book.sodium" target="_blank">Sodium</a>
 
-This is not a full cryptographic solution. If you need more capabilities, for example, public-key encryption, we suggest you consider direct use of OpenSSL or one of the other [Cryptography Extensions](https://www.php.net/manual/en/refs.crypto.php). A more comprehensive package like [Halite](https://github.com/paragonie/halite) (an O-O package built on libsodium) is another possibility.
+This is not a full cryptographic solution. If you need more capabilities, for example, public-key encryption, we suggest you consider direct use of OpenSSL or one of the other <a href="https://www.php.net/manual/en/refs.crypto.php" target="_blank">Cryptography Extensions</a>. A more comprehensive package like <a href="https://github.com/paragonie/halite" target="_blank">Halite</a> (an O-O package built on libsodium) is another possibility.
 
 !!! note "Note"
     Support for the `MCrypt` extension has been dropped, as that has been deprecated as of PHP 7.2.
@@ -163,7 +163,7 @@ For HMAC message authentication, the Encryption library supports usage of the SH
 </tbody>
 </table>
 
-The reason for not including other popular algorithms, such as MD5 or SHA1 is that they are no longer considered secure enough and as such, we don't want to encourage their usage. If you absolutely need to use them, it is easy to do so via PHP's native [hash_hmac()](http://php.net/manual/en/function.hash-hmac.php) function.
+The reason for not including other popular algorithms, such as MD5 or SHA1 is that they are no longer considered secure enough and as such, we don't want to encourage their usage. If you absolutely need to use them, it is easy to do so via PHP's native <a href="http://php.net/manual/en/function.hash-hmac.php" target="_blank">hash_hmac()</a> function.
 
 Stronger algorithms of course will be added in the future as they appear and become widely available.
 
@@ -244,15 +244,15 @@ Padding is implemented in `SodiumHandler` using libsodium's native `sodium_pad` 
 
 #### OpenSSL Notes
 
-The [OpenSSL](https://www.php.net/openssl) extension has been a standard part of PHP for a long time.
+The <a href="https://www.php.net/openssl" target="_blank">OpenSSL</a> extension has been a standard part of PHP for a long time.
 
 CodeIgniter's OpenSSL handler uses the AES-256-CTR cipher.
 
-The *key* your configuration provides is used to derive two other keys, one for encryption and one for authentication. This is achieved by way of a technique known as an [HMAC-based Key Derivation Function](https://en.wikipedia.org/wiki/HKDF) (HKDF).
+The *key* your configuration provides is used to derive two other keys, one for encryption and one for authentication. This is achieved by way of a technique known as an <a href="https://en.wikipedia.org/wiki/HKDF" target="_blank">HMAC-based Key Derivation Function</a> (HKDF).
 
 #### Sodium Notes
 
-The [Sodium](https://www.php.net/manual/en/book.sodium) extension is bundled by default in PHP as of PHP 7.2.0.
+The <a href="https://www.php.net/manual/en/book.sodium" target="_blank">Sodium</a> extension is bundled by default in PHP as of PHP 7.2.0.
 
 Sodium uses the algorithms XSalsa20 to encrypt, Poly1305 for MAC, and XS25519 for key exchange in sending secret messages in an end-to-end scenario. To encrypt and/or authenticate a string using a shared-key, such as symmetric encryption, Sodium uses the XSalsa20 algorithm to encrypt and HMAC-SHA512 for the authentication.
 

@@ -1,6 +1,6 @@
 # Testing
 
-CodeIgniter has been built to make testing both the framework and your application as simple as possible. Support for [PHPUnit](https://phpunit.de/) is built in, and the framework provides a number of convenient helper methods to make testing every aspect of your application as painless as possible.
+CodeIgniter has been built to make testing both the framework and your application as simple as possible. Support for <a href="https://phpunit.de/" target="_blank">PHPUnit</a>\_ is built in, and the framework provides a number of convenient helper methods to make testing every aspect of your application as painless as possible.
 
 - [System Set Up](#system-set-up)
     - [Installing PHPUnit](#installing-phpunit)
@@ -24,11 +24,11 @@ CodeIgniter has been built to make testing both the framework and your applicati
 
 ### Installing PHPUnit
 
-CodeIgniter uses [PHPUnit](https://phpunit.de/) as the basis for all of its testing. There are two ways to install PHPUnit to use within your system.
+CodeIgniter uses <a href="https://phpunit.de/" target="_blank">PHPUnit</a>\_ as the basis for all of its testing. There are two ways to install PHPUnit to use within your system.
 
 #### Composer
 
-The recommended method is to install it in your project using [Composer](https://getcomposer.org/). While it's possible to install it globally we do not recommend it, since it can cause compatibility issues with other projects on your system as time goes on.
+The recommended method is to install it in your project using <a href="https://getcomposer.org/" target="_blank">Composer</a>\_. While it's possible to install it globally we do not recommend it, since it can cause compatibility issues with other projects on your system as time goes on.
 
 Ensure that you have Composer installed on your system. From the project root (the directory that contains the application and system directories) type the following from the command line:
 
@@ -50,7 +50,7 @@ vendor\bin\phpunit
 
 #### Phar
 
-The other option is to download the .phar file from the [PHPUnit](https://phpunit.de/getting-started/phpunit-9.html) site. This is a standalone file that should be placed within your project root.
+The other option is to download the .phar file from the <a href="https://phpunit.de/getting-started/phpunit-9.html" target="_blank">PHPUnit</a>\_ site. This is a standalone file that should be placed within your project root.
 
 ## Testing Your Application
 
@@ -158,7 +158,7 @@ testing/overview/009.php
 ```
 
 !!! note "Note"
-    the test case with this should be [run as a separate process in PHPunit](https://docs.phpunit.de/en/9.6/annotations.html#runinseparateprocess).
+    the test case with this should be <a href="https://docs.phpunit.de/en/9.6/annotations.html#runinseparateprocess" target="_blank">run as a separate process in PHPunit</a>.
 
 ##### assertHeaderNotEmitted($header, $ignoreCase = false)
 
@@ -171,7 +171,7 @@ testing/overview/010.php
 ```
 
 !!! note "Note"
-    the test case with this should be [run as a separate process in PHPunit](https://docs.phpunit.de/en/9.6/annotations.html#runinseparateprocess).
+    the test case with this should be <a href="https://docs.phpunit.de/en/9.6/annotations.html#runinseparateprocess" target="_blank">run as a separate process in PHPunit</a>.
 
 ##### assertCloseEnough($expected, $actual, $message = '', $tolerance = 1)
 

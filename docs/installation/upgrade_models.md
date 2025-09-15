@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- [Model Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/general/models.html)
+- <a href="http://codeigniter.com/userguide3/general/models.html" target="_blank">Model Documentation CodeIgniter 3.X</a>
 
 - [Model Documentation CodeIgniter 4.X](#/models/model)
 

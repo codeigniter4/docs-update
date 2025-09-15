@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- [Database Reference Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/database/index.html)
+- <a href="http://codeigniter.com/userguide3/database/index.html" target="_blank">Database Reference Documentation CodeIgniter 3.X</a>
 
 - [Working with Databases Documentation CodeIgniter 4.X](#/database/index)
 
@@ -17,7 +17,7 @@
 
 - The functionality in CI3 is basically the same as in CI4.
 
-- [Database Caching](https://www.codeigniter.com/userguide3/database/caching.html) functionality known from CI3 was removed.
+- <a href="https://www.codeigniter.com/userguide3/database/caching.html" target="_blank">Database Caching</a> functionality known from CI3 was removed.
 
 - The method names have changed to camelCase and the [Query Builder](../general/../database/query_builder.md) now needs to be initialized before you can run queries on it.
 
@@ -48,7 +48,7 @@
     > - `$this->db->join('comments', 'comments.id = blogs.id');` to `$builder->join('comments', 'comments.id = blogs.id');`
     > - `$this->db->having('user_id',  45);` to `$builder->having('user_id',  45);`
 
-6.  CI4 does not provide [Database Caching](https://www.codeigniter.com/userguide3/database/caching.html) layer known from CI3, so if you need to cache the result, use [Caching](../libraries/caching.md) instead.
+6.  CI4 does not provide <a href="https://www.codeigniter.com/userguide3/database/caching.html" target="_blank">Database Caching</a> layer known from CI3, so if you need to cache the result, use [Caching](../libraries/caching.md) instead.
 
 ## Code Example
 

@@ -25,7 +25,7 @@ extending/events/001.php
 --8<--
 ```
 
-In this example, whenever the `pre_system` event is executed, an instance of `MyClass` is created and the `myFunction()` method is run. Note that the second parameter can be *any* form of [callable](https://www.php.net/manual/en/function.is-callable.php) that PHP recognizes:
+In this example, whenever the `pre_system` event is executed, an instance of `MyClass` is created and the `myFunction()` method is run. Note that the second parameter can be *any* form of <a href="https://www.php.net/manual/en/function.is-callable.php" target="_blank">callable</a> that PHP recognizes:
 
 ```php
 --8<--

@@ -13,7 +13,7 @@ Please refer to the upgrade instructions corresponding to your installation meth
 
 ## Project Files
 
-A few files in the **project space** (root, app, public, writable) received cosmetic updates. You need not touch these files at all. There are some third-party CodeIgniter modules available to assist with merging changes to the project space: [Explore on Packagist](https://packagist.org/explore/?query=codeigniter4%20updates).
+A few files in the **project space** (root, app, public, writable) received cosmetic updates. You need not touch these files at all. There are some third-party CodeIgniter modules available to assist with merging changes to the project space: <a href="https://packagist.org/explore/?query=codeigniter4%20updates" target="_blank">Explore on Packagist</a>.
 
 ### All Changes
 

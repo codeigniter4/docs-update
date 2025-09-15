@@ -224,7 +224,7 @@ libraries/caching/006.php
 --8<--
 ```
 
-For more information on glob-style syntax, please see [Glob (programming)](https://en.wikipedia.org/wiki/Glob_(programming)#Syntax).
+For more information on glob-style syntax, please see <a href="https://en.wikipedia.org/wiki/Glob\_(programming)#Syntax" target="_blank">Glob (programming)</a>.
 
 #### increment($key\[, $offset = 1]): mixed
 
@@ -370,17 +370,17 @@ libraries/caching/013.php
 --8<--
 ```
 
-For more information on Memcached, please see <https://www.php.net/memcached>.
+For more information on Memcached, please see <a href="https://www.php.net/memcached" target="_blank">https://www.php.net/memcached</a>.
 
 ### WinCache Caching
 
 Under Windows, you can also utilize the WinCache driver.
 
-For more information on WinCache, please see <https://www.php.net/wincache>.
+For more information on WinCache, please see <a href="https://www.php.net/wincache" target="_blank">https://www.php.net/wincache</a>.
 
 ### Redis Caching
 
-Redis is an in-memory key-value store which can operate in LRU cache mode. To use it, you need [Redis server and phpredis PHP extension](https://github.com/phpredis/phpredis).
+Redis is an in-memory key-value store which can operate in LRU cache mode. To use it, you need <a href="https://github.com/phpredis/phpredis" target="_blank">Redis server and phpredis PHP extension</a>.
 
 Config options to connect to redis server stored in the cache configuration file. Available options are:
 
@@ -390,7 +390,7 @@ libraries/caching/014.php
 --8<--
 ```
 
-For more information on Redis, please see <https://redis.io>.
+For more information on Redis, please see <a href="https://redis.io" target="_blank">https://redis.io</a>.
 
 ### Predis Caching
 
@@ -400,7 +400,7 @@ Predis is a flexible and feature-complete PHP client library for the Redis key-v
 composer require predis/predis
 ```
 
-For more information on Redis, please see <https://github.com/nrk/predis>.
+For more information on Redis, please see <a href="https://github.com/nrk/predis" target="_blank">https://github.com/nrk/predis</a>.
 
 ### Dummy Cache
 

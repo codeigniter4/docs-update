@@ -323,4 +323,4 @@ incoming/filters/011.php
 --8<--
 ```
 
-If you want to know about secure headers, see [OWASP Secure Headers Project](https://owasp.org/www-project-secure-headers/).
+If you want to know about secure headers, see <a href="https://owasp.org/www-project-secure-headers/" target="_blank">OWASP Secure Headers Project</a>.

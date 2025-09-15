@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- [Config Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/libraries/config.html)
+- <a href="http://codeigniter.com/userguide3/libraries/config.html" target="_blank">Config Documentation CodeIgniter 3.X</a>
 
 - [Configuration Documentation CodeIgniter 4.X](#/general/configuration)
 

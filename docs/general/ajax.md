@@ -26,7 +26,7 @@ fetch(url, {
 
 ## jQuery
 
-For libraries like jQuery for example, it is not necessary to make explicit the sending of this header, because according to the [official documentation](https://api.jquery.com/jquery.ajax/) it is a standard header for all requests `$.ajax()`. But if you still want to force the shipment to not take risks, just do it as follows:
+For libraries like jQuery for example, it is not necessary to make explicit the sending of this header, because according to the <a href="https://api.jquery.com/jquery.ajax/" target="_blank">official documentation</a> it is a standard header for all requests `$.ajax()`. But if you still want to force the shipment to not take risks, just do it as follows:
 
 ``` javascript
 $.ajax({
@@ -51,7 +51,7 @@ axios.get("your url", {headers: {'Content-Type': 'application/json'}})
 
 ## htmx
 
-You can use [ajax-header](https://htmx.org/extensions/ajax-header/) extension.
+You can use <a href="https://htmx.org/extensions/ajax-header/" target="_blank">ajax-header</a> extension.
 
 ``` html
 <body hx-ext="ajax-header">

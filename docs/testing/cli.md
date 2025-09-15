@@ -121,7 +121,7 @@ testing/overview/020.php
 **PhpStreamWrapper** provides a way to write tests for methods that require user input, such as `CLI::prompt()`, `CLI::wait()`, and `CLI::input()`.
 
 !!! note "Note"
-    The PhpStreamWrapper is a stream wrapper class. If you don't know PHP's stream wrapper, see [The streamWrapper class](https://www.php.net/manual/en/class.streamwrapper.php) in the PHP maual.
+    The PhpStreamWrapper is a stream wrapper class. If you don't know PHP's stream wrapper, see <a href="https://www.php.net/manual/en/class.streamwrapper.php" target="_blank">The streamWrapper class</a> in the PHP maual.
 
 ##### How to Use
 
@@ -132,7 +132,7 @@ testing/overview/020.php
 - `PhpStreamWrapper::setContent()` Set the input data.
 
 !!! important "Important"
-    The PhpStreamWrapper is intended for only testing `php://stdin`. But when you register it, it handles all the [php protocol](https://www.php.net/manual/en/wrappers.php.php) streams, such as `php://stdout`, `php://stderr`, `php://memory`. So it is strongly recommended that `PhpStreamWrapper` be registered/unregistered only when needed. Otherwise, it will interfere with other built-in php streams while registered.
+    The PhpStreamWrapper is intended for only testing `php://stdin`. But when you register it, it handles all the <a href="https://www.php.net/manual/en/wrappers.php.php" target="_blank">php protocol</a> streams, such as `php://stdout`, `php://stderr`, `php://memory`. So it is strongly recommended that `PhpStreamWrapper` be registered/unregistered only when needed. Otherwise, it will interfere with other built-in php streams while registered.
 
 An example demonstrating this inside one of your test cases:
 

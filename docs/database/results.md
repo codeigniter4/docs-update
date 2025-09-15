@@ -191,7 +191,7 @@ database/results/012.php
 
 ## Custom Result Objects
 
-You can have the results returned as an instance of a custom class instead of a `stdClass` or array, as the `getResult()` and `getResultArray()` methods allow. If the class is not already loaded into memory, the Autoloader will attempt to load it. The object will have all values returned from the database set as properties. If these have been declared and are non-public then you should provide a `__set()` method to allow them to be set.
+You can have the results returned as an instance of a custom class instead of a `stdClass` or array, as the `getResult()` and `getResultArray()[ methods allow. If the class is not already loaded into memory, the Autoloader will attempt to load it. The object will have all values returned from the database set as properties. If these have been declared and are non-public then you should provide a ]_set()` method to allow them to be set.
 
 Example:
 

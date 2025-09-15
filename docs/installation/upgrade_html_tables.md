@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- [HTML Table Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/libraries/table.html)
+- <a href="http://codeigniter.com/userguide3/libraries/table.html" target="_blank">HTML Table Documentation CodeIgniter 3.X</a>
 
 - [HTML Table Documentation CodeIgniter 4.X](#/outgoing/table)
 

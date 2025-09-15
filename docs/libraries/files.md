@@ -1,6 +1,6 @@
 # Working with Files
 
-CodeIgniter provides a File class that wraps the [SplFileInfo](https://www.php.net/manual/en/class.splfileinfo.php) class and provides some additional convenience methods. This class is the base class for [uploaded files](#/libraries/uploaded-files) and [images](#/libraries/images).
+CodeIgniter provides a File class that wraps the <a href="https://www.php.net/manual/en/class.splfileinfo.php" target="_blank">SplFileInfo</a> class and provides some additional convenience methods. This class is the base class for [uploaded files](#/libraries/uploaded-files) and [images](#/libraries/images).
 
 - [Getting a File instance](#getting-a-file-instance)
 - [Taking Advantage of Spl](#taking-advantage-of-spl)

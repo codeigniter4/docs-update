@@ -46,7 +46,7 @@ All files in this directory live under the `App` namespace, though you are free 
 
 This directory stores the files that make up the framework, itself. While you have a lot of flexibility in how you use the application directory, the files in the system directory should never be modified. Instead, you should extend the classes, or create new classes, to provide the desired functionality.
 
-All files in this directory live under the `CodeIgniter` namespace.
+All files in this directory live under the `CodeIgniter[ namespace.
 
 ### public
 
@@ -60,7 +60,7 @@ This directory holds any directories that might need to be written to in the cou
 
 ### tests
 
-This directory is set up to hold your test files. The `_support` directory holds various mock classes and other utilities that you can use while writing your tests. This directory does not need to be transferred to your production servers.
+This directory is set up to hold your test files. The ]support` directory holds various mock classes and other utilities that you can use while writing your tests. This directory does not need to be transferred to your production servers.
 
 ## Modifying Directory Locations
 

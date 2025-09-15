@@ -17,9 +17,9 @@ Every application consists of a large number of classes in many different locati
 
 ## CodeIgniter4 Autoloader
 
-CodeIgniter provides a very flexible autoloader that can be used with very little configuration. It can locate individual namespaced classes that adhere to [PSR-4](https://www.php-fig.org/psr/psr-4/) autoloading directory structures.
+CodeIgniter provides a very flexible autoloader that can be used with very little configuration. It can locate individual namespaced classes that adhere to <a href="https://www.php-fig.org/psr/psr-4/" target="_blank">PSR-4</a> autoloading directory structures.
 
-The autoloader works great by itself, but can also work with other autoloaders, like [Composer](https://getcomposer.org), or even your own custom autoloaders, if needed. Because they're all registered through [spl_autoload_register](https://www.php.net/manual/en/function.spl-autoload-register.php), they work in sequence and don't get in each other's way.
+The autoloader works great by itself, but can also work with other autoloaders, like <a href="https://getcomposer.org" target="_blank">Composer</a>, or even your own custom autoloaders, if needed. Because they're all registered through <a href="https://www.php.net/manual/en/function.spl-autoload-register.php" target="_blank">spl_autoload_register</a>, they work in sequence and don't get in each other's way.
 
 The autoloader is always active, being registered with `spl_autoload_register()` at the beginning of the framework's execution.
 

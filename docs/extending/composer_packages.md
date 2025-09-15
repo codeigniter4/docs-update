@@ -92,7 +92,7 @@ If you are not familiar with open source licenses, see <https://choosealicense.c
 
 ## Preparing Development Tools
 
-There are many tools that help ensure quality code. So you should use them. You can easily install and configure such tools with [CodeIgniter DevKit](https://github.com/codeigniter4/devkit).
+There are many tools that help ensure quality code. So you should use them. You can easily install and configure such tools with <a href="https://github.com/codeigniter4/devkit" target="_blank">CodeIgniter DevKit</a>.
 
 ### Installing DevKit
 
@@ -108,7 +108,7 @@ The DevKit installs various Composer packages that helps your development, and i
 
 ### Configuring Coding Standards Fixer
 
-DevKit provides Coding Standards Fixer with [CodeIgniter Coding Standard](https://github.com/CodeIgniter/coding-standard) based on [PHP-CS-Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer).
+DevKit provides Coding Standards Fixer with <a href="https://github.com/CodeIgniter/coding-standard" target="_blank">CodeIgniter Coding Standard</a> based on <a href="https://github.com/PHP-CS-Fixer/PHP-CS-Fixer" target="_blank">PHP-CS-Fixer</a>.
 
 Copy **vendor/codeigniter4/devkit/src/Template/.php-cs-fixer.dist.php** to your project root folder.
 

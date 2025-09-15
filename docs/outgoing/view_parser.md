@@ -497,7 +497,7 @@ The following filters are available when using the parser:
 </tbody>
 </table>
 
-See [PHP's NumberFormatter](https://www.php.net/manual/en/numberformatter.create.php) for details relevant to the "local_number" filter.
+See <a href="https://www.php.net/manual/en/numberformatter.create.php" target="_blank">PHP's NumberFormatter</a> for details relevant to the "local_number" filter.
 
 #### Custom Filters
 

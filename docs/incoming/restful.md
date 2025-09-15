@@ -12,7 +12,7 @@
 - [ResourcePresenter](#resourcepresenter)
 - [Presenter/Controller Comparison](#presentercontroller-comparison)
 
-Representational State Transfer (REST) is an architectural style for distributed applications, first described by Roy Fielding in his 2000 PhD dissertation, [Architectural Styles and the Design of Network-based Software Architectures](https://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm). That might be a bit of a dry read, and you might find Martin Fowler's [Richardson Maturity Model](https://martinfowler.com/articles/richardsonMaturityModel.html) a gentler introduction.
+Representational State Transfer (REST) is an architectural style for distributed applications, first described by Roy Fielding in his 2000 PhD dissertation, <a href="https://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm" target="_blank">Architectural Styles and the Design of Network-based Software Architectures</a>. That might be a bit of a dry read, and you might find Martin Fowler's <a href="https://martinfowler.com/articles/richardsonMaturityModel.html" target="_blank">Richardson Maturity Model</a> a gentler introduction.
 
 REST has been interpreted, and mis-interpreted, in more ways than most software architectures, and it might be easier to say that the more of Roy Fielding's principles that you embrace in an architecture, the most "RESTful" your application would be considered.
 

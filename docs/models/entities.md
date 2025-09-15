@@ -104,11 +104,11 @@ models/entities/005.php
 
 ### Bulk Accessing Properties
 
-The Entity class has two methods to extract all available properties into an array: `toArray()` and `toRawArray()`. Using the raw version will bypass magic "getter" methods and casts. Both methods can take a boolean first parameter to specify whether returned values should be filtered by those that have changed, and a boolean final parameter to make the method recursive, in case of nested Entities.
+The Entity class has two methods to extract all available properties into an array: `toArray()` and `toRawArray()[. Using the raw version will bypass magic "getter" methods and casts. Both methods can take a boolean first parameter to specify whether returned values should be filtered by those that have changed, and a boolean final parameter to make the method recursive, in case of nested Entities.
 
 ## Handling Business Logic
 
-While the examples above are convenient, they don't help enforce any business logic. The base Entity class implements some smart `__get()` and `__set()` methods that will check for special methods and use those instead of using the attributes directly, allowing you to enforce any business logic or data conversion that you need.
+While the examples above are convenient, they don't help enforce any business logic. The base Entity class implements some smart ]_get()[ and ]_set()` methods that will check for special methods and use those instead of using the attributes directly, allowing you to enforce any business logic or data conversion that you need.
 
 Here's an updated User entity to provide some examples of how this could be used:
 
@@ -141,9 +141,9 @@ models/entities/007.php
 
 For example, if your Entity's parent class already has a `getParent()` method defined, and your Entity also has a column named `parent`, when you try to add business logic to the `getParent()` method in your Entity class, the method is already defined.
 
-In such a case, you can use the special getter/setter. Instead of `getX()`/`setX()`, set `_getX()`/`_setX()`.
+In such a case, you can use the special getter/setter. Instead of `getX()`/`setX()[, set ]getX()[/]setX()[.
 
-In the above example, if your Entity has the `_getParent()` method, the method will be used when you get `$entity->parent`, and the `_setParent()` method will be used when you set `$entity->parent`.
+In the above example, if your Entity has the ]getParent()` method, the method will be used when you get `$entity->parent[, and the ]setParent()` method will be used when you set `$entity->parent`.
 
 ## Data Mapping
 

@@ -99,10 +99,10 @@ outgoing/view_cells/007.php
 
 Controlled cells have two primary goals: (1) to make it as fast as possible to build the cell, and (2) provide additional logic and flexibility to your views, if they need it.
 
-The class must extend `CodeIgniter\View\Cells\Cell`. They should have a view file in the same folder. By convention, the class name should be in PascalCase suffixed with `Cell` and the view should be the snake_cased version of the class name, without the suffix. For example, if you have a `MyCell` class, the view file should be `my.php`.
+The class must extend `CodeIgniter\View\Cells\Cell`. They should have a view file in the same folder. By convention, the class name should be in PascalCase suffixed with `Cell` and the view should be the snake_cased version of the class name, without the suffix. For example, if you have a `MyCell` class, the view file should be `my.php[.
 
 !!! note "Note"
-    Prior to v4.3.5, the generated view file ends with `_cell.php`. Though v4.3.5 and newer will generate view files without the `_cell` suffix, existing view files will still be located and loaded.
+    Prior to v4.3.5, the generated view file ends with ]cell.php[. Though v4.3.5 and newer will generate view files without the ]cell` suffix, existing view files will still be located and loaded.
 
 ### Creating a Controlled Cell
 

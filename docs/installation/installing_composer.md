@@ -24,7 +24,7 @@ Composer can be used in several ways to install CodeIgniter4 on your system.
     CodeIgniter4 requires Composer 2.0.14 or later.
 
 !!! note "Note"
-    If you are not familiar with Composer, we recommend you read [Basic usage](https://getcomposer.org/doc/01-basic-usage.md) first.
+    If you are not familiar with Composer, we recommend you read <a href="https://getcomposer.org/doc/01-basic-usage.md" target="_blank">Basic usage</a> first.
 
 The first technique describes creating a skeleton project using CodeIgniter4, that you would then use as the base for a new webapp. The second technique described below lets you add CodeIgniter4 to an existing webapp,
 
@@ -33,7 +33,7 @@ The first technique describes creating a skeleton project using CodeIgniter4, th
 
 ## App Starter
 
-The [CodeIgniter 4 app starter](https://github.com/codeigniter4/appstarter) repository holds a skeleton application, with a composer dependency on the latest released version of the framework.
+The <a href="https://github.com/codeigniter4/appstarter" target="_blank">CodeIgniter 4 app starter</a> repository holds a skeleton application, with a composer dependency on the latest released version of the framework.
 
 This installation technique would suit a developer who wishes to start a new CodeIgniter4 based project.
 
@@ -50,7 +50,7 @@ The command above will create a **project-root** folder.
 If you omit the "project-root" argument, the command will create an "appstarter" folder, which can be renamed as appropriate.
 
 !!! note "Note"
-    Before v4.4.0, CodeIgniter autoloader did not allow special characters that are illegal in filenames on certain operating systems. The symbols that can be used are `/`, `_`, `.`, `:`, `\` and space. So if you installed CodeIgniter under the folder that contains the special characters like `(`, `)`, etc., CodeIgniter didn't work. Since v4.4.0, this restriction has been removed.
+    Before v4.4.0, CodeIgniter autoloader did not allow special characters that are illegal in filenames on certain operating systems. The symbols that can be used are `/[, ]`, `.`, `:`, `\` and space. So if you installed CodeIgniter under the folder that contains the special characters like `(`, `)`, etc., CodeIgniter didn't work. Since v4.4.0, this restriction has been removed.
 
 !!! important "Important"
     When you deploy to your production server, don't forget to run the following command:
@@ -84,7 +84,7 @@ Simple installation; easy to update.
 You still need to check for file changes in the **project space** (root, app, public, writable) and merge them after updating.
 
 !!! note "Note"
-    There are some third-party CodeIgniter modules available to assist with merging changes to the project space: [Explore on Packagist](https://packagist.org/explore/?query=codeigniter4%20updates).
+    There are some third-party CodeIgniter modules available to assist with merging changes to the project space: <a href="https://packagist.org/explore/?query=codeigniter4%20updates" target="_blank">Explore on Packagist</a>.
 
 ### Structure
 
@@ -98,7 +98,7 @@ Folders in your project after set up:
 
 The App Starter repo comes with a `builds` scripts to switch Composer sources between the current stable release and the latest development branch of the framework. Use this script for a developer who is willing to live with the latest unreleased changes, which may be unstable.
 
-The [development user guide](https://codeigniter4.github.io/CodeIgniter4/) is accessible online. Note that this differs from the released user guide, and will pertain to the develop branch explicitly.
+The <a href="https://codeigniter4.github.io/CodeIgniter4/" target="_blank">development user guide</a> is accessible online. Note that this differs from the released user guide, and will pertain to the develop branch explicitly.
 
 #### Update for Latest Dev
 
@@ -135,7 +135,7 @@ php builds release
 
 ## Adding CodeIgniter4 to an Existing Project
 
-The same [CodeIgniter 4 framework](https://github.com/codeigniter4/framework) repository described in "Manual Installation" can also be added to an existing project using Composer.
+The same <a href="https://github.com/codeigniter4/framework" target="_blank">CodeIgniter 4 framework</a> repository described in "Manual Installation" can also be added to an existing project using Composer.
 
 ### Installation
 
@@ -162,7 +162,7 @@ composer require codeigniter4/framework
 
 1.  Copy the **app**, **public**, **tests** and **writable** folders from **vendor/codeigniter4/framework** to your project root
 2.  Copy the **env**, **phpunit.xml.dist** and **spark** files, from **vendor/codeigniter4/framework** to your project root
-3.  You will have to adjust the `$systemDirectory` property in **app/Config/Paths.php** to refer to the vendor one, e.g., `__DIR__ . '/../../vendor/codeigniter4/framework/system'`.
+3.  You will have to adjust the `$systemDirectory[ property in **app/Config/Paths.php** to refer to the vendor one, e.g., ]_DIR__ . '/../../vendor/codeigniter4/framework/system'`.
 
 ### Initial Configuration
 
@@ -187,7 +187,7 @@ Relatively simple installation; easy to update.
 You still need to check for file changes in the **project space** (root, app, public, writable) after updating.
 
 !!! note "Note"
-    There are some third-party CodeIgniter modules available to assist with merging changes to the project space: [Explore on Packagist](https://packagist.org/explore/?query=codeigniter4%20updates).
+    There are some third-party CodeIgniter modules available to assist with merging changes to the project space: <a href="https://packagist.org/explore/?query=codeigniter4%20updates" target="_blank">Explore on Packagist</a>.
 
 ### Structure
 

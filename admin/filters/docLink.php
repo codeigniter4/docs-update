@@ -6,14 +6,14 @@ function before_filter_docLink($data, $folder) {
     $folder = array_pop($folder);
 
     // Handle RST cross-references like `CodeIgniter URLs <urls-remove-index-php-apache>`
-    // Convert them to proper markdown links, but skip external URLs (http/https)
-    $data = preg_replace_callback('/`([^`]+?) <([^>]+?)>`/', function ($matches) {
+    // Convert them to proper markdown links, and convert external URLs to HTML with target="_blank"
+    $data = preg_replace_callback('/`([^`]+?) <([^>]+?)>`_?/', function ($matches) {
         $text = $matches[1];
         $reference = $matches[2];
 
-        // Skip external URLs - let pandoc handle them
+        // Handle external URLs - use placeholder that won't get escaped
         if (preg_match('/^https?:\/\//', $reference)) {
-            return $matches[0]; // Return original match unchanged
+            return "{{EXTERNAL_LINK_START}}{$reference}{{EXTERNAL_LINK_MIDDLE}}{$text}{{EXTERNAL_LINK_END}}";
         }
 
         // Try to find actual files that match the reference
@@ -161,10 +161,23 @@ function after_filter_docLink($data, $folder) {
     $data = preg_replace('/:doc:\[([^\]]+)\]\(([^)]+)\)/', '[$1]($2)', $data);
 
     // Handle :ref: directives that may have been created without links
-    $data = preg_replace('/:ref:`([^`]+)`/', '[$1]', $data);
+    $data = preg_replace('/:ref:`([^`]+)`_?/', '[$1]', $data);
 
     // Handle :doc: directives that may have been created without links
-    $data = preg_replace('/:doc:`([^`]+)`/', '[$1]', $data);
+    $data = preg_replace('/:doc:`([^`]+)`_?/', '[$1]', $data);
+
+    // Clean up any remaining RST-style backtick references with trailing underscores
+    $data = preg_replace('/`([^`]+)`_/', '[$1]', $data);
+
+    // Convert external markdown links to placeholder format
+    $data = preg_replace_callback('/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/', function ($matches) {
+        $text = $matches[1];
+        $url = $matches[2];
+        return "{{EXTERNAL_LINK_START}}{$url}{{EXTERNAL_LINK_MIDDLE}}{$text}{{EXTERNAL_LINK_END}}";
+    }, $data);
+
+    // Convert all external link placeholders to final HTML with target="_blank"
+    $data = preg_replace('/{{EXTERNAL_LINK_START}}([^{]+){{EXTERNAL_LINK_MIDDLE}}([^{]+){{EXTERNAL_LINK_END}}/', '<a href="$1" target="_blank">$2</a>', $data);
 
     return $data;
 }

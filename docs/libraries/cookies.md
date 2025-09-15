@@ -104,11 +104,11 @@ A cookie name can be any US-ASCII character, except for the following:
 
 - separator characters, such as `( ) < > @ , ; : \ " / [ ] ? = { }`
 
-If setting the `$raw` parameter to `true` this validation will be strictly made. This is because PHP's [setcookie()](https://www.php.net/manual/en/function.setcookie.php) and [setrawcookie()](https://www.php.net/manual/en/function.setrawcookie.php) will reject cookies with invalid names. Additionally, cookie names cannot be an empty string.
+If setting the `$raw` parameter to `true[ this validation will be strictly made. This is because PHP's <a href="https://www.php.net/manual/en/function.setcookie.php" target="_blank">setcookie()</a> and <a href="https://www.php.net/manual/en/function.setrawcookie.php" target="_blank">setrawcookie()</a> will reject cookies with invalid names. Additionally, cookie names cannot be an empty string.
 
 ### Validating the Prefix Attribute
 
-When using the `__Secure-` prefix, cookies must be set with the `$secure` flag set to `true`. If using the `__Host-` prefix, cookies must exhibit the following:
+When using the ]_Secure-` prefix, cookies must be set with the `$secure` flag set to `true[. If using the ]_Host-` prefix, cookies must exhibit the following:
 
 - `$secure` flag set to `true`
 
