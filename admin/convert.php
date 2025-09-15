@@ -1,6 +1,50 @@
 <?php
 
-define('SOURCE_DIR', __DIR__ . '/../docs-rst/');
+// Load environment configuration
+function loadEnvConfig() {
+    $envFile = __DIR__ . '/../.env';
+    $config = [
+        'DOCS_SOURCE_TYPE' => 'local',
+        'DOCS_PROJECT_PATH' => ''
+    ];
+
+    if (file_exists($envFile)) {
+        $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if (strpos($line, '#') === 0 || empty($line)) {
+                continue;
+            }
+
+            if (strpos($line, '=') !== false) {
+                list($key, $value) = explode('=', $line, 2);
+                $config[trim($key)] = trim($value);
+            }
+        }
+    }
+
+    return $config;
+}
+
+// Get source directory based on configuration
+function getSourceDirectory() {
+    $config = loadEnvConfig();
+
+    if ($config['DOCS_SOURCE_TYPE'] === 'project' && !empty($config['DOCS_PROJECT_PATH'])) {
+        $projectPath = rtrim($config['DOCS_PROJECT_PATH'], '/') . '/';
+        if (!is_dir($projectPath)) {
+            echo "Error: Project path does not exist: $projectPath\n";
+            echo "Please check your .env file configuration.\n";
+            exit(1);
+        }
+        return $projectPath;
+    }
+
+    // Default to local docs-rst directory
+    return __DIR__ . '/../docs-rst/';
+}
+
+define('SOURCE_DIR', getSourceDirectory());
 define('TARGET_DIR', __DIR__ . '/../docs/');
 
 define('BEFORE_FILTERS', [

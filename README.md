@@ -3,6 +3,33 @@
 The aim of this project is to convert the CodeIgniter User Guide from the existing reStructuredText format to Markdown format,
 making it easier to maintain and contribute to, as well as allowing all of our projects to share a common documentation format.
 
+## Configuration
+
+The converter can work with two different source types:
+
+1. **Local docs-rst folder** (default) - Uses the `docs-rst` folder in this project
+2. **CodeIgniter4 project** - Points to a CodeIgniter4 project's `user_guide_src/source` folder for latest docs
+
+To configure, copy `.env.dist` to `.env` and modify as needed:
+
+```bash
+cp .env.dist .env
+```
+
+Example configurations:
+
+**For local docs-rst (default):**
+```bash
+DOCS_SOURCE_TYPE=local
+DOCS_PROJECT_PATH=
+```
+
+**For CodeIgniter4 project:**
+```bash
+DOCS_SOURCE_TYPE=project
+DOCS_PROJECT_PATH=/path/to/CodeIgniter4/user_guide_src/source/
+```
+
 ## The Conversion Process
 
 The conversion process is being done using pandoc to do the initial conversion.
