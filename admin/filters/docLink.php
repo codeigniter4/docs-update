@@ -5,6 +5,37 @@ function before_filter_docLink($data, $folder) {
     $folder = explode('/', trim($folder,  '/'));
     $folder = array_pop($folder);
 
+    // Handle :doc: directives FIRST before general backtick patterns
+    // :doc:`View Decorators <../outgoing/view_decorators>`
+    // :doc:`Feature Tests </testing/feature>`
+    // :doc:`configuration <configuration>`
+    $data = preg_replace_callback('/:doc:`(.*?) <(.*?)>`/', function ($matches) use ($folder) {
+        $text = $matches[1];
+        $url  = $matches[2];
+
+        if (identifyRelativePath($url) === '../') {
+            // Convert directly to markdown link for relative paths
+            return "[{$text}]({$url}.md)";
+        }
+
+        if (identifyRelativePath($url) === './') {
+            $url = str_replace('./', '', $url);
+            return "[{$text}]({$url}.md)";
+        }
+
+        if (identifyRelativePath($url) === '/') {
+            if (str_contains($url, $folder)) {
+                $url = explode('/', $url);
+                $url = array_pop($url);
+            } else {
+                $url = '..' . $url;
+            }
+            return "[{$text}]({$url}.md)";
+        }
+
+        return "[{$text}]({$url}.md)";
+    }, $data);
+
     // Handle RST cross-references like `CodeIgniter URLs <urls-remove-index-php-apache>`
     // Convert them to proper markdown links, and convert external URLs to HTML with target="_blank"
     $data = preg_replace_callback('/`([^`]+?) <([^>]+?)>`_?/', function ($matches) {
@@ -34,34 +65,6 @@ function before_filter_docLink($data, $folder) {
         return "[{$text}](#{$reference})";
     }, $data);
 
-    // :doc:`View Decorators <../outgoing/view_decorators>`
-    // :doc:`Feature Tests </testing/feature>`
-    // :doc:`configuration <configuration>`
-    $data = preg_replace_callback('/:doc:`(.*?) <(.*?)>`/', function ($matches) use ($folder) {
-        $text = $matches[1];
-        $url  = $matches[2];
-
-        if (identifyRelativePath($url) === '../') {
-            return "`$text <$url.md>`_";
-        }
-
-        if (identifyRelativePath($url) === './') {
-            $url = str_replace('./', '', $url);
-            return "`$text <$url.md>`_";
-        }
-
-        if (identifyRelativePath($url) === '/') {
-            if (str_contains($url, $folder)) {
-                $url = explode('/', $url);
-                $url = array_pop($url);
-            } else {
-                $url = '..' . $url;
-            }
-        }
-
-        return "`$text <$url.md>`_";
-    }, $data);
-
     // :doc:`../outgoing/view_decorators`
     // :doc:`./backward_compatibility_notes`
     return preg_replace_callback('/:doc:`(.*?)`/', function ($matches) use ($folder) {
@@ -70,12 +73,12 @@ function before_filter_docLink($data, $folder) {
         $text = ucwords(str_replace('_', ' ', array_pop($text)));
 
         if (identifyRelativePath($url) === '../') {
-            return "`$text <$url.md>`_";
+            return "[{$text}]({$url}.md)";
         }
 
         if (identifyRelativePath($url) === './') {
             $url = str_replace('./', '', $url);
-            return "`$text <$url.md>`_";
+            return "[{$text}]({$url}.md)";
         }
 
         if (identifyRelativePath($url) === '/') {
@@ -85,9 +88,10 @@ function before_filter_docLink($data, $folder) {
             } else {
                 $url = '..' . $url;
             }
+            return "[{$text}]({$url}.md)";
         }
 
-        return "`$text <$url.md>`_";
+        return "[{$text}]({$url}.md)";
     }, $data);
 }
 
@@ -149,6 +153,9 @@ function after_filter_docLink($data, $folder) {
     $data = str_replace('\\]', ']', $data);
     $data = str_replace('\\(', '(', $data);
     $data = str_replace('\\)', ')', $data);
+
+    // Fix escaped markdown links (pandoc often escapes square brackets)
+    $data = str_replace('\\[', '[', $data);
 
     // Handle the literal backslash-escaped format as it appears in the output
     // Pattern: :ref:\[text\](url) -> [text](url)
