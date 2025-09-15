@@ -65,6 +65,7 @@ define('AFTER_FILTERS', [
     'toctree',
     'contents',
     'docLink',
+    'codeBlocks',
 ]);
 
 // Load all filters
