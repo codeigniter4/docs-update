@@ -86,6 +86,8 @@ function updateFile($file, $function) {
 // Completely empties the target directory
 function clean($target) {
     if (!is_dir($target)) {
+        // Directory doesn't exist, create it
+        mkdir($target, 0755, true);
         return;
     }
 
@@ -159,6 +161,100 @@ function copyAssets() {
             copy($sourcePath, $targetPath);
         }
     }
+
+    // Create MkDocs assets structure from _static
+    createMkDocsAssets();
+}
+
+// Create the assets folder structure that MkDocs expects
+function createMkDocsAssets() {
+    $staticDir = TARGET_DIR . '_static/';
+    $assetsDir = TARGET_DIR . 'assets/';
+
+    if (!is_dir($staticDir)) {
+        echo "Warning: _static directory not found, skipping MkDocs assets creation\n";
+        return;
+    }
+
+    if (!is_dir($assetsDir)) {
+        mkdir($assetsDir, 0755, true);
+    }
+
+    // CSS files are now handled by createMkDocsThemeCSS() from admin/assets
+    // No need to copy from _static/css anymore
+
+    // CSS and JS files are now handled by createMkDocsThemeCSS() from admin/assets
+    // No need to copy from _static/css or _static/js anymore
+
+    // Copy logo and favicon
+    $iconMapping = [
+        'ci-logo-text.svg' => 'flame.svg',
+        'favicon.ico' => 'favicon.ico'
+    ];
+
+    foreach ($iconMapping as $sourceFile => $targetFile) {
+        $sourcePath = $staticDir . $sourceFile;
+        $targetPath = $assetsDir . $targetFile;
+
+        if (file_exists($sourcePath)) {
+            echo "Creating MkDocs asset: $targetPath\n";
+            copy($sourcePath, $targetPath);
+        }
+    }
+
+    // Create MkDocs Material theme-compatible CSS
+    createMkDocsThemeCSS();
+}
+
+// Copy CSS files from admin/assets folder
+function createMkDocsThemeCSS() {
+    $assetsDir = TARGET_DIR . 'assets/';
+    $assetsCssDir = $assetsDir . 'css/';
+    $assetsJsDir = $assetsDir . 'js/';
+    $adminAssetsDir = __DIR__ . '/assets/';
+
+    if (!is_dir($assetsCssDir)) {
+        mkdir($assetsCssDir, 0755, true);
+    }
+
+    if (!is_dir($assetsJsDir)) {
+        mkdir($assetsJsDir, 0755, true);
+    }
+
+    // Copy the pre-built CSS files from admin/assets
+    $cssFiles = [
+        'codeigniter.css' => 'codeigniter.css',
+        'codeigniter_dark_mode.css' => 'codeigniter_dark_mode.css'
+    ];
+
+    foreach ($cssFiles as $sourceFile => $targetFile) {
+        $sourcePath = $adminAssetsDir . $sourceFile;
+        $targetPath = $assetsCssDir . $targetFile;
+
+        if (file_exists($sourcePath)) {
+            echo "Copying MkDocs theme CSS: $sourcePath to $targetPath\n";
+            copy($sourcePath, $targetPath);
+        } else {
+            echo "Warning: CSS file not found: $sourcePath\n";
+        }
+    }
+
+    // Copy the pre-built JavaScript files from admin/assets
+    $jsFiles = [
+        'hljs.js' => 'hljs.js'
+    ];
+
+    foreach ($jsFiles as $sourceFile => $targetFile) {
+        $sourcePath = $adminAssetsDir . $sourceFile;
+        $targetPath = $assetsJsDir . $targetFile;
+
+        if (file_exists($sourcePath)) {
+            echo "Copying MkDocs theme JS: $sourcePath to $targetPath\n";
+            copy($sourcePath, $targetPath);
+        } else {
+            echo "Warning: JS file not found: $sourcePath\n";
+        }
+    }
 }
 
 // Core conversion function that handles the actual pandoc conversion
@@ -182,7 +278,7 @@ function convert($source, $target) {
     }
 
     // Assets that are handled separately by copyAssets()
-    $skipAssets = ['_static', 'images', '.nojekyll', 'conf.py'];
+    $skipAssets = ['_static', 'images', '.nojekyll', 'conf.py', 'assets'];
 
     while (($file = readdir($dir)) !== false) {
         if ($file == '.' || $file == '..') {
@@ -244,6 +340,13 @@ if (isset($argv[1])) {
 } else {
     // Do full conversion
     echo "Starting full conversion...\n";
+
+    // Ensure target directory exists
+    if (!is_dir(TARGET_DIR)) {
+        echo "Creating target directory...\n";
+        mkdir(TARGET_DIR, 0755, true);
+    }
+
     echo "Cleaning target directory...\n";
     clean(TARGET_DIR);
 
