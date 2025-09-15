@@ -139,6 +139,22 @@ function getSubdirectoryToctree($subdirPath, $folder) {
         $lines = explode("\n", $toctreeContent);
         $entries = [];
 
+        // Get the main title of this index file to include as the first entry
+        if (preg_match('/^#+\s*(.+)$/m', $content, $titleMatch)) {
+            $mainTitle = trim($titleMatch[1]);
+
+            // Determine the link path for the main index file
+            if (strpos($subdirPath, '../') === 0) {
+                // For relative paths like ../changelogs/index
+                $mainLinkPath = $subdirPath . '.md';
+            } else {
+                // For regular paths like testing/index
+                $mainLinkPath = $subdirPath . '.md';
+            }
+
+            $entries[] = "- [$mainTitle]($mainLinkPath)";
+        }
+
         foreach ($lines as $line) {
             $trimmed = trim($line);
             if (empty($trimmed)) continue;
@@ -226,7 +242,7 @@ function getSubdirectoryToctree($subdirPath, $folder) {
                 }
             }
 
-            $entries[] = "- [$finalDisplayName]($linkPath)";
+            $entries[] = "    - [$finalDisplayName]($linkPath)";
         }
 
         return $entries;
