@@ -83,9 +83,12 @@ function updateFile($file, $function) {
 }
 
 
-// Deletes all files and directories within the target directory,
-// except for the assets directory.
+// Completely empties the target directory
 function clean($target) {
+    if (!is_dir($target)) {
+        return;
+    }
+
     $dir = opendir($target);
 
     while (($file = readdir($dir)) !== false) {
@@ -96,9 +99,6 @@ function clean($target) {
         $targetFile = $target . '/' . $file;
 
         if (is_dir($targetFile)) {
-            if ($file == 'assets') {
-                continue;
-            }
             clean($targetFile);
             rmdir($targetFile);
         } else {
@@ -106,6 +106,59 @@ function clean($target) {
         }
     }
     closedir($dir);
+}
+
+// Copy a directory and all its contents recursively
+function copyDirectory($source, $target) {
+    if (!is_dir($source)) {
+        return false;
+    }
+
+    if (!is_dir($target)) {
+        mkdir($target, 0755, true);
+    }
+
+    $dir = opendir($source);
+    while (($file = readdir($dir)) !== false) {
+        if ($file == '.' || $file == '..') {
+            continue;
+        }
+
+        $sourceFile = $source . '/' . $file;
+        $targetFile = $target . '/' . $file;
+
+        if (is_dir($sourceFile)) {
+            copyDirectory($sourceFile, $targetFile);
+        } else {
+            echo "Copying asset: $sourceFile\n";
+            copy($sourceFile, $targetFile);
+        }
+    }
+    closedir($dir);
+    return true;
+}
+
+// Copy essential assets that are needed for the docs
+function copyAssets() {
+    $assetsToTransfer = [
+        '_static' => '_static',
+        'images' => 'images',
+        '.nojekyll' => '.nojekyll',
+        'conf.py' => 'conf.py'
+    ];
+
+    foreach ($assetsToTransfer as $source => $target) {
+        $sourcePath = SOURCE_DIR . $source;
+        $targetPath = TARGET_DIR . $target;
+
+        if (is_dir($sourcePath)) {
+            echo "Copying directory: $sourcePath to $targetPath\n";
+            copyDirectory($sourcePath, $targetPath);
+        } elseif (file_exists($sourcePath)) {
+            echo "Copying file: $sourcePath to $targetPath\n";
+            copy($sourcePath, $targetPath);
+        }
+    }
 }
 
 // Core conversion function that handles the actual pandoc conversion
@@ -128,8 +181,16 @@ function convert($source, $target) {
         mkdir($target);
     }
 
+    // Assets that are handled separately by copyAssets()
+    $skipAssets = ['_static', 'images', '.nojekyll', 'conf.py'];
+
     while (($file = readdir($dir)) !== false) {
         if ($file == '.' || $file == '..') {
+            continue;
+        }
+
+        // Skip assets that are copied separately
+        if (in_array($file, $skipAssets)) {
             continue;
         }
 
@@ -182,7 +243,18 @@ if (isset($argv[1])) {
     convertSingleFile($filename);
 } else {
     // Do full conversion
+    echo "Starting full conversion...\n";
+    echo "Cleaning target directory...\n";
     clean(TARGET_DIR);
+
+    echo "Copying essential assets...\n";
+    copyAssets();
+
+    echo "Loading filters...\n";
     loadFilters();
+
+    echo "Converting RST files to Markdown...\n";
     convert(SOURCE_DIR, TARGET_DIR);
+
+    echo "Conversion completed successfully!\n";
 }
