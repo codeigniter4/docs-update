@@ -1,95 +1,74 @@
 # Create News Items
 
-<div class="contents" local="" depth="3">
+- [Enable CSRF Filter](#enable-csrf-filter)
+- [Adding Routing Rules](#adding-routing-rules)
+- [Create a Form](#create-a-form)
+    - [Create news/create View File](#create-newscreate-view-file)
+    - [News Controller](#news-controller)
+        - [Add <News::new>() to Display the Form](#add-newsnew-to-display-the-form)
+        - [Add <News::create>() to Create a News Item](#add-newscreate-to-create-a-news-item)
+- [NewsModel Updating](#newsmodel-updating)
+- [Create a News Item](#create-a-news-item)
+- [Congratulations](#congratulations)
 
-</div>
-
-You now know how you can read data from a database using CodeIgniter,
-but you haven't written any information to the database yet. In this
-section, you'll expand your news controller and model created earlier to
-include this functionality.
+You now know how you can read data from a database using CodeIgniter, but you haven't written any information to the database yet. In this section, you'll expand your news controller and model created earlier to include this functionality.
 
 ## Enable CSRF Filter
 
 Before creating a form, let's enable the CSRF protection.
 
-Open the **app/Config/Filters.php** file and update the `$methods`
-property like the following:
+Open the **app/Config/Filters.php** file and update the `$methods` property like the following:
 
-<div class="literalinclude">
+```php
+--8<--
+tutorial/create_news_items/001.php
+--8<--
+```
 
-create_news_items/001.php
+It configures the CSRF filter to be enabled for all **POST** requests. You can read more about the CSRF protection in [Security](#../libraries/security) library.
 
-</div>
-
-It configures the CSRF filter to be enabled for all **POST** requests.
-You can read more about the CSRF protection in
-`Security <../libraries/security>` library.
-
-> [!WARNING]
-> In general, if you use `$methods` filters, you should
-> `disable Auto Routing (Legacy) <use-defined-routes-only>` because
-> `auto-routing-legacy` permits any HTTP method to access a controller.
-> Accessing the controller with a method you don't expect could bypass
-> the filter.
+!!! warning "Warning"
+    In general, if you use `$methods` filters, you should [disable Auto Routing (Legacy)](#use-defined-routes-only) because `auto-routing-legacy` permits any HTTP method to access a controller. Accessing the controller with a method you don't expect could bypass the filter.
 
 ## Adding Routing Rules
 
-Before you can start adding news items into your CodeIgniter application
-you have to add an extra rule to **app/Config/Routes.php** file. Make
-sure your file contains the following:
+Before you can start adding news items into your CodeIgniter application you have to add an extra rule to **app/Config/Routes.php** file. Make sure your file contains the following:
 
-<div class="literalinclude">
+```php
+--8<--
+tutorial/create_news_items/004.php
+--8<--
+```
 
-create_news_items/004.php
+The route directive for `'news/new'` is placed before the directive for `'news/(:segment)'` to ensure that the form to create a news item is displayed.
 
-</div>
+The `$routes->post()` line defines the router for a POST request. It matches only a POST request to the URI path **/news**, and it maps to the `create()` method of the `News` class.
 
-The route directive for `'news/new'` is placed before the directive for
-`'news/(:segment)'` to ensure that the form to create a news item is
-displayed.
-
-The `$routes->post()` line defines the router for a POST request. It
-matches only a POST request to the URI path **/news**, and it maps to
-the `create()` method of the `News` class.
-
-You can read more about different routing types in
-`defined-route-routing`.
+You can read more about different routing types in `defined-route-routing`.
 
 ## Create a Form
 
 ### Create news/create View File
 
-To input data into the database, you need to create a form where you can
-input the information to be stored. This means you'll be needing a form
-with two fields, one for the title and one for the text. You'll derive
-the slug from our title in the model.
+To input data into the database, you need to create a form where you can input the information to be stored. This means you'll be needing a form with two fields, one for the title and one for the text. You'll derive the slug from our title in the model.
 
 Create a new view at **app/Views/news/create.php**:
 
-<div class="literalinclude">
-
-create_news_items/006.php
-
-</div>
+```php
+--8<--
+tutorial/create_news_items/006.php
+--8<--
+```
 
 There are probably only four things here that look unfamiliar.
 
-The `session()` function is used to get the Session object, and
-`session()->getFlashdata('error')` is used to display the error related
-to CSRF protection to the user. However, by default, if a CSRF
-validation check fails, an exception will be thrown, so it does not work
-yet. See `csrf-redirection-on-failure` for more information.
+The `session()` function is used to get the Session object, and `session()->getFlashdata('error')` is used to display the error related to CSRF protection to the user. However, by default, if a CSRF validation check fails, an exception will be thrown, so it does not work yet. See `csrf-redirection-on-failure` for more information.
 
-The `validation_list_errors()` function provided by the
-`../helpers/form_helper` is used to report errors related to form
-validation.
+The `validation_list_errors()` function provided by the [Form Helper](../helpers/form_helper.md) is used to report errors related to form validation.
 
-The `csrf_field()` function creates a hidden input with a CSRF token
-that helps protect against some common attacks.
+The `csrf_field()` function creates a hidden input with a CSRF token that helps protect against some common attacks.
 
-The `set_value()` function provided by the `../helpers/form_helper` is
-used to show old input data when errors occur.
+The `set_value()` function provided by the [Form Helper](../helpers/form_helper.md) is used to show old input data when errors occur.
 
 ### News Controller
 
@@ -99,15 +78,13 @@ Go back to your `News` controller.
 
 First, create a method to display the HTML form you have created.
 
-<div class="literalinclude">
+```php
+--8<--
+tutorial/create_news_items/002.php
+--8<--
+```
 
-create_news_items/002.php
-
-</div>
-
-We load the `Form helper <../helpers/form_helper>` with the `helper()`
-function. Most helper functions require the helper to be loaded before
-use.
+We load the [Form helper](#../helpers/form-helper) with the `helper()` function. Most helper functions require the helper to be loaded before use.
 
 Then it returns the created form view.
 
@@ -121,57 +98,39 @@ You're going to do three things here:
 2.  saves the news item to the database.
 3.  returns a success page.
 
-<div class="literalinclude">
-
-create_news_items/005.php
-
-</div>
+```php
+--8<--
+tutorial/create_news_items/005.php
+--8<--
+```
 
 The code above adds a lot of functionality.
 
 ##### Retrieve the Data
 
-First, we use the `IncomingRequest <../incoming/incomingrequest>` object
-`$this->request`, which is set in the controller by the framework.
+First, we use the [IncomingRequest](#../incoming/incomingrequest) object `$this->request`, which is set in the controller by the framework.
 
-We get the necessary items from the **POST** data by the user and set
-them in the `$data` variable.
+We get the necessary items from the **POST** data by the user and set them in the `$data` variable.
 
 ##### Validate the Data
 
-Next, you'll use the Controller-provided helper function
-`validateData() <controller-validatedata>` to validate the submitted
-data. In this case, the title and body fields are required and in the
-specific length.
+Next, you'll use the Controller-provided helper function [validateData()](#controller-validatedata) to validate the submitted data. In this case, the title and body fields are required and in the specific length.
 
-CodeIgniter has a powerful validation library as demonstrated above. You
-can read more about the `Validation library <../libraries/validation>`.
+CodeIgniter has a powerful validation library as demonstrated above. You can read more about the [Validation library](#../libraries/validation).
 
-If the validation fails, we call the `new()` method you just created and
-return the HTML form.
+If the validation fails, we call the `new()` method you just created and return the HTML form.
 
 ##### Save the News Item
 
-If the validation passed all the rules, we get the validated data by
-`$this->validator->getValidated() <validation-getting-validated-data>`
-and set them in the `$post` variable.
+If the validation passed all the rules, we get the validated data by [$this-\>validator-\>getValidated()](#validation-getting-validated-data) and set them in the `$post` variable.
 
-The `NewsModel` is loaded and called. This takes care of passing the
-news item into the model. The `model-save` method handles inserting or
-updating the record automatically, based on whether it finds an array
-key matching the primary key.
+The `NewsModel` is loaded and called. This takes care of passing the news item into the model. The `model-save` method handles inserting or updating the record automatically, based on whether it finds an array key matching the primary key.
 
-This contains a new function `url_title()`. This function -provided by
-the `URL helper <../helpers/url_helper>` - strips down the string you
-pass it, replacing all spaces by dashes (`-`) and makes sure everything
-is in lowercase characters. This leaves you with a nice slug, perfect
-for creating URIs.
+This contains a new function `url_title()`. This function -provided by the [URL helper](#../helpers/url-helper) - strips down the string you pass it, replacing all spaces by dashes (`-`) and makes sure everything is in lowercase characters. This leaves you with a nice slug, perfect for creating URIs.
 
 ##### Return Success Page
 
-After this, view files are loaded and returned to display a success
-message. Create a view at **app/Views/news/success.php** and write a
-success message.
+After this, view files are loaded and returned to display a success message. Create a view at **app/Views/news/success.php** and write a success message.
 
 This could be as simple as:
 
@@ -179,49 +138,31 @@ This could be as simple as:
 
 ## NewsModel Updating
 
-The only thing that remains is ensuring that your model is set up to
-allow data to be saved properly. The `save()` method that was used will
-determine whether the information should be inserted or if the row
-already exists and should be updated, based on the presence of a primary
-key. In this case, there is no `id` field passed to it, so it will
-insert a new row into it's table, `news`.
+The only thing that remains is ensuring that your model is set up to allow data to be saved properly. The `save()` method that was used will determine whether the information should be inserted or if the row already exists and should be updated, based on the presence of a primary key. In this case, there is no `id` field passed to it, so it will insert a new row into it's table, `news`.
 
-However, by default the insert and update methods in the Model will not
-actually save any data because it doesn't know what fields are safe to
-be updated. Edit the `NewsModel` to provide it a list of updatable
-fields in the `$allowedFields` property.
+However, by default the insert and update methods in the Model will not actually save any data because it doesn't know what fields are safe to be updated. Edit the `NewsModel` to provide it a list of updatable fields in the `$allowedFields` property.
 
-<div class="literalinclude">
+```php
+--8<--
+tutorial/create_news_items/003.php
+--8<--
+```
 
-create_news_items/003.php
-
-</div>
-
-This new property now contains the fields that we allow to be saved to
-the database. Notice that we leave out the `id`? That's because you will
-almost never need to do that, since it is an auto-incrementing field in
-the database. This helps protect against Mass Assignment
-Vulnerabilities. If your model is handling your timestamps, you would
-also leave those out.
+This new property now contains the fields that we allow to be saved to the database. Notice that we leave out the `id`? That's because you will almost never need to do that, since it is an auto-incrementing field in the database. This helps protect against Mass Assignment Vulnerabilities. If your model is handling your timestamps, you would also leave those out.
 
 ## Create a News Item
 
-Now point your browser to your local development environment where you
-installed CodeIgniter and add **/news/new** to the URL. Add some news
-and check out the different pages you made.
+Now point your browser to your local development environment where you installed CodeIgniter and add **/news/new** to the URL. Add some news and check out the different pages you made.
 
-<img src="../images/tutorial3.png" class="align-center"
-style="width:45.0%" height="415" alt="image" />
+![image](../images/tutorial3.png)
 
-<img src="../images/tutorial4.png" class="align-center"
-style="width:45.0%" height="415" alt="image" />
+![image](../images/tutorial4.png)
 
 ## Congratulations
 
 You just completed your first CodeIgniter4 application!
 
-The diagram underneath shows your project's **app** folder, with all of
-the files that you created or modified.
+The diagram underneath shows your project's **app** folder, with all of the files that you created or modified.
 
 ``` none
 app/
@@ -243,6 +184,6 @@ app/
     │   ├── about.php
     │   └── home.php
     └── templates
-        ├── footer.php
-        └── header.php
+    ├── footer.php
+    └── header.php
 ```

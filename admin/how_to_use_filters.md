@@ -2,7 +2,7 @@
 
 Filters are simple function that automate changes in the docs conversion process.
 
-All filters are declared in the `convert-with-filters.php` file.
+All filters are declared in the `convert.php` file.
 
 We have two types of filters:
 * `before`
@@ -28,4 +28,4 @@ Available filters:
 
 Usage:
 
-    php ./admin/convert-with-filters.php
+    php ./admin/convert.php

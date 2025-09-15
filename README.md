@@ -15,6 +15,8 @@ to be made for consistency, clarity, and ease of understanding.
 
 To convert, pandoc is required. To install it, see <https://pandoc.org/installing.html>.
 
+Generation of the final documentation uses [MkDocs](https://www.mkdocs.org/) with the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) theme. See [How to Build Docs](./admin/how_to_build_docs.md) for more details.
+
 ## Next Steps:
 
 - [x] Build converter script to convert all files from rst to md
@@ -37,11 +39,13 @@ php ./admin/convert.php
 > This will first delete all files and directories in the `./docs` directory, except for the `assets` directory,
 which contains images and other assets used by the documentation.
 
-You can also run conversion with [filters](./admin/how_to_use_filters):
+You can also convert individual files:
 
 ```bash
-php ./admin/convert-with-filters.php
+php ./admin/convert.php filename
 ```
+
+See [how to use filters](./admin/how_to_use_filters.md) for more details about the conversion process.
 
 ### Previewing the converted files
 

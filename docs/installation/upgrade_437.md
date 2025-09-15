@@ -1,15 +1,19 @@
 # Upgrading from 4.3.6 to 4.3.7
 
-Please refer to the upgrade instructions corresponding to your
-installation method.
+Please refer to the upgrade instructions corresponding to your installation method.
 
-- `Composer Installation App Starter Upgrading <app-starter-upgrading>`
-- `Composer Installation Adding CodeIgniter4 to an Existing Project Upgrading <adding-codeigniter4-upgrading>`
-- `Manual Installation Upgrading <installing-manual-upgrading>`
+- [Composer Installation App Starter Upgrading](#app-starter-upgrading)
 
-<div class="contents" local="" depth="2">
+- [Composer Installation Adding CodeIgniter4 to an Existing Project Upgrading](#adding-codeigniter4-upgrading)
 
-</div>
+- [Manual Installation Upgrading](#installing-manual-upgrading)
+
+- [Breaking Changes](#breaking-changes)
+    - [Feature Testing Request Body](#feature-testing-request-body)
+    - [Return value of Validation::loadRuleGroup()](#return-value-of-validationloadrulegroup)
+- [Project Files](#project-files)
+    - [Content Changes](#content-changes)
+    - [All Changes](#all-changes)
 
 ## Breaking Changes
 
@@ -17,16 +21,13 @@ installation method.
 
 If you call:
 
-1.  `withBody() <feature-setting-the-body>`
-2.  and `withBodyFormat() <feature-formatting-the-request>`
-3.  and pass the `$params` to `call() <feature-requesting-a-page>` (or
-    shorthand methods)
+1.  [withBody()](#feature-setting-the-body)
+2.  and [withBodyFormat()](#feature-formatting-the-request)
+3.  and pass the `$params` to [call()](#feature-requesting-a-page) (or shorthand methods)
 
-the priority for a Request body has been changed. In the unlikely event
-that you have test code affected by this change, modify it.
+the priority for a Request body has been changed. In the unlikely event that you have test code affected by this change, modify it.
 
-For example, now the `$params` is used to build the request body, and
-the `$body` is not used:
+For example, now the `$params` is used to build the request body, and the `$body` is not used:
 
     $this->withBody($body)->withBodyFormat('json')->call('post', $params)
 
@@ -34,9 +35,7 @@ Previously, the `$body` was used for the request body.
 
 ### Return value of Validation::loadRuleGroup()
 
-The return value of `Validation::loadRuleGroup()` has been changed from
-"**rules array**" to "**array** of **rules array** and **customErrors
-array**" (`[rules, customErrors]`).
+The return value of `Validation::loadRuleGroup()` has been changed from "\*\*rules array\*\*" to "\*\*array\*\* of **rules array** and **customErrors array**" (`[rules, customErrors]`).
 
 If you use the method, update the code like the following:
 
@@ -46,19 +45,13 @@ If you use the method, update the code like the following:
 
 ## Project Files
 
-Some files in the **project space** (root, app, public, writable)
-received updates. Due to these files being outside of the **system**
-scope they will not be changed without your intervention.
+Some files in the **project space** (root, app, public, writable) received updates. Due to these files being outside of the **system** scope they will not be changed without your intervention.
 
-There are some third-party CodeIgniter modules available to assist with
-merging changes to the project space: [Explore on
-Packagist](https://packagist.org/explore/?query=codeigniter4%20updates).
+There are some third-party CodeIgniter modules available to assist with merging changes to the project space: \[Explore on Packagist](#https://packagist.org/explore/?query=codeigniter4%20updates)\_.
 
 ### Content Changes
 
-The following files received significant changes (including deprecations
-or visual adjustments) and it is recommended that you merge the updated
-versions with your application:
+The following files received significant changes (including deprecations or visual adjustments) and it is recommended that you merge the updated versions with your application:
 
 #### Config
 
@@ -66,20 +59,30 @@ versions with your application:
 
 ### All Changes
 
-This is a list of all files in the **project space** that received
-changes; many will be simple comments or formatting that have no effect
-on the runtime:
+This is a list of all files in the **project space** that received changes; many will be simple comments or formatting that have no effect on the runtime:
 
 - app/Config/App.php
+
 - app/Config/Autoload.php
+
 - app/Config/Cache.php
+
 - app/Config/ContentSecurityPolicy.php
+
 - app/Config/Filters.php
+
 - app/Config/Kint.php
+
 - app/Config/Logger.php
+
 - app/Config/Migrations.php
+
 - app/Config/Modules.php
+
 - app/Config/Paths.php
+
 - app/Controllers/BaseController.php
+
 - app/Controllers/Home.php
+
 - composer.json

@@ -1,280 +1,227 @@
 # RESTful Resource Handling
 
-<div class="contents" local="" depth="2">
+- [Resource Routes](#resource-routes)
+    - [Change the Controller Used](#change-the-controller-used)
+    - [Change the Placeholder Used](#change-the-placeholder-used)
+    - [Limit the Routes Made](#limit-the-routes-made)
+- [ResourceController](#resourcecontroller)
+- [Presenter Routes](#presenter-routes)
+    - [Change the Controller Used](#change-the-controller-used)
+    - [Change the Placeholder Used](#change-the-placeholder-used)
+    - [Limit the Routes Made](#limit-the-routes-made)
+- [ResourcePresenter](#resourcepresenter)
+- [Presenter/Controller Comparison](#presentercontroller-comparison)
 
-</div>
+Representational State Transfer (REST) is an architectural style for distributed applications, first described by Roy Fielding in his 2000 PhD dissertation, [Architectural Styles and the Design of Network-based Software Architectures](https://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm). That might be a bit of a dry read, and you might find Martin Fowler's \[Richardson Maturity Model](#https://martinfowler.com/articles/richardsonMaturityModel.html)\_ a gentler introduction.
 
-Representational State Transfer (REST) is an architectural style for
-distributed applications, first described by Roy Fielding in his 2000
-PhD dissertation, [Architectural Styles and the Design of Network-based
-Software
-Architectures](https://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm).
-That might be a bit of a dry read, and you might find Martin Fowler's
-[Richardson Maturity
-Model](https://martinfowler.com/articles/richardsonMaturityModel.html) a
-gentler introduction.
+REST has been interpreted, and mis-interpreted, in more ways than most software architectures, and it might be easier to say that the more of Roy Fielding's principles that you embrace in an architecture, the most "RESTful" your application would be considered.
 
-REST has been interpreted, and mis-interpreted, in more ways than most
-software architectures, and it might be easier to say that the more of
-Roy Fielding's principles that you embrace in an architecture, the most
-"RESTful" your application would be considered.
-
-CodeIgniter makes it easy to create RESTful APIs for your resources,
-with its resource routes and
-<span class="title-ref">ResourceController</span>.
+CodeIgniter makes it easy to create RESTful APIs for your resources, with its resource routes and <span class="title-ref">ResourceController</span>.
 
 ## Resource Routes
 
-You can quickly create a handful of RESTful routes for a single resource
-with the `resource()` method. This creates the five most common routes
-needed for full CRUD of a resource: create a new resource, update an
-existing one, list all of that resource, show a single resource, and
-delete a single resource. The first parameter is the resource name:
+You can quickly create a handful of RESTful routes for a single resource with the `resource()` method. This creates the five most common routes needed for full CRUD of a resource: create a new resource, update an existing one, list all of that resource, show a single resource, and delete a single resource. The first parameter is the resource name:
 
-<div class="literalinclude">
+```php
+--8<--
+incoming/restful/001.php
+--8<--
+```
 
-restful/001.php
+!!! note "Note"
+    The ordering above is for clarity, whereas the actual order the routes are created in, in RouteCollection, ensures proper route resolution
 
-</div>
+!!! important "Important"
+    The routes are matched in the order they are specified, so if you have a resource photos above a get 'photos/poll' the show action's route for the resource line will be matched before the get line. To fix this, move the get line above the resource line so that it is matched first.
 
-> [!NOTE]
-> The ordering above is for clarity, whereas the actual order the routes
-> are created in, in RouteCollection, ensures proper route resolution
+The second parameter accepts an array of options that can be used to modify the routes that are generated. While these routes are geared toward API-usage, where more methods are allowed, you can pass in the `websafe` option to have it generate update and delete methods that work with HTML forms:
 
-> [!IMPORTANT]
-> The routes are matched in the order they are specified, so if you have
-> a resource photos above a get 'photos/poll' the show action's route
-> for the resource line will be matched before the get line. To fix
-> this, move the get line above the resource line so that it is matched
-> first.
-
-The second parameter accepts an array of options that can be used to
-modify the routes that are generated. While these routes are geared
-toward API-usage, where more methods are allowed, you can pass in the
-`websafe` option to have it generate update and delete methods that work
-with HTML forms:
-
-<div class="literalinclude">
-
-restful/002.php
-
-</div>
+```php
+--8<--
+incoming/restful/002.php
+--8<--
+```
 
 ### Change the Controller Used
 
-You can specify the controller that should be used by passing in the
-`controller` option with the name of the controller that should be used:
+You can specify the controller that should be used by passing in the `controller` option with the name of the controller that should be used:
 
-<div class="literalinclude">
+```php
+--8<--
+incoming/restful/003.php
+--8<--
+```
 
-restful/003.php
+```php
+--8<--
+incoming/restful/017.php
+--8<--
+```
 
-</div>
-
-<div class="literalinclude">
-
-restful/017.php
-
-</div>
-
-<div class="literalinclude">
-
-restful/018.php
-
-</div>
+```php
+--8<--
+incoming/restful/018.php
+--8<--
+```
 
 See also `controllers-namespace`.
 
 ### Change the Placeholder Used
 
-By default, the `(:segment)` placeholder is used when a resource ID is
-needed. You can change this by passing in the `placeholder` option with
-the new string to use:
+By default, the `(:segment)` placeholder is used when a resource ID is needed. You can change this by passing in the `placeholder` option with the new string to use:
 
-<div class="literalinclude">
-
-restful/004.php
-
-</div>
+```php
+--8<--
+incoming/restful/004.php
+--8<--
+```
 
 ### Limit the Routes Made
 
-You can restrict the routes generated with the `only` option. This
-should be **an array** or **comma separated list** of method names that
-should be created. Only routes that match one of these methods will be
-created. The rest will be ignored:
+You can restrict the routes generated with the `only` option. This should be **an array** or **comma separated list** of method names that should be created. Only routes that match one of these methods will be created. The rest will be ignored:
 
-<div class="literalinclude">
+```php
+--8<--
+incoming/restful/005.php
+--8<--
+```
 
-restful/005.php
+Otherwise you can remove unused routes with the `except` option. This should also be **an array** or **comma separated list** of method names. This option run after `only`:
 
-</div>
+```php
+--8<--
+incoming/restful/006.php
+--8<--
+```
 
-Otherwise you can remove unused routes with the `except` option. This
-should also be **an array** or **comma separated list** of method names.
-This option run after `only`:
-
-<div class="literalinclude">
-
-restful/006.php
-
-</div>
-
-Valid methods are: `index`, `show`, `create`, `update`, `new`, `edit`
-and `delete`.
+Valid methods are: `index`, `show`, `create`, `update`, `new`, `edit` and `delete`.
 
 ## ResourceController
 
-The `ResourceController` provides a convenient starting point for your
-RESTful API, with methods that correspond to the resource routes above.
+The `ResourceController` provides a convenient starting point for your RESTful API, with methods that correspond to the resource routes above.
 
-Extend it, over-riding the `modelName` and `format` properties, and then
-implement those methods that you want handled:
+Extend it, over-riding the `modelName` and `format` properties, and then implement those methods that you want handled:
 
-<div class="literalinclude">
-
-restful/007.php
-
-</div>
+```php
+--8<--
+incoming/restful/007.php
+--8<--
+```
 
 The routing for this would be:
 
-<div class="literalinclude">
-
-restful/008.php
-
-</div>
+```php
+--8<--
+incoming/restful/008.php
+--8<--
+```
 
 ## Presenter Routes
 
-You can quickly create a presentation controller which aligns with a
-resource controller, using the `presenter()` method. This creates routes
-for the controller methods that would return views for your resource, or
-process forms submitted from those views.
+You can quickly create a presentation controller which aligns with a resource controller, using the `presenter()` method. This creates routes for the controller methods that would return views for your resource, or process forms submitted from those views.
 
-It is not needed, since the presentation can be handled with a
-conventional controller - it is a convenience. Its usage is similar to
-the resource routing:
+It is not needed, since the presentation can be handled with a conventional controller - it is a convenience. Its usage is similar to the resource routing:
 
-<div class="literalinclude">
+```php
+--8<--
+incoming/restful/009.php
+--8<--
+```
 
-restful/009.php
+!!! note "Note"
+    The ordering above is for clarity, whereas the actual order the routes are created in, in RouteCollection, ensures proper route resolution
 
-</div>
+You would not have routes for <span class="title-ref">photos</span> for both a resource and a presenter controller. You need to distinguish them, for instance:
 
-> [!NOTE]
-> The ordering above is for clarity, whereas the actual order the routes
-> are created in, in RouteCollection, ensures proper route resolution
+```php
+--8<--
+incoming/restful/010.php
+--8<--
+```
 
-You would not have routes for <span class="title-ref">photos</span> for
-both a resource and a presenter controller. You need to distinguish
-them, for instance:
-
-<div class="literalinclude">
-
-restful/010.php
-
-</div>
-
-The second parameter accepts an array of options that can be used to
-modify the routes that are generated.
+The second parameter accepts an array of options that can be used to modify the routes that are generated.
 
 ### Change the Controller Used
 
-You can specify the controller that should be used by passing in the
-`controller` option with the name of the controller that should be used:
+You can specify the controller that should be used by passing in the `controller` option with the name of the controller that should be used:
 
-<div class="literalinclude">
+```php
+--8<--
+incoming/restful/011.php
+--8<--
+```
 
-restful/011.php
+```php
+--8<--
+incoming/restful/019.php
+--8<--
+```
 
-</div>
-
-<div class="literalinclude">
-
-restful/019.php
-
-</div>
-
-<div class="literalinclude">
-
-restful/020.php
-
-</div>
+```php
+--8<--
+incoming/restful/020.php
+--8<--
+```
 
 See also `controllers-namespace`.
 
 ### Change the Placeholder Used
 
-By default, the `(:segment)` placeholder is used when a resource ID is
-needed. You can change this by passing in the `placeholder` option with
-the new string to use:
+By default, the `(:segment)` placeholder is used when a resource ID is needed. You can change this by passing in the `placeholder` option with the new string to use:
 
-<div class="literalinclude">
-
-restful/012.php
-
-</div>
+```php
+--8<--
+incoming/restful/012.php
+--8<--
+```
 
 ### Limit the Routes Made
 
-You can restrict the routes generated with the `only` option. This
-should be **an array** or **comma separated list** of method names that
-should be created. Only routes that match one of these methods will be
-created. The rest will be ignored:
+You can restrict the routes generated with the `only` option. This should be **an array** or **comma separated list** of method names that should be created. Only routes that match one of these methods will be created. The rest will be ignored:
 
-<div class="literalinclude">
+```php
+--8<--
+incoming/restful/013.php
+--8<--
+```
 
-restful/013.php
+Otherwise you can remove unused routes with the `except` option. This should also be **an array** or **comma separated list** of method names. This option run after `only`:
 
-</div>
+```php
+--8<--
+incoming/restful/014.php
+--8<--
+```
 
-Otherwise you can remove unused routes with the `except` option. This
-should also be **an array** or **comma separated list** of method names.
-This option run after `only`:
-
-<div class="literalinclude">
-
-restful/014.php
-
-</div>
-
-Valid methods are: `index`, `show`, `new`, `create`, `edit`, `update`,
-`remove` and `delete`.
+Valid methods are: `index`, `show`, `new`, `create`, `edit`, `update`, `remove` and `delete`.
 
 ## ResourcePresenter
 
-The `ResourcePresenter` provides a convenient starting point for
-presenting views of your resource, and processing data from forms in
-those views, with methods that align to the resource routes above.
+The `ResourcePresenter` provides a convenient starting point for presenting views of your resource, and processing data from forms in those views, with methods that align to the resource routes above.
 
-Extend it, over-riding the `modelName` property, and then implement
-those methods that you want handled:
+Extend it, over-riding the `modelName` property, and then implement those methods that you want handled:
 
-<div class="literalinclude">
-
-restful/015.php
-
-</div>
+```php
+--8<--
+incoming/restful/015.php
+--8<--
+```
 
 The routing for this would be:
 
-<div class="literalinclude">
-
-restful/016.php
-
-</div>
+```php
+--8<--
+incoming/restful/016.php
+--8<--
+```
 
 ## Presenter/Controller Comparison
 
-This table presents a comparison of the default routes created by
-<span class="title-ref">resource()</span> and
-<span class="title-ref">presenter()</span> with their corresponding
-Controller functions.
+This table presents a comparison of the default routes created by <span class="title-ref">resource()</span> and <span class="title-ref">presenter()</span> with their corresponding Controller functions.
 
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Operation</th>
 <th>Method</th>
 <th>Controller Route</th>
@@ -284,7 +231,7 @@ Controller functions.
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>New</strong></td>
 <td>GET</td>
 <td>photos/new</td>
@@ -292,15 +239,23 @@ Controller functions.
 <td><code>new()</code></td>
 <td><code>new()</code></td>
 </tr>
-<tr class="even">
-<td><p><strong>Create</strong> Create (alias)</p></td>
-<td><p>POST POST</p></td>
-<td><p>photos</p></td>
-<td><p>photos photos/create</p></td>
-<td><p><code>create()</code></p></td>
-<td><p><code>create()</code> <code>create()</code></p></td>
+<tr>
+<td><strong>Create</strong></td>
+<td>POST</td>
+<td>photos</td>
+<td>photos</td>
+<td><code>create()</code></td>
+<td><code>create()</code></td>
 </tr>
-<tr class="odd">
+<tr>
+<td>Create (alias)</td>
+<td>POST</td>
+<td></td>
+<td>photos/create</td>
+<td></td>
+<td><code>create()</code></td>
+</tr>
+<tr>
 <td><strong>List</strong></td>
 <td>GET</td>
 <td>photos</td>
@@ -308,38 +263,69 @@ Controller functions.
 <td><code>index()</code></td>
 <td><code>index()</code></td>
 </tr>
-<tr class="even">
-<td><p><strong>Show</strong> Show (alias)</p></td>
-<td><p>GET GET</p></td>
-<td><p>photos/(:segment)</p></td>
-<td><p>photos/(:segment) photos/show/(:segment)</p></td>
-<td><p><code>show($id = null)</code></p></td>
-<td><p><code>show($id = null)</code>
-<code>show($id = null)</code></p></td>
+<tr>
+<td><strong>Show</strong></td>
+<td>GET</td>
+<td>photos/(:segment)</td>
+<td>photos/(:segment)</td>
+<td><code>show($id = null)</code></td>
+<td><code>show($id = null)</code></td>
 </tr>
-<tr class="odd">
-<td><p><strong>Edit</strong> <strong>Update</strong></p></td>
-<td><p>GET PUT/PATCH</p></td>
-<td><p>photos/(:segment)/edit photos/(:segment)</p></td>
-<td><p>photos/edit/(:segment)</p></td>
-<td><p><code>edit($id = null)</code>
-<code>update($id = null)</code></p></td>
-<td><p><code>edit($id = null)</code></p></td>
+<tr>
+<td>Show (alias)</td>
+<td>GET</td>
+<td></td>
+<td>photos/show/(:segment)</td>
+<td></td>
+<td><code>show($id = null)</code></td>
 </tr>
-<tr class="even">
-<td><p>Update (websafe) <strong>Remove</strong> <strong>Delete</strong>
-Delete (websafe)</p></td>
-<td><p>POST GET DELETE POST</p></td>
-<td><p>photos/(:segment)</p>
-<p>photos/(:segment)</p></td>
-<td><p>photos/update/(:segment) photos/remove/(:segment)</p>
-<p>photos/delete/(:segment)</p></td>
-<td><p><code>update($id = null)</code></p>
-<p><code>delete($id = null)</code>
-<code>delete($id = null)</code></p></td>
-<td><p><code>update($id = null)</code>
-<code>remove($id = null)</code></p>
-<p><code>delete($id = null)</code></p></td>
+<tr>
+<td><strong>Edit</strong></td>
+<td>GET</td>
+<td>photos/(:segment)/edit</td>
+<td>photos/edit/(:segment)</td>
+<td><code>edit($id = null)</code></td>
+<td><code>edit($id = null)</code></td>
+</tr>
+<tr>
+<td><strong>Update</strong></td>
+<td>PUT/PATCH</td>
+<td>photos/(:segment)</td>
+<td></td>
+<td><code>update($id = null)</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Update (websafe)</td>
+<td>POST</td>
+<td>photos/(:segment)</td>
+<td>photos/update/(:segment)</td>
+<td><code>update($id = null)</code></td>
+<td><code>update($id = null)</code></td>
+</tr>
+<tr>
+<td><strong>Remove</strong></td>
+<td>GET</td>
+<td></td>
+<td>photos/remove/(:segment)</td>
+<td></td>
+<td><code>remove($id = null)</code></td>
+</tr>
+<tr>
+<td><strong>Delete</strong></td>
+<td>DELETE</td>
+<td>photos/(:segment)</td>
+<td></td>
+<td><code>delete($id = null)</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Delete (websafe)</td>
+<td>POST</td>
+<td></td>
+<td>photos/delete/(:segment)</td>
+<td><code>delete($id = null)</code></td>
+<td><code>delete($id = null)</code></td>
 </tr>
 </tbody>
 </table>

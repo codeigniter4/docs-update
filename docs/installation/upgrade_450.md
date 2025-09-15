@@ -1,15 +1,28 @@
 # Upgrading from 4.4.x to 4.5.0
 
-Please refer to the upgrade instructions corresponding to your
-installation method.
+Please refer to the upgrade instructions corresponding to your installation method.
 
-- `Composer Installation App Starter Upgrading <app-starter-upgrading>`
-- `Composer Installation Adding CodeIgniter4 to an Existing Project Upgrading <adding-codeigniter4-upgrading>`
-- `Manual Installation Upgrading <installing-manual-upgrading>`
+- [Composer Installation App Starter Upgrading](#app-starter-upgrading)
 
-<div class="contents" local="" depth="2">
+- [Composer Installation Adding CodeIgniter4 to an Existing Project Upgrading](#adding-codeigniter4-upgrading)
 
-</div>
+- [Manual Installation Upgrading](#installing-manual-upgrading)
+
+- [Mandatory File Changes](#mandatory-file-changes)
+- [Breaking Changes](#breaking-changes)
+    - [Lowercase HTTP Method Name](#lowercase-http-method-name)
+    - [Nested Route Groups and Options](#nested-route-groups-and-options)
+    - [Method Signature Changes](#method-signature-changes)
+    - [Filter Execution Order](#filter-execution-order)
+    - [FileLocator::findQualifiedNameFromPath()](#filelocatorfindqualifiednamefrompath)
+    - [BaseModel::getIdValue()](#basemodelgetidvalue)
+    - [Factories](#factories)
+    - [Auto Routing (Legacy)](#auto-routing-legacy)
+    - [Removed Deprecated Items](#removed-deprecated-items)
+- [Breaking Enhancements](#breaking-enhancements)
+- [Project Files](#project-files)
+    - [Content Changes](#content-changes)
+    - [All Changes](#all-changes)
 
 ## Mandatory File Changes
 
@@ -19,20 +32,13 @@ installation method.
 
 #### Request::getMethod()
 
-For historical reasons, `Request::getMethod()` returned HTTP method
-names in lower case by default.
+For historical reasons, `Request::getMethod()` returned HTTP method names in lower case by default.
 
-But the method token is case-sensitive because it might be used as a
-gateway to object-based systems with case-sensitive method names. By
-convention, standardized methods are defined in all-uppercase US-ASCII
-letters. See <https://www.rfc-editor.org/rfc/rfc9110#name-overview>.
+But the method token is case-sensitive because it might be used as a gateway to object-based systems with case-sensitive method names. By convention, standardized methods are defined in all-uppercase US-ASCII letters. See <https://www.rfc-editor.org/rfc/rfc9110#name-overview>.
 
-Now the deprecated `$upper` parameter in `Request::getMethod()` has been
-removed, and the `getMethod()` returns the as-is HTTP method name. That
-is, uppercase like "GET", "POST", and so on.
+Now the deprecated `$upper` parameter in `Request::getMethod()` has been removed, and the `getMethod()` returns the as-is HTTP method name. That is, uppercase like "GET", "POST", and so on.
 
-If you want lowercase HTTP method names, use PHP's `strtolower()`
-function:
+If you want lowercase HTTP method names, use PHP's `strtolower()` function:
 
     strtolower($request->getMethod())
 
@@ -49,11 +55,9 @@ You should update the keys in `$methods` in **app/Config/Filters.php**:
 
 #### CURLRequest::request()
 
-In previous versions, you could pass lowercase HTTP methods to the
-`request()` method. But this bug has been fixed.
+In previous versions, you could pass lowercase HTTP methods to the `request()` method. But this bug has been fixed.
 
-Now you must pass the correct HTTP method names like "GET", "POST".
-Otherwise you would get the error response:
+Now you must pass the correct HTTP method names like "GET", "POST". Otherwise you would get the error response:
 
     $client   = \Config\Services::curlrequest();
     $response = $client->request('get', 'https://www.google.com/', [
@@ -64,11 +68,9 @@ Otherwise you would get the error response:
 
 ### Nested Route Groups and Options
 
-A bug that prevented options passed to outer `group()` from being merged
-with options in inner `group()` has been fixed.
+A bug that prevented options passed to outer `group()` from being merged with options in inner `group()` has been fixed.
 
-Check and correct your route configuration as it could change the values
-of the options applied.
+Check and correct your route configuration as it could change the values of the options applied.
 
 For example,
 
@@ -86,22 +88,15 @@ $routes->group('admin', ['filter' => 'csrf'], static function ($routes) {
 });
 ```
 
-Now the `csrf` filter is executed for both the route `admin` and
-`admin/users`. In previous versions, it is executed only for the route
-`admin`. See also `routing-nesting-groups`.
+Now the `csrf` filter is executed for both the route `admin` and `admin/users`. In previous versions, it is executed only for the route `admin`. See also `routing-nesting-groups`.
 
 ### Method Signature Changes
 
-Some method signature changes have been made. Classes that extend them
-should update their APIs to reflect the changes. See
-`ChangeLog <v450-method-signature-changes>` for details.
+Some method signature changes have been made. Classes that extend them should update their APIs to reflect the changes. See [ChangeLog](#v450-method-signature-changes) for details.
 
 ### Filter Execution Order
 
-The order in which Controller Filters are executed has changed. If you
-wish to maintain the same execution order as in previous versions, set
-`true` to `Config\Feature::$oldFilterOrder`. See also
-`filter-execution-order`.
+The order in which Controller Filters are executed has changed. If you wish to maintain the same execution order as in previous versions, set `true` to `Config\Feature::$oldFilterOrder`. See also `filter-execution-order`.
 
 1.  The order of execution of filter groups has been changed.
 
@@ -115,8 +110,7 @@ wish to maintain the same execution order as in previous versions, set
     >     Previous: route → globals → filters
     >          Now: route → filters → globals
 
-2\. The After Filters in *Route* filters and *Filters* filters execution
-order is now reversed.
+2\. The After Filters in *Route* filters and *Filters* filters execution order is now reversed.
 
 > When you have the following configuration:
 >
@@ -143,68 +137,49 @@ order is now reversed.
 
 ### FileLocator::findQualifiedNameFromPath()
 
-In previous versions, `FileLocator::findQualifiedNameFromPath()` returns
-Fully Qualified Classnames with a leading `\`. Now the leading `\` has
-been removed.
+In previous versions, `FileLocator::findQualifiedNameFromPath()` returns Fully Qualified Classnames with a leading `\`. Now the leading `\` has been removed.
 
 If you have code that expects a leading `\`, fix it.
 
 ### BaseModel::getIdValue()
 
-The `BaseModel::getIdValue()` has been changed to `abstract`, and the
-implementation has been removed.
+The `BaseModel::getIdValue()` has been changed to `abstract`, and the implementation has been removed.
 
-If you extneds `BaseModel`, implement the `getIdValue()` method in the
-child class.
+If you extneds `BaseModel`, implement the `getIdValue()` method in the child class.
 
 ### Factories
 
-`../concepts/factories` has been changed to a final class. In the
-unlikely event, you have inherited the Factories, stop inheriting and
-copy the code into your Factories class.
+[Factories](../concepts/factories.md) has been changed to a final class. In the unlikely event, you have inherited the Factories, stop inheriting and copy the code into your Factories class.
 
 ### Auto Routing (Legacy)
 
-In previous versions, the controller filters might be executed even when
-the corresponding controller was not found.
+In previous versions, the controller filters might be executed even when the corresponding controller was not found.
 
-This bug has been fixed and now a `PageNotFoundException` will be thrown
-and the filters will not be executed if the controller is not found.
+This bug has been fixed and now a `PageNotFoundException` will be thrown and the filters will not be executed if the controller is not found.
 
-If you have code that depends on this bug, for example if you expect
-global filters to be executed even for non-existent pages, please add
-the necessary routes.
+If you have code that depends on this bug, for example if you expect global filters to be executed even for non-existent pages, please add the necessary routes.
 
 ### Removed Deprecated Items
 
-Some deprecated items have been removed. If you extend these classes and
-are using them, upgrade your code. See
-`ChangeLog <v450-removed-deprecated-items>` for details.
+Some deprecated items have been removed. If you extend these classes and are using them, upgrade your code. See [ChangeLog](#v450-removed-deprecated-items) for details.
 
 ## Breaking Enhancements
 
 ## Project Files
 
-Some files in the **project space** (root, app, public, writable)
-received updates. Due to these files being outside of the **system**
-scope they will not be changed without your intervention.
+Some files in the **project space** (root, app, public, writable) received updates. Due to these files being outside of the **system** scope they will not be changed without your intervention.
 
-There are some third-party CodeIgniter modules available to assist with
-merging changes to the project space: [Explore on
-Packagist](https://packagist.org/explore/?query=codeigniter4%20updates).
+There are some third-party CodeIgniter modules available to assist with merging changes to the project space: \[Explore on Packagist](#https://packagist.org/explore/?query=codeigniter4%20updates)\_.
 
 ### Content Changes
 
-The following files received significant changes (including deprecations
-or visual adjustments) and it is recommended that you merge the updated
-versions with your application:
+The following files received significant changes (including deprecations or visual adjustments) and it is recommended that you merge the updated versions with your application:
 
 #### Config
 
 ##### app/Config/Filters.php
 
-Required Filters have been added, so the following changes were made.
-See also `Upgrading <v450-required-filters>`.
+Required Filters have been added, so the following changes were made. See also [Upgrading](#v450-required-filters).
 
 The base class has been changed:
 
@@ -238,28 +213,27 @@ The `'toolbar'` in the `$global['after']` was removed.
 ##### Others
 
 - app/Config/Boot/production.php  
-  - The default error level to `error_reporting()` has been changed to
-    `E_ALL & ~E_DEPRECATED`.
+
+- The default error level to `error_reporting()` has been changed to `E_ALL & ~E_DEPRECATED`.
 
 - app/Config/Database.php  
-  - The default value of `charset` in `$default` has been change to
-    `utf8mb4`.
-  - The default value of `DBCollat` in `$default` has been change to
-    `utf8mb4_general_ci`.
-  - The default value of `DBCollat` in `$tests` has been change to `''`.
+
+- The default value of `charset` in `$default` has been change to `utf8mb4`.
+
+- The default value of `DBCollat` in `$default` has been change to `utf8mb4_general_ci`.
+
+- The default value of `DBCollat` in `$tests` has been change to `''`.
 
 - app/Config/Feature.php  
-  - `Config\Feature::$multipleFilters` has been removed, because now
-    `multiple-filters` are always enabled.
+
+- `Config\Feature::$multipleFilters` has been removed, because now `multiple-filters` are always enabled.
 
 - app/Config/Kint.php  
-  - It no longer extends `BaseConfig` because enabling
-    `factories-config-caching` could cause errors.
+
+- It no longer extends `BaseConfig` because enabling `factories-config-caching` could cause errors.
 
 ### All Changes
 
-This is a list of all files in the **project space** that received
-changes; many will be simple comments or formatting that have no effect
-on the runtime:
+This is a list of all files in the **project space** that received changes; many will be simple comments or formatting that have no effect on the runtime:
 
 - @TODO

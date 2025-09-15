@@ -1,25 +1,25 @@
 # Upgrading from 4.1.5 to 4.1.6
 
-Please refer to the upgrade instructions corresponding to your
-installation method.
+Please refer to the upgrade instructions corresponding to your installation method.
 
-- `Composer Installation App Starter Upgrading <app-starter-upgrading>`
-- `Composer Installation Adding CodeIgniter4 to an Existing Project Upgrading <adding-codeigniter4-upgrading>`
-- `Manual Installation Upgrading <installing-manual-upgrading>`
+- [Composer Installation App Starter Upgrading](#app-starter-upgrading)
 
-<div class="contents" local="" depth="2">
+- [Composer Installation Adding CodeIgniter4 to an Existing Project Upgrading](#adding-codeigniter4-upgrading)
 
-</div>
+- [Manual Installation Upgrading](#installing-manual-upgrading)
+
+- [Breaking Changes](#breaking-changes)
+    - [Validation Result Changes](#validation-result-changes)
+- [Breaking Enhancements](#breaking-enhancements)
+- [Project Files](#project-files)
+    - [Content Changes](#content-changes)
+    - [All Changes](#all-changes)
 
 ## Breaking Changes
 
 ### Validation Result Changes
 
-Due to a bug fix, the Validation now might change the validation results
-when you validate an array item (see
-`Changelog <changelog-v416-validation-changes>`). So check the
-validation results for all the code that validates the array. Validating
-multiple fields like `contacts.*.name` is not affected.
+Due to a bug fix, the Validation now might change the validation results when you validate an array item (see [Changelog](#changelog-v416-validation-changes)). So check the validation results for all the code that validates the array. Validating multiple fields like `contacts.*.name` is not affected.
 
 If you have the following form:
 
@@ -38,38 +38,33 @@ none.
 
 ## Project Files
 
-Numerous files in the **project space** (root, app, public, writable)
-received updates. Due to these files being outside of the **system**
-scope they will not be changed without your intervention. There are some
-third-party CodeIgniter modules available to assist with merging changes
-to the project space: [Explore on
-Packagist](https://packagist.org/explore/?query=codeigniter4%20updates).
+Numerous files in the **project space** (root, app, public, writable) received updates. Due to these files being outside of the **system** scope they will not be changed without your intervention. There are some third-party CodeIgniter modules available to assist with merging changes to the project space: \[Explore on Packagist](#https://packagist.org/explore/?query=codeigniter4%20updates)\_.
 
-> [!NOTE]
-> Except in very rare cases for bug fixes, no changes made to files for
-> the project space will break your application. All changes noted here
-> are optional until the next major version, and any mandatory changes
-> will be covered in the sections above.
+!!! note "Note"
+    Except in very rare cases for bug fixes, no changes made to files for the project space will break your application. All changes noted here are optional until the next major version, and any mandatory changes will be covered in the sections above.
 
 ### Content Changes
 
-The following files received significant changes (including deprecations
-or visual adjustments) and it is recommended that you merge the updated
-versions with your application:
+The following files received significant changes (including deprecations or visual adjustments) and it is recommended that you merge the updated versions with your application:
 
 - `app/Config/Filters.php`
+
 - `app/Config/Mimes.php`
+
 - `app/Config/Security.php`
+
 - `app/Config/Toolbar.php`
 
 ### All Changes
 
-This is a list of all files in the **project space** that received
-changes; many will be simple comments or formatting that have no effect
-on the runtime:
+This is a list of all files in the **project space** that received changes; many will be simple comments or formatting that have no effect on the runtime:
 
 - `app/Config/Filters.php`
+
 - `app/Config/Mimes.php`
+
 - `app/Config/Security.php`
+
 - `app/Config/Toolbar.php`
+
 - `app/Views/errors/html/error_exception.php`

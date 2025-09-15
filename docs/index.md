@@ -1,119 +1,52 @@
 # CodeIgniter4 User Guide
 
-<div class="toctree" includehidden="" titlesonly="">
-
-intro/index
-
-</div>
+- [Index](intro/index.md)
 
 ## Getting Started
 
-<div class="toctree" maxdepth="2" titlesonly="">
-
-installation/index
-
-</div>
+- [Index](installation/index.md)
 
 ## Build Your First Application
 
-<div class="toctree" includehidden="" titlesonly="">
-
-tutorial/index
-
-</div>
+- [Index](tutorial/index.md)
 
 ## Overview & General Topics
 
-<div class="toctree" titlesonly="">
+- [Index](concepts/index.md)
 
-concepts/index
-
-</div>
-
-<div class="toctree" titlesonly="">
-
-general/index
-
-</div>
+- [Index](general/index.md)
 
 ## Request Handling
 
-<div class="toctree" titlesonly="">
+- [Index](incoming/index.md)
 
-incoming/index
-
-</div>
-
-<div class="toctree" titlesonly="">
-
-outgoing/index
-
-</div>
+- [Index](outgoing/index.md)
 
 ## Handling Databases
 
-<div class="toctree" titlesonly="">
+- [Working with Databases](database/index.md)
 
-database/index
+- [Index](models/index.md)
 
-</div>
-
-<div class="toctree" titlesonly="">
-
-models/index
-
-</div>
-
-<div class="toctree" titlesonly="">
-
-dbmgmt/index
-
-</div>
+- [Index](dbmgmt/index.md)
 
 ## Libraries & Helpers
 
-<div class="toctree" titlesonly="">
+- [Index](libraries/index.md)
 
-libraries/index
-
-</div>
-
-<div class="toctree" titlesonly="">
-
-helpers/index
-
-</div>
+- [Index](helpers/index.md)
 
 ## Advanced Topics
 
-<div class="toctree" titlesonly="">
+- [Index](testing/index.md)
 
-testing/index
+- [Index](cli/index.md)
 
-</div>
+- [Index](extending/index.md)
 
-<div class="toctree" titlesonly="">
-
-cli/index
-
-</div>
-
-<div class="toctree" titlesonly="">
-
-extending/index
-
-</div>
-
-<div class="toctree" hidden="">
-
-license changelogs/index
-
-</div>
+- [License](license.md)
+- [Index](changelogs/index.md)
 
 ## Official Packages
 
-<div class="toctree" titlesonly="">
-
-libraries/official_packages
-
-</div>
+- [Official Packages](libraries/official_packages.md)

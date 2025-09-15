@@ -2,9 +2,10 @@
 
 CodeIgniter 4 has been designed to be easy to extend or build upon.
 
-<div class="toctree" titlesonly="">
-
-core_classes common events basecontroller authentication
-composer_packages contributing
-
-</div>
+- [Core Classes](core_classes.md)
+- [Common](common.md)
+- [Events](events.md)
+- [Basecontroller](basecontroller.md)
+- [Authentication](authentication.md)
+- [Composer Packages](composer_packages.md)
+- [Contributing](contributing.md)

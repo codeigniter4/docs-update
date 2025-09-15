@@ -2,9 +2,15 @@
 
 View components are used to build what is returned to the user.
 
-<div class="toctree" titlesonly="">
-
-views view_cells view_renderer view_layouts view_parser view_decorators
-table response api_responses csp localization alternative_php
-
-</div>
+- [Views](views.md)
+- [View Cells](view_cells.md)
+- [View Renderer](view_renderer.md)
+- [View Layouts](view_layouts.md)
+- [View Parser](view_parser.md)
+- [View Decorators](view_decorators.md)
+- [Table](table.md)
+- [Response](response.md)
+- [Api Responses](api_responses.md)
+- [Csp](csp.md)
+- [Localization](localization.md)
+- [Alternative Php](alternative_php.md)

@@ -1,375 +1,319 @@
 # Working with URIs
 
-CodeIgniter provides an object oriented solution for working with URI's
-in your application. Using this makes it simple to ensure that the
-structure is always correct, no matter how complex the URI might be, as
-well as adding relative URI to an existing one and have it resolved
-safely and correctly.
+CodeIgniter provides an object oriented solution for working with URI's in your application. Using this makes it simple to ensure that the structure is always correct, no matter how complex the URI might be, as well as adding relative URI to an existing one and have it resolved safely and correctly.
 
-<div class="contents" local="" depth="2">
-
-</div>
+- [Creating URI instances](#creating-uri-instances)
+    - [The Current URI](#the-current-uri)
+- [URI Strings](#uri-strings)
+- [The URI Parts](#the-uri-parts)
+    - [Scheme](#scheme)
+    - [Authority](#authority)
+    - [UserInfo](#userinfo)
+    - [Host](#host)
+    - [Port](#port)
+    - [Path](#path)
+    - [Query](#query)
+    - [Fragment](#fragment)
+- [URI Segments](#uri-segments)
+- [Disable Throwing Exceptions](#disable-throwing-exceptions)
 
 ## Creating URI instances
 
 Creating a URI instance is as simple as creating a new class instance.
 
-When you create the new instance, you can pass a full or partial URL in
-the constructor and it will be parsed into its appropriate sections:
+When you create the new instance, you can pass a full or partial URL in the constructor and it will be parsed into its appropriate sections:
 
-<div class="literalinclude" lines="2-">
+```php
+--8<--
+libraries/uri/001.php:2:
+--8<--
+```
 
-uri/001.php
+Alternatively, you can use the `service()` function to return an instance for you:
 
-</div>
-
-Alternatively, you can use the `service()` function to return an
-instance for you:
-
-<div class="literalinclude" lines="2-">
-
-uri/003.php
-
-</div>
+```php
+--8<--
+libraries/uri/003.php:2:
+--8<--
+```
 
 Since v4.4.0, if you don't pass a URL, it returns the current URI:
 
-<div class="literalinclude" lines="2-">
+```php
+--8<--
+libraries/uri/002.php:2:
+--8<--
+```
 
-uri/002.php
-
-</div>
-
-> [!NOTE]
-> The above code returns the `SiteURI` instance, that extends the `URI`
-> class. The `URI` class is for general URIs, but the `SiteURI` class is
-> for your site URIs.
+!!! note "Note"
+    The above code returns the `SiteURI` instance, that extends the `URI` class. The `URI` class is for general URIs, but the `SiteURI` class is for your site URIs.
 
 ### The Current URI
 
-Many times, all you really want is an object representing the current
-URL of this request. You can use the `current_url()` function available
-in the `../helpers/url_helper`:
+Many times, all you really want is an object representing the current URL of this request. You can use the `current_url()` function available in the [Url Helper](../helpers/url_helper.md):
 
-<div class="literalinclude" lines="2-">
+```php
+--8<--
+libraries/uri/004.php:2:
+--8<--
+```
 
-uri/004.php
+You must pass `true` as the first parameter, otherwise, it will return the string representation of the current URL.
 
-</div>
+This URI is based on the path (relative to your `baseURL`) as determined by the current request object and your settings in `Config\App` (`baseURL`, `indexPage`, and `forceGlobalSecureRequests`).
 
-You must pass `true` as the first parameter, otherwise, it will return
-the string representation of the current URL.
+Assuming that you're in a controller that extends `CodeIgniter\Controller`, you can also get the current SiteURI instance:
 
-This URI is based on the path (relative to your `baseURL`) as determined
-by the current request object and your settings in `Config\App`
-(`baseURL`, `indexPage`, and `forceGlobalSecureRequests`).
-
-Assuming that you're in a controller that extends
-`CodeIgniter\Controller`, you can also get the current SiteURI instance:
-
-<div class="literalinclude" lines="2-">
-
-uri/005.php
-
-</div>
+```php
+--8<--
+libraries/uri/005.php:2:
+--8<--
+```
 
 ## URI Strings
 
-Many times, all you really want is to get a string representation of a
-URI. This is easy to do by simply casting the URI as a string:
+Many times, all you really want is to get a string representation of a URI. This is easy to do by simply casting the URI as a string:
 
-<div class="literalinclude">
+```php
+--8<--
+libraries/uri/006.php
+--8<--
+```
 
-uri/006.php
+If you know the pieces of the URI and just want to ensure it's all formatted correctly, you can generate a string using the URI class' static `createURIString()` method:
 
-</div>
+```php
+--8<--
+libraries/uri/007.php
+--8<--
+```
 
-If you know the pieces of the URI and just want to ensure it's all
-formatted correctly, you can generate a string using the URI class'
-static `createURIString()` method:
-
-<div class="literalinclude">
-
-uri/007.php
-
-</div>
-
-> [!IMPORTANT]
-> When `URI` is cast to a string, it will attempt to adjust project URLs
-> to the settings defined in `Config\App`. If you need the exact,
-> unaltered string representation then use `URI::createURIString()`
-> instead.
+!!! important "Important"
+    When `URI` is cast to a string, it will attempt to adjust project URLs to the settings defined in `Config\App`. If you need the exact, unaltered string representation then use `URI::createURIString()` instead.
 
 ## The URI Parts
 
-Once you have a URI instance, you can set or retrieve any of the various
-parts of the URI. This section will provide details on what those parts
-are, and how to work with them.
+Once you have a URI instance, you can set or retrieve any of the various parts of the URI. This section will provide details on what those parts are, and how to work with them.
 
 ### Scheme
 
-The scheme is frequently 'http' or 'https', but any scheme is supported,
-including 'file', 'mailto', etc.
+The scheme is frequently 'http' or 'https', but any scheme is supported, including 'file', 'mailto', etc.
 
-<div class="literalinclude">
-
-uri/008.php
-
-</div>
+```php
+--8<--
+libraries/uri/008.php
+--8<--
+```
 
 ### Authority
 
-Many URIs contain several elements that are collectively known as the
-'authority'. This includes any user info, the host and the port number.
-You can retrieve all of these pieces as one single string with the
-`getAuthority()` method, or you can manipulate the individual parts.
+Many URIs contain several elements that are collectively known as the 'authority'. This includes any user info, the host and the port number. You can retrieve all of these pieces as one single string with the `getAuthority()` method, or you can manipulate the individual parts.
 
-<div class="literalinclude">
+```php
+--8<--
+libraries/uri/009.php
+--8<--
+```
 
-uri/009.php
+By default, this will not display the password portion since you wouldn't want to show that to anyone. If you want to show the password, you can use the `showPassword()` method. This URI instance will continue to show that password until you turn it off again, so always make sure that you turn it off as soon as you are finished with it:
 
-</div>
+```php
+--8<--
+libraries/uri/010.php
+--8<--
+```
 
-By default, this will not display the password portion since you
-wouldn't want to show that to anyone. If you want to show the password,
-you can use the `showPassword()` method. This URI instance will continue
-to show that password until you turn it off again, so always make sure
-that you turn it off as soon as you are finished with it:
+If you do not want to display the port, pass in `true` as the only parameter:
 
-<div class="literalinclude">
+```php
+--8<--
+libraries/uri/011.php
+--8<--
+```
 
-uri/010.php
-
-</div>
-
-If you do not want to display the port, pass in `true` as the only
-parameter:
-
-<div class="literalinclude">
-
-uri/011.php
-
-</div>
-
-> [!NOTE]
-> If the current port is the default port for the scheme it will never
-> be displayed.
+!!! note "Note"
+    If the current port is the default port for the scheme it will never be displayed.
 
 ### UserInfo
 
-The userinfo section is simply the username and password that you might
-see with an FTP URI. While you can get this as part of the Authority,
-you can also retrieve it yourself:
+The userinfo section is simply the username and password that you might see with an FTP URI. While you can get this as part of the Authority, you can also retrieve it yourself:
 
-<div class="literalinclude">
+```php
+--8<--
+libraries/uri/012.php
+--8<--
+```
 
-uri/012.php
+By default, it will not display the password, but you can override that with the `showPassword()` method:
 
-</div>
-
-By default, it will not display the password, but you can override that
-with the `showPassword()` method:
-
-<div class="literalinclude">
-
-uri/013.php
-
-</div>
+```php
+--8<--
+libraries/uri/013.php
+--8<--
+```
 
 ### Host
 
-The host portion of the URI is typically the domain name of the URL.
-This can be easily set and retrieved with the `getHost()` and
-`setHost()` methods:
+The host portion of the URI is typically the domain name of the URL. This can be easily set and retrieved with the `getHost()` and `setHost()` methods:
 
-<div class="literalinclude">
-
-uri/014.php
-
-</div>
+```php
+--8<--
+libraries/uri/014.php
+--8<--
+```
 
 ### Port
 
-The port is an integer number between 0 and 65535. Each scheme has a
-default value associated with it.
+The port is an integer number between 0 and 65535. Each scheme has a default value associated with it.
 
-<div class="literalinclude">
+```php
+--8<--
+libraries/uri/015.php
+--8<--
+```
 
-uri/015.php
-
-</div>
-
-When using the `setPort()` method, the port will be checked that it is
-within the valid range and assigned.
+When using the `setPort()` method, the port will be checked that it is within the valid range and assigned.
 
 ### Path
 
-The path are all of the segments within the site itself. As expected,
-the `getPath()` and `setPath()` methods can be used to manipulate it:
+The path are all of the segments within the site itself. As expected, the `getPath()` and `setPath()` methods can be used to manipulate it:
 
-<div class="literalinclude">
+```php
+--8<--
+libraries/uri/016.php
+--8<--
+```
 
-uri/016.php
+!!! note "Note"
+    When setting the path this way, or any other way the class allows, it is sanitized to encode any dangerous characters, and remove dot segments for safety.
 
-</div>
-
-> [!NOTE]
-> When setting the path this way, or any other way the class allows, it
-> is sanitized to encode any dangerous characters, and remove dot
-> segments for safety.
-
-> [!NOTE]
-> Since v4.4.0, the `SiteURI::getRoutePath()` method, returns the URI
-> path relative to baseURL, and the `SiteURI::getPath()` method always
-> returns the full URI path with leading `/`.
+!!! note "Note"
+    Since v4.4.0, the `SiteURI::getRoutePath()` method, returns the URI path relative to baseURL, and the `SiteURI::getPath()` method always returns the full URI path with leading `/`.
 
 ### Query
 
-The query data can be manipulated through the class using simple string
-representations.
+The query data can be manipulated through the class using simple string representations.
 
 #### Getting/Setting Query
 
 Query values can only be set as a string currently.
 
-<div class="literalinclude">
-
-uri/017.php
-
-</div>
+```php
+--8<--
+libraries/uri/017.php
+--8<--
+```
 
 The `setQuery()` method overwrite any existing query variables.
 
-> [!NOTE]
-> Query values cannot contain fragments. An InvalidArgumentException
-> will be thrown if it does.
+!!! note "Note"
+    Query values cannot contain fragments. An InvalidArgumentException will be thrown if it does.
 
 #### Setting Query from Array
 
 You can set query values using an array:
 
-<div class="literalinclude">
-
-uri/018.php
-
-</div>
+```php
+--8<--
+libraries/uri/018.php
+--8<--
+```
 
 The `setQueryArray()` method overwrite any existing query variables.
 
 #### Adding Query Value
 
-You can add a value to the query variables collection without destroying
-the existing query variables with the `addQuery()` method. The first
-parameter is the name of the variable, and the second parameter is the
-value:
+You can add a value to the query variables collection without destroying the existing query variables with the `addQuery()` method. The first parameter is the name of the variable, and the second parameter is the value:
 
-<div class="literalinclude">
-
-uri/019.php
-
-</div>
+```php
+--8<--
+libraries/uri/019.php
+--8<--
+```
 
 #### Filtering Query Values
 
-You can filter the query values returned by passing an options array to
-the `getQuery()` method, with either an *only* or an *except* key:
+You can filter the query values returned by passing an options array to the `getQuery()` method, with either an *only* or an *except* key:
 
-<div class="literalinclude">
+```php
+--8<--
+libraries/uri/020.php
+--8<--
+```
 
-uri/020.php
-
-</div>
-
-This only changes the values returned during this one call. If you need
-to modify the URI's query values more permanently,
+This only changes the values returned during this one call. If you need to modify the URI's query values more permanently,
 
 #### Changing Query Values
 
-you can use the `stripQuery()` and `keepQuery()` methods to change the
-actual object's query variable collection:
+you can use the `stripQuery()` and `keepQuery()` methods to change the actual object's query variable collection:
 
-<div class="literalinclude">
+```php
+--8<--
+libraries/uri/021.php
+--8<--
+```
 
-uri/021.php
-
-</div>
-
-> [!NOTE]
-> By default `setQuery()` and `setQueryArray()` methods uses native
-> `parse_str()` function to prepare data. If you want to use more
-> liberal rules (which allow key names to contain dots), you can use a
-> special method `useRawQueryString()` beforehand.
+!!! note "Note"
+    By default `setQuery()` and `setQueryArray()` methods uses native `parse_str()` function to prepare data. If you want to use more liberal rules (which allow key names to contain dots), you can use a special method `useRawQueryString()` beforehand.
 
 ### Fragment
 
-Fragments are the portion at the end of the URL, preceded by the
-pound-sign (`#`). In HTML URLs these are links to an on-page anchor.
-Media URI's can make use of them in various other ways.
+Fragments are the portion at the end of the URL, preceded by the pound-sign (`#`). In HTML URLs these are links to an on-page anchor. Media URI's can make use of them in various other ways.
 
-<div class="literalinclude">
-
-uri/022.php
-
-</div>
+```php
+--8<--
+libraries/uri/022.php
+--8<--
+```
 
 ## URI Segments
 
 Each section of the path between the slashes is a single segment.
 
-> [!NOTE]
-> In the case of your site URI, URI Segments mean only the URI path part
-> relative to the baseURL. If your baseURL contains sub folders, the
-> values will be different from the current URI path.
+!!! note "Note"
+    In the case of your site URI, URI Segments mean only the URI path part relative to the baseURL. If your baseURL contains sub folders, the values will be different from the current URI path.
 
-The URI class provides a simple way to determine what the values of the
-segments are. The segments start at 1 being the furthest left of the
-path.
+The URI class provides a simple way to determine what the values of the segments are. The segments start at 1 being the furthest left of the path.
 
-<div class="literalinclude">
+```php
+--8<--
+libraries/uri/023.php
+--8<--
+```
 
-uri/023.php
+You can also set a different default value for a particular segment by using the second parameter of the `getSegment()` method. The default is empty string.
 
-</div>
+```php
+--8<--
+libraries/uri/024.php
+--8<--
+```
 
-You can also set a different default value for a particular segment by
-using the second parameter of the `getSegment()` method. The default is
-empty string.
-
-<div class="literalinclude">
-
-uri/024.php
-
-</div>
-
-> [!NOTE]
-> You can get the last +1 segment. When you try to get the last +2 or
-> more segment, an exception will be thrown by default. You could
-> prevent throwing exceptions with the `setSilent()` method.
+!!! note "Note"
+    You can get the last +1 segment. When you try to get the last +2 or more segment, an exception will be thrown by default. You could prevent throwing exceptions with the `setSilent()` method.
 
 You can get a count of the total segments:
 
-<div class="literalinclude">
-
-uri/025.php
-
-</div>
+```php
+--8<--
+libraries/uri/025.php
+--8<--
+```
 
 Finally, you can retrieve an array of all of the segments:
 
-<div class="literalinclude">
-
-uri/026.php
-
-</div>
+```php
+--8<--
+libraries/uri/026.php
+--8<--
+```
 
 ## Disable Throwing Exceptions
 
-By default, some methods of this class may throw an exception. If you
-want to disable it, you can set a special flag that will prevent
-throwing exceptions.
+By default, some methods of this class may throw an exception. If you want to disable it, you can set a special flag that will prevent throwing exceptions.
 
-<div class="literalinclude">
-
-uri/027.php
-
-</div>
+```php
+--8<--
+libraries/uri/027.php
+--8<--
+```

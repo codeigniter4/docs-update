@@ -1,10 +1,11 @@
 # CodeIgniter4 Overview
 
-The following pages describe the architectural concepts behind
-CodeIgniter4:
+The following pages describe the architectural concepts behind CodeIgniter4:
 
-<div class="toctree" titlesonly="">
-
-structure mvc autoloader services factories http security
-
-</div>
+- [Structure](structure.md)
+- [Mvc](mvc.md)
+- [Autoloader](autoloader.md)
+- [Services](services.md)
+- [Factories](factories.md)
+- [Http](http.md)
+- [Security](security.md)

@@ -1,22 +1,25 @@
 # Upgrading from 4.3.4 to 4.3.5
 
-Please refer to the upgrade instructions corresponding to your
-installation method.
+Please refer to the upgrade instructions corresponding to your installation method.
 
-- `Composer Installation App Starter Upgrading <app-starter-upgrading>`
-- `Composer Installation Adding CodeIgniter4 to an Existing Project Upgrading <adding-codeigniter4-upgrading>`
-- `Manual Installation Upgrading <installing-manual-upgrading>`
+- [Composer Installation App Starter Upgrading](#app-starter-upgrading)
 
-<div class="contents" local="" depth="2">
+- [Composer Installation Adding CodeIgniter4 to an Existing Project Upgrading](#adding-codeigniter4-upgrading)
 
-</div>
+- [Manual Installation Upgrading](#installing-manual-upgrading)
+
+- [Breaking Changes](#breaking-changes)
+    - [Validation Placeholders](#validation-placeholders)
+    - [<Session::stop>()](#sessionstop)
+- [Project Files](#project-files)
+    - [Content Changes](#content-changes)
+    - [All Changes](#all-changes)
 
 ## Breaking Changes
 
 ### Validation Placeholders
 
-To use `validation-placeholders` securely, please remember to create a
-validation rule for the field you will use as a placeholder.
+To use `validation-placeholders` securely, please remember to create a validation rule for the field you will use as a placeholder.
 
 E.g., if you have the following code:
 
@@ -33,32 +36,21 @@ You need to add the rules for `{id}`:
 
 ### <Session::stop>()
 
-Prior to v4.3.5, the `Session::stop()` method did not destroy the
-session due to a bug. This method has been modified to destroy the
-session, and now deprecated because it is exactly the same as the
-`Session::destroy()` method. So use the
-`Session::destroy <session-destroy>` method instead.
+Prior to v4.3.5, the `Session::stop()` method did not destroy the session due to a bug. This method has been modified to destroy the session, and now deprecated because it is exactly the same as the `Session::destroy()` method. So use the [<Session::destroy>](#session-destroy) method instead.
 
-If you have code to depend on the bug, replace it with
-`session_regenerate_id(true)`.
+If you have code to depend on the bug, replace it with `session_regenerate_id(true)`.
 
-See also `Session Library <session-stop>`.
+See also [Session Library](#session-stop).
 
 ## Project Files
 
-Some files in the **project space** (root, app, public, writable)
-received updates. Due to these files being outside of the **system**
-scope they will not be changed without your intervention.
+Some files in the **project space** (root, app, public, writable) received updates. Due to these files being outside of the **system** scope they will not be changed without your intervention.
 
-There are some third-party CodeIgniter modules available to assist with
-merging changes to the project space: [Explore on
-Packagist](https://packagist.org/explore/?query=codeigniter4%20updates).
+There are some third-party CodeIgniter modules available to assist with merging changes to the project space: \[Explore on Packagist](#https://packagist.org/explore/?query=codeigniter4%20updates)\_.
 
 ### Content Changes
 
-The following files received significant changes (including deprecations
-or visual adjustments) and it is recommended that you merge the updated
-versions with your application:
+The following files received significant changes (including deprecations or visual adjustments) and it is recommended that you merge the updated versions with your application:
 
 #### Config
 
@@ -66,10 +58,10 @@ versions with your application:
 
 ### All Changes
 
-This is a list of all files in the **project space** that received
-changes; many will be simple comments or formatting that have no effect
-on the runtime:
+This is a list of all files in the **project space** that received changes; many will be simple comments or formatting that have no effect on the runtime:
 
 - app/Config/App.php
+
 - app/Config/Generators.php
+
 - composer.json
