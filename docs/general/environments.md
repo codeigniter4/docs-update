@@ -54,7 +54,7 @@ CI_ENVIRONMENT = development
 
 #### Apache
 
-This server variable can be set in your **.htaccess** file or Apache config using \[SetEnv](#https://httpd.apache.org/docs/2.4/mod/mod-env.html#setenv)\_.
+This server variable can be set in your **.htaccess** file or Apache config using [SetEnv](https://httpd.apache.org/docs/2.4/mod/mod_env.html#setenv).
 
 ``` apache
 SetEnv CI_ENVIRONMENT development

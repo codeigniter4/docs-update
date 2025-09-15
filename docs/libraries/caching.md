@@ -224,7 +224,7 @@ libraries/caching/006.php
 --8<--
 ```
 
-For more information on glob-style syntax, please see \[Glob (programming)](#https://en.wikipedia.org/wiki/Glob-(programming)#Syntax)\_.
+For more information on glob-style syntax, please see [Glob (programming)](https://en.wikipedia.org/wiki/Glob_(programming)#Syntax).
 
 #### increment($key\[, $offset = 1]): mixed
 
@@ -370,17 +370,17 @@ libraries/caching/013.php
 --8<--
 ```
 
-For more information on Memcached, please see \[<https://www.php.net/memcached>](#https://www.php.net/memcached)\_.
+For more information on Memcached, please see <https://www.php.net/memcached>.
 
 ### WinCache Caching
 
 Under Windows, you can also utilize the WinCache driver.
 
-For more information on WinCache, please see \[<https://www.php.net/wincache>](#https://www.php.net/wincache)\_.
+For more information on WinCache, please see <https://www.php.net/wincache>.
 
 ### Redis Caching
 
-Redis is an in-memory key-value store which can operate in LRU cache mode. To use it, you need \[Redis server and phpredis PHP extension](#https://github.com/phpredis/phpredis)\_.
+Redis is an in-memory key-value store which can operate in LRU cache mode. To use it, you need [Redis server and phpredis PHP extension](https://github.com/phpredis/phpredis).
 
 Config options to connect to redis server stored in the cache configuration file. Available options are:
 
@@ -390,7 +390,7 @@ libraries/caching/014.php
 --8<--
 ```
 
-For more information on Redis, please see \[<https://redis.io>](#https://redis.io)\_.
+For more information on Redis, please see <https://redis.io>.
 
 ### Predis Caching
 
@@ -400,7 +400,7 @@ Predis is a flexible and feature-complete PHP client library for the Redis key-v
 composer require predis/predis
 ```
 
-For more information on Redis, please see \[<https://github.com/nrk/predis>](#https://github.com/nrk/predis)\_.
+For more information on Redis, please see <https://github.com/nrk/predis>.
 
 ### Dummy Cache
 

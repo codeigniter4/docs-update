@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- \[File Uploading Class Documentation CodeIgniter 3.X](#http://codeigniter.com/userguide3/libraries/file-uploading.html)\_
+- [File Uploading Class Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/libraries/file_uploading.html)
 
 - [Working with Uploaded Files Documentation CodeIgniter 4.X](#/libraries/uploaded-files)
 

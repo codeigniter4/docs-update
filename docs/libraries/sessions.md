@@ -87,7 +87,7 @@ libraries/sessions/003.php
 
 Session data is simply an array associated with a particular session ID (cookie).
 
-If you've used sessions in PHP before, you should be familiar with PHP's \[$\_SESSION superglobal](#https://www.php.net/manual/en/reserved.variables.session.php)\_ (if not, please read the content on that link).
+If you've used sessions in PHP before, you should be familiar with PHP's [$\_SESSION superglobal](https://www.php.net/manual/en/reserved.variables.session.php) (if not, please read the content on that link).
 
 CodeIgniter gives access to its session data through the same means, as it uses the session handlers' mechanism provided by PHP. Using session data is as simple as manipulating (read, set and unset values) the `$_SESSION` array.
 
@@ -428,7 +428,7 @@ libraries/sessions/044.php
 
 You do not have to close the session manually, PHP will close it automatically after your script terminated. But as session data is locked to prevent concurrent writes only one request may operate on a session at any time. You may improve your site performance by closing the session as soon as all changes to session data are done.
 
-This method will work in exactly the same way as PHP's \[session_write_close()](#https://www.php.net/session-write-close)\_ function.
+This method will work in exactly the same way as PHP's [session_write_close()](https://www.php.net/session_write_close) function.
 
 ### Destroying a Session
 
@@ -442,7 +442,7 @@ libraries/sessions/037.php
 --8<--
 ```
 
-This method will work in exactly the same way as PHP's \[session_destroy()](#https://www.php.net/session-destroy)\_ function.
+This method will work in exactly the same way as PHP's [session_destroy()](https://www.php.net/session_destroy) function.
 
 This must be the last session-related operation that you do during the same request. All session data (including flashdata and tempdata) will be destroyed permanently.
 
@@ -621,7 +621,7 @@ Some of you will probably opt to choose another session driver because file stor
 
 A very basic test will probably trick you into believing that an SQL database is faster, but in 99% of the cases, this is only true while you only have a few current sessions. As the sessions count and server loads increase - which is the time when it matters - the file system will consistently outperform almost all relational database setups.
 
-In addition, if performance is your only concern, you may want to look into using \[tmpfs](#https://eddmann.com/posts/storing-php-sessions-file-caches-in-memory-using-tmpfs/)\_, (warning: external resource), which can make your sessions blazing fast.
+In addition, if performance is your only concern, you may want to look into using [tmpfs](https://eddmann.com/posts/storing-php-sessions-file-caches-in-memory-using-tmpfs/), (warning: external resource), which can make your sessions blazing fast.
 
 ### DatabaseHandler Driver
 
@@ -720,7 +720,7 @@ This command will take the `$savePath` and `$matchIP` settings into account when
 
 Redis is a storage engine typically used for caching and popular because of its high performance, which is also probably your reason to use the 'RedisHandler' session driver.
 
-The downside is that it is not as ubiquitous as relational databases and requires the \[phpredis](#https://github.com/phpredis/phpredis)\_ PHP extension to be installed on your system, and that one doesn't come bundled with PHP. Chances are, you're only be using the RedisHandler driver only if you're already both familiar with Redis and using it for other purposes.
+The downside is that it is not as ubiquitous as relational databases and requires the [phpredis](https://github.com/phpredis/phpredis) PHP extension to be installed on your system, and that one doesn't come bundled with PHP. Chances are, you're only be using the RedisHandler driver only if you're already both familiar with Redis and using it for other purposes.
 
 #### Configure RedisHandler
 

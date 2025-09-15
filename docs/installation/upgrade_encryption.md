@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- \[Encryption Library Documentation CodeIgniter 3.X](#http://codeigniter.com/userguide3/libraries/encryption.html)\_
+- [Encryption Library Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/libraries/encryption.html)
 
 - [Encryption Service Documentation CodeIgniter 4.X](#/libraries/encryption)
 

@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- \[Security Class Documentation CodeIgniter 3.X](#http://codeigniter.com/userguide3/libraries/security.html)\_
+- [Security Class Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/libraries/security.html)
 
 - [Security Documentation CodeIgniter 4.X](#/libraries/security)
 

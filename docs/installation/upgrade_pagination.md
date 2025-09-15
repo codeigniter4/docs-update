@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- \[Pagination Class Documentation CodeIgniter 3.X](#http://codeigniter.com/userguide3/libraries/pagination.html)\_
+- [Pagination Class Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/libraries/pagination.html)
 
 - [Pagination Documentation CodeIgniter 4.X](#/libraries/pagination)
 

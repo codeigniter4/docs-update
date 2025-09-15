@@ -296,7 +296,7 @@ helpers/url_helper/010.php
 !!! note "Note"
     The **window_name** is not really an attribute, but an argument to
 
-the JavaScript \[window.open()](#https://www.w3schools.com/jsref/met-win-open.asp)\_ method, which accepts either a window name or a window target.
+the JavaScript [window.open()](https://www.w3schools.com/jsref/met_win_open.asp) method, which accepts either a window name or a window target.
 
 !!! note "Note"
     Any other attribute than the listed above will be parsed as an

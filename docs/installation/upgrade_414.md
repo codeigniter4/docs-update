@@ -12,7 +12,7 @@ Please refer to the upgrade instructions corresponding to your installation meth
     - [Method Scope](#method-scope)
 - [Project Files](#project-files)
 
-This release focuses on code style. All changes (except those noted below) are cosmetic to bring the code in line with the new \[CodeIgniter Coding Standard](#https://github.com/CodeIgniter/coding-standard)\_ (based on PSR-12).
+This release focuses on code style. All changes (except those noted below) are cosmetic to bring the code in line with the new [CodeIgniter Coding Standard](https://github.com/CodeIgniter/coding-standard) (based on PSR-12).
 
 ## Breaking Changes
 

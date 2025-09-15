@@ -90,7 +90,7 @@ To protect the username, password and email content while communicating with the
 
 Most SMTP servers allow connections on ports 465 or 587 when submitting emails. (The original port 25 is seldom used because of many ISPs have blocking rules in place and since the communication is entirely in clear-text).
 
-The key difference is that port 465 expects the communication channel to be secured using TLS from the start as per \[RFC 8314](#https://tools.ietf.org/html/rfc8314)\_. A connection to port 587 allows clear-text connection and later will upgrade the channel to use encryption using the `STARTTLS` SMTP command.
+The key difference is that port 465 expects the communication channel to be secured using TLS from the start as per [RFC 8314](https://tools.ietf.org/html/rfc8314). A connection to port 587 allows clear-text connection and later will upgrade the channel to use encryption using the `STARTTLS` SMTP command.
 
 Upgrading a connection on port 465 may or may not be supported by the server, so the `STARTTLS` SMTP command may fail if the server does not allow it. If you set the port to 465, you should try to set the `SMTPCrypto` to an empty string (`''`) since the communication is secured using TLS from the start and the `STARTTLS` is not needed.
 

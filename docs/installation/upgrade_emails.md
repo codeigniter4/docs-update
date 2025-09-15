@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- \[Email Documentation CodeIgniter 3.X](#http://codeigniter.com/userguide3/libraries/email.html)\_
+- [Email Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/libraries/email.html)
 
 - [Email Documentation CodeIgniter 4.X](#/libraries/email)
 

@@ -14,7 +14,7 @@
 
 This tutorial is intended to introduce you to the CodeIgniter4 framework and the basic principles of MVC architecture. It will show you how a basic CodeIgniter application is constructed in a step-by-step fashion.
 
-If you are not familiar with PHP, we recommend that you check out the \[W3Schools PHP Tutorial](#https://www.w3schools.com/php/default.asp)\_ before continuing.
+If you are not familiar with PHP, we recommend that you check out the [W3Schools PHP Tutorial](https://www.w3schools.com/php/default.asp) before continuing.
 
 In this tutorial, you will be creating a **basic news application**. You will begin by writing the code that can load static pages. Next, you will create a news section that reads news items from a database. Finally, you'll add a form to create news items in the database.
 

@@ -10,7 +10,7 @@ The Throttler class provides a very simple way to limit an activity to be perfor
 
 ## Overview
 
-The Throttler implements a simplified version of the \[Token Bucket](#https://en.wikipedia.org/wiki/Token-bucket)\_ algorithm. This basically treats each action that you want as a bucket. When you call the `check()` method, you tell it how large the bucket is, and how many tokens it can hold and the time interval. Each `check()` call uses 1 of the available tokens, by default. Let's walk through an example to make this clear.
+The Throttler implements a simplified version of the [Token Bucket](https://en.wikipedia.org/wiki/Token_bucket) algorithm. This basically treats each action that you want as a bucket. When you call the `check()` method, you tell it how large the bucket is, and how many tokens it can hold and the time interval. Each `check()` call uses 1 of the available tokens, by default. Let's walk through an example to make this clear.
 
 Let's say we want an action to happen once every second. The first call to the Throttler would look like the following. The first parameter is the bucket name, the second parameter the number of tokens the bucket holds, and the third being the amount of time it takes the bucket to refill:
 

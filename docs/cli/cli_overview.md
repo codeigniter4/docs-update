@@ -9,7 +9,7 @@ CodeIgniter 4 provides built-in command **spark** and useful commands and librar
 
 ## What is the CLI?
 
-The command-line interface is a text-based method of interacting with computers. For more information, check the \[Wikipedia article](#https://en.wikipedia.org/wiki/Command-line-interface)\_.
+The command-line interface is a text-based method of interacting with computers. For more information, check the [Wikipedia article](https://en.wikipedia.org/wiki/Command-line_interface).
 
 ## Why Run via the Command-Line?
 

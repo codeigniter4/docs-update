@@ -6,10 +6,15 @@ function before_filter_docLink($data, $folder) {
     $folder = array_pop($folder);
 
     // Handle RST cross-references like `CodeIgniter URLs <urls-remove-index-php-apache>`
-    // Convert them to proper markdown links
+    // Convert them to proper markdown links, but skip external URLs (http/https)
     $data = preg_replace_callback('/`([^`]+?) <([^>]+?)>`/', function ($matches) {
         $text = $matches[1];
         $reference = $matches[2];
+
+        // Skip external URLs - let pandoc handle them
+        if (preg_match('/^https?:\/\//', $reference)) {
+            return $matches[0]; // Return original match unchanged
+        }
 
         // Try to find actual files that match the reference
         $targetFile = findMatchingFile($reference);

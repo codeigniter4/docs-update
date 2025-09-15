@@ -16,7 +16,7 @@ general/logging/001.php
 --8<--
 ```
 
-There are eight different log levels, matching to the \[RFC 5424](#https://tools.ietf.org/html/rfc5424)\_ levels, and they are as follows:
+There are eight different log levels, matching to the [RFC 5424](https://tools.ietf.org/html/rfc5424) levels, and they are as follows:
 
 <table>
 <thead>
@@ -91,7 +91,7 @@ The logging system can support multiple methods of handling logging running at t
 
 - **File Handler** is the default handler and will create a single file for every day locally. This is the recommended method of logging.
 
-- **ChromeLogger Handler** If you have the \[ChromeLogger extension](#https://craig.is/writing/chrome-logger)\_ installed in the Chrome web browser, you can use this handler to display the log information in Chrome's console window.
+- **ChromeLogger Handler** If you have the [ChromeLogger extension](https://craig.is/writing/chrome-logger) installed in the Chrome web browser, you can use this handler to display the log information in Chrome's console window.
 
 - **Errorlog Handler** This handler will take advantage of PHP's native `error_log()` function and write the logs there. Currently, only the `0` and `4` message types of `error_log()` are supported.
 
@@ -168,7 +168,7 @@ Several core placeholders exist that will be automatically expanded for you base
 
 ## Using Third-Party Loggers
 
-You can use any other logger that you might like as long as it extends from either `Psr\Log\LoggerInterface` and is \[PSR-3](#https://www.php-fig.org/psr/psr-3/)\_ compatible. This means that you can easily drop in use for any PSR-3 compatible logger, or create your own.
+You can use any other logger that you might like as long as it extends from either `Psr\Log\LoggerInterface` and is [PSR-3](https://www.php-fig.org/psr/psr-3/) compatible. This means that you can easily drop in use for any PSR-3 compatible logger, or create your own.
 
 You must ensure that the third-party logger can be found by the system, by adding it to either the **app/Config/Autoload.php** configuration file, or through another autoloader, like Composer. Next, you should modify **app/Config/Services.php** to point the `logger` alias to your new class name.
 

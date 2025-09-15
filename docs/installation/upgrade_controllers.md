@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- \[Controller Documentation CodeIgniter 3.X](#http://codeigniter.com/userguide3/general/controllers.html)\_
+- [Controller Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/general/controllers.html)
 
 - [Controller Documentation CodeIgniter 4.X](#/incoming/controllers)
 

@@ -128,7 +128,7 @@ incoming/controllers/006.php
 The controller also provides the convenience method `validate()`.
 
 !!! warning "Warning"
-    Instead of `validate()`, use `validateData()` to validate POST data only. `validate()` uses `$request->getVar()` which returns `$_GET`, `$_POST` or `$_COOKIE` data in that order (depending on php.ini \[request-order](#https://www.php.net/manual/en/ini.core.php#ini.request-order)\_). Newer values override older values. POST values may be overridden by the cookies if they have the same name.
+    Instead of `validate()`, use `validateData()` to validate POST data only. `validate()` uses `$request->getVar()` which returns `$_GET`, `$_POST` or `$_COOKIE` data in that order (depending on php.ini [request-order](https://www.php.net/manual/en/ini.core.php#ini.request-order)). Newer values override older values. POST values may be overridden by the cookies if they have the same name.
 
 The method accepts an array of rules in the first parameter, and in the optional second parameter, an array of custom error messages to display if the items are not valid.
 

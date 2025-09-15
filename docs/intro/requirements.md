@@ -6,11 +6,11 @@
 
 ## PHP and Required Extensions
 
-\[PHP](#https://www.php.net/)\_ version 8.1 or newer is required, with the following PHP extensions are enabled:
+[PHP](https://www.php.net/) version 8.1 or newer is required, with the following PHP extensions are enabled:
 
-> - \[intl](#https://www.php.net/manual/en/intl.requirements.php)\_
-> - \[mbstring](#https://www.php.net/manual/en/mbstring.requirements.php)\_
-> - \[json](#https://www.php.net/manual/en/json.requirements.php)\_
+> - [intl](https://www.php.net/manual/en/intl.requirements.php)
+> - [mbstring](https://www.php.net/manual/en/mbstring.requirements.php)
+> - [json](https://www.php.net/manual/en/json.requirements.php)
 
 !!! warning "Warning"
     The end of life date for PHP 7.4 was November 28, 2022. If you are still using PHP 7.4, you should upgrade immediately. The end of life date for PHP 8.0 will be November 26, 2023.
@@ -19,23 +19,23 @@
 
 The following PHP extensions should be enabled on your server:
 
-> - \[mysqlnd](#https://www.php.net/manual/en/mysqlnd.install.php)\_ (if you use MySQL)
-> - \[curl](#https://www.php.net/manual/en/curl.requirements.php)\_ (if you use [CURLRequest](#/libraries/curlrequest))
-> - \[imagick](#https://www.php.net/manual/en/imagick.requirements.php)\_ (if you use [Image](#/libraries/images) class ImageMagickHandler)
-> - \[gd](#https://www.php.net/manual/en/image.requirements.php)\_ (if you use [Image](#/libraries/images) class GDHandler)
-> - \[simplexml](#https://www.php.net/manual/en/simplexml.requirements.php)\_ (if you format XML)
+> - [mysqlnd](https://www.php.net/manual/en/mysqlnd.install.php) (if you use MySQL)
+> - [curl](https://www.php.net/manual/en/curl.requirements.php) (if you use [CURLRequest](#/libraries/curlrequest))
+> - [imagick](https://www.php.net/manual/en/imagick.requirements.php) (if you use [Image](#/libraries/images) class ImageMagickHandler)
+> - [gd](https://www.php.net/manual/en/image.requirements.php) (if you use [Image](#/libraries/images) class GDHandler)
+> - [simplexml](https://www.php.net/manual/en/simplexml.requirements.php) (if you format XML)
 
 The following PHP extensions are required when you use a Cache server:
 
-> - \[memcache](#https://www.php.net/manual/en/memcache.requirements.php)\_ (if you use [Cache](#/libraries/caching) class MemcachedHandler with Memcache)
-> - \[memcached](#https://www.php.net/manual/en/memcached.requirements.php)\_ (if you use [Cache](#/libraries/caching) class MemcachedHandler with Memcached)
-> - \[redis](#https://github.com/phpredis/phpredis)\_ (if you use [Cache](#/libraries/caching) class RedisHandler)
+> - [memcache](https://www.php.net/manual/en/memcache.requirements.php) (if you use [Cache](#/libraries/caching) class MemcachedHandler with Memcache)
+> - [memcached](https://www.php.net/manual/en/memcached.requirements.php) (if you use [Cache](#/libraries/caching) class MemcachedHandler with Memcached)
+> - [redis](https://github.com/phpredis/phpredis) (if you use [Cache](#/libraries/caching) class RedisHandler)
 
 The following PHP extensions are required when you use PHPUnit:
 
-> - \[dom](#https://www.php.net/manual/en/dom.requirements.php)\_ (if you use [TestResponse](#/testing/response) class)
-> - \[libxml](#https://www.php.net/manual/en/libxml.requirements.php)\_ (if you use [TestResponse](#/testing/response) class)
-> - \[xdebug](#https://xdebug.org/docs/install)\_ (if you use `CIUnitTestCase::assertHeaderEmitted()`)
+> - [dom](https://www.php.net/manual/en/dom.requirements.php) (if you use [TestResponse](#/testing/response) class)
+> - [libxml](https://www.php.net/manual/en/libxml.requirements.php) (if you use [TestResponse](#/testing/response) class)
+> - [xdebug](https://xdebug.org/docs/install) (if you use `CIUnitTestCase::assertHeaderEmitted()`)
 
 ## Supported Databases
 

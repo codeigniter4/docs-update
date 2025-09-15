@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- \[Language Documentation CodeIgniter 3.X](#http://codeigniter.com/userguide3/libraries/language.html)\_
+- [Language Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/libraries/language.html)
 
 - [Localization Documentation CodeIgniter 4.X](#/outgoing/localization)
 

@@ -109,7 +109,7 @@ incoming/content_negotiation/006.php
 --8<--
 ```
 
-See more at \[Wikipedia](#https://en.wikipedia.org/wiki/HTTP-compression)\_.
+See more at [Wikipedia](https://en.wikipedia.org/wiki/HTTP_compression).
 
 ### Character Set
 

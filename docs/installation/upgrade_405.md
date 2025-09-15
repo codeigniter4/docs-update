@@ -23,11 +23,11 @@ Please refer to the upgrade instructions corresponding to your installation meth
 
 CodeIgniter 4.0.5 introduces a setting for the cookie SameSite attribute. Prior versions did not set this attribute at all. The default setting for cookies is now <span class="title-ref">Lax</span>. This will affect how cookies are handled in cross-domain contexts and you may need to adjust this setting in your projects. Separate settings in **app/Config/App.php** exists for Response cookies and for CSRF cookies.
 
-For additional information, see \[MDN Web Docs](#https://developer.mozilla.org/pl/docs/Web/HTTP/Headers/Set-Cookie/SameSite)\_. The SameSite specifications are described in \[RFC 6265](#https://tools.ietf.org/html/rfc6265)\_ and the \[RFC 6265bis revision](#https://datatracker.ietf.org/doc/draft-ietf-httpbis-rfc6265bis/?include-text=1)\_.
+For additional information, see [MDN Web Docs](https://developer.mozilla.org/pl/docs/Web/HTTP/Headers/Set-Cookie/SameSite). The SameSite specifications are described in [RFC 6265](https://tools.ietf.org/html/rfc6265) and the [RFC 6265bis revision](https://datatracker.ietf.org/doc/draft-ietf-httpbis-rfc6265bis/?include_text=1).
 
 ### <Message::getHeader(s)>
 
-The HTTP layer is moving towards \[PSR-7 compliance](#https://www.php-fig.org/psr/psr-7/)\_. Towards this end `Message::getHeader()` and `Message::getHeaders()` are deprecated and should be replaced with `Message::header()` and `Message::headers()` respectively. Note that this pertains to all classes that extend `Message` as well: `Request`, `Response` and their subclasses.
+The HTTP layer is moving towards [PSR-7 compliance](https://www.php-fig.org/psr/psr-7/). Towards this end `Message::getHeader()` and `Message::getHeaders()` are deprecated and should be replaced with `Message::header()` and `Message::headers()` respectively. Note that this pertains to all classes that extend `Message` as well: `Request`, `Response` and their subclasses.
 
 Additional related deprecations from the HTTP layer:
 
@@ -91,7 +91,7 @@ Service discovery has been updated to allow third-party services (when enabled v
 
 ## Project Files
 
-Numerous files in the project space (root, app, public, writable) received updates. Due to these files being outside of the system scope they will not be changed without your intervention. There are some third-party CodeIgniter modules available to assist with merging changes to the project space: \[Explore on Packagist](#https://packagist.org/explore/?query=codeigniter4%20updates)\_.
+Numerous files in the project space (root, app, public, writable) received updates. Due to these files being outside of the system scope they will not be changed without your intervention. There are some third-party CodeIgniter modules available to assist with merging changes to the project space: [Explore on Packagist](https://packagist.org/explore/?query=codeigniter4%20updates).
 
 !!! note "Note"
     Except in very rare cases for bug fixes, no changes made to files for the project space will break your application. All changes noted here are optional until the next major version, and any mandatory changes will be covered in the sections above.

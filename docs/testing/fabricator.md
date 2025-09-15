@@ -1,6 +1,6 @@
 # Generating Test Data
 
-Often you will need sample data for your application to run its tests. The `Fabricator` class uses fzaninotto's \[Faker](#https://github.com/FakerPHP/Faker)\_ to turn models into generators of random data. Use fabricators in your seeds or test cases to stage fake data for your unit tests.
+Often you will need sample data for your application to run its tests. The `Fabricator` class uses fzaninotto's [Faker](https://github.com/FakerPHP/Faker) to turn models into generators of random data. Use fabricators in your seeds or test cases to stage fake data for your unit tests.
 
 - [Supported Models](#supported-models)
 - [Loading Fabricators](#loading-fabricators)

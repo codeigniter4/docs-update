@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- \[URI Routing Documentation CodeIgniter 3.X](#http://codeigniter.com/userguide3/general/routing.html)\_
+- [URI Routing Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/general/routing.html)
 
 - [URI Routing Documentation CodeIgniter 4.X](#/incoming/routing)
 

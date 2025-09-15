@@ -24,7 +24,7 @@ Composer can be used in several ways to install CodeIgniter4 on your system.
     CodeIgniter4 requires Composer 2.0.14 or later.
 
 !!! note "Note"
-    If you are not familiar with Composer, we recommend you read \[Basic usage](#https://getcomposer.org/doc/01-basic-usage.md)\_ first.
+    If you are not familiar with Composer, we recommend you read [Basic usage](https://getcomposer.org/doc/01-basic-usage.md) first.
 
 The first technique describes creating a skeleton project using CodeIgniter4, that you would then use as the base for a new webapp. The second technique described below lets you add CodeIgniter4 to an existing webapp,
 
@@ -33,7 +33,7 @@ The first technique describes creating a skeleton project using CodeIgniter4, th
 
 ## App Starter
 
-The \[CodeIgniter 4 app starter](#https://github.com/codeigniter4/appstarter)\_ repository holds a skeleton application, with a composer dependency on the latest released version of the framework.
+The [CodeIgniter 4 app starter](https://github.com/codeigniter4/appstarter) repository holds a skeleton application, with a composer dependency on the latest released version of the framework.
 
 This installation technique would suit a developer who wishes to start a new CodeIgniter4 based project.
 
@@ -84,7 +84,7 @@ Simple installation; easy to update.
 You still need to check for file changes in the **project space** (root, app, public, writable) and merge them after updating.
 
 !!! note "Note"
-    There are some third-party CodeIgniter modules available to assist with merging changes to the project space: \[Explore on Packagist](#https://packagist.org/explore/?query=codeigniter4%20updates)\_.
+    There are some third-party CodeIgniter modules available to assist with merging changes to the project space: [Explore on Packagist](https://packagist.org/explore/?query=codeigniter4%20updates).
 
 ### Structure
 
@@ -98,7 +98,7 @@ Folders in your project after set up:
 
 The App Starter repo comes with a `builds` scripts to switch Composer sources between the current stable release and the latest development branch of the framework. Use this script for a developer who is willing to live with the latest unreleased changes, which may be unstable.
 
-The \[development user guide](#https://codeigniter4.github.io/CodeIgniter4/)\_ is accessible online. Note that this differs from the released user guide, and will pertain to the develop branch explicitly.
+The [development user guide](https://codeigniter4.github.io/CodeIgniter4/) is accessible online. Note that this differs from the released user guide, and will pertain to the develop branch explicitly.
 
 #### Update for Latest Dev
 
@@ -135,7 +135,7 @@ php builds release
 
 ## Adding CodeIgniter4 to an Existing Project
 
-The same \[CodeIgniter 4 framework](#https://github.com/codeigniter4/framework)\_ repository described in "Manual Installation" can also be added to an existing project using Composer.
+The same [CodeIgniter 4 framework](https://github.com/codeigniter4/framework) repository described in "Manual Installation" can also be added to an existing project using Composer.
 
 ### Installation
 
@@ -187,7 +187,7 @@ Relatively simple installation; easy to update.
 You still need to check for file changes in the **project space** (root, app, public, writable) after updating.
 
 !!! note "Note"
-    There are some third-party CodeIgniter modules available to assist with merging changes to the project space: \[Explore on Packagist](#https://packagist.org/explore/?query=codeigniter4%20updates)\_.
+    There are some third-party CodeIgniter modules available to assist with merging changes to the project space: [Explore on Packagist](https://packagist.org/explore/?query=codeigniter4%20updates).
 
 ### Structure
 

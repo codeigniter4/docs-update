@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- \[Session Library Documentation CodeIgniter 3.X](#http://codeigniter.com/userguide3/libraries/sessions.html)\_
+- [Session Library Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/libraries/sessions.html)
 
 - [Session Library Documentation CodeIgniter 4.X](#/libraries/sessions)
 

@@ -178,10 +178,10 @@ In addition, there are a few utility methods for retrieving information from eit
 !!! important "Important"
     This method exists only for backward compatibility. Do not use it in new projects. Even if you are already using it, we recommend that you use another, more appropriate method.
 
-The `getVar()` method will pull from `$_REQUEST`, so will return any data from `$_GET`, `$POST`, or `$_COOKIE` (depending on php.ini \[request-order](#https://www.php.net/manual/en/ini.core.php#ini.request-order)\_).
+The `getVar()` method will pull from `$_REQUEST`, so will return any data from `$_GET`, `$POST`, or `$_COOKIE` (depending on php.ini [request-order](https://www.php.net/manual/en/ini.core.php#ini.request-order)).
 
 !!! warning "Warning"
-    If you want to validate POST data only, don't use `getVar()`. Newer values override older values. POST values may be overridden by the cookies if they have the same name, and you set "C" after "P" in \[request-order](#https://www.php.net/manual/en/ini.core.php#ini.request-order)\_.
+    If you want to validate POST data only, don't use `getVar()`. Newer values override older values. POST values may be overridden by the cookies if they have the same name, and you set "C" after "P" in [request-order](https://www.php.net/manual/en/ini.core.php#ini.request-order).
 
 !!! note "Note"
     If the incoming request has a `Content-Type` header set to `application/json`, the `getVar()` method returns the JSON data instead of `$_REQUEST` data.
@@ -201,7 +201,7 @@ incoming/incomingrequest/009.php
 
 By default, this will return any objects in the JSON data as objects. If you want that converted to associative arrays, pass in `true` as the first parameter.
 
-The second and third parameters match up to the `$depth` and `$flags` arguments of the \[json_decode()](#https://www.php.net/manual/en/function.json-decode.php)\_ PHP function.
+The second and third parameters match up to the `$depth` and `$flags` arguments of the [json_decode()](https://www.php.net/manual/en/function.json-decode.php) PHP function.
 
 ### Getting Specific Data from JSON
 
@@ -252,7 +252,7 @@ incoming/incomingrequest/039.php
 
 ### Filtering Input Data
 
-To maintain security of your application, you will want to filter all input as you access it. You can pass the type of filter to use as the second parameter of any of these methods. The native `filter_var()` function is used for the filtering. Head over to the PHP manual for a list of \[valid filter types](#https://www.php.net/manual/en/filter.filters.php)\_.
+To maintain security of your application, you will want to filter all input as you access it. You can pass the type of filter to use as the second parameter of any of these methods. The native `filter_var()` function is used for the filtering. Head over to the PHP manual for a list of [valid filter types](https://www.php.net/manual/en/filter.filters.php).
 
 Filtering a POST variable would look like this:
 
@@ -453,7 +453,7 @@ The methods provided by the parent classes that are available are:
 
 - **$filter** `int` The type of filter to apply. A list of filters can be found in
 
-\[Types of filters](#https://www.php.net/manual/en/filter.filters.php)\_\_. \* **Parameters** \* **$flags** `int` Flags to apply. A list of flags can be found in \[Filter flags](#https://www.php.net/manual/en/filter.filters.flags.php)\_\_. \* **Returns**: `$_REQUEST` if no parameters supplied, otherwise the REQUEST value if found, or null if not \* **Return type**: `array|bool|float|int|object|string|null`
+[Types of filters](https://www.php.net/manual/en/filter.filters.php). \* **Parameters** \* **$flags** `int` Flags to apply. A list of flags can be found in [Filter flags](https://www.php.net/manual/en/filter.filters.flags.php). \* **Returns**: `$_REQUEST` if no parameters supplied, otherwise the REQUEST value if found, or null if not \* **Return type**: `array|bool|float|int|object|string|null`
 
 !!! important "Important"
     This method exists only for backward compatibility. Do not use it
@@ -470,7 +470,7 @@ This method is identical to `getGet()`, only it fetches REQUEST data.
 
 - **$filter** `int` The type of filter to apply. A list of filters can be found in
 
-\[Types of filters](#https://www.php.net/manual/en/filter.filters.php)\_\_. \* **Parameters** \* **$flags** `int` Flags to apply. A list of flags can be found in \[Filter flags](#https://www.php.net/manual/en/filter.filters.flags.php)\_\_. \* **Returns**: `$_GET` if no parameters supplied, otherwise the GET value if found, or null if not \* **Return type**: `array|bool|float|int|object|string|null`
+[Types of filters](https://www.php.net/manual/en/filter.filters.php). \* **Parameters** \* **$flags** `int` Flags to apply. A list of flags can be found in [Filter flags](https://www.php.net/manual/en/filter.filters.flags.php). \* **Returns**: `$_GET` if no parameters supplied, otherwise the GET value if found, or null if not \* **Return type**: `array|bool|float|int|object|string|null`
 
 The first parameter will contain the name of the GET item you are looking for:
 
@@ -524,7 +524,7 @@ incoming/incomingrequest/045.php
 
 - **$filter** `int` The type of filter to apply. A list of filters can be
 
-found \[here](#https://www.php.net/manual/en/filter.filters.php)\_\_. \* **Parameters** \* **$flags** `int` Flags to apply. A list of flags can be found \[here](#https://www.php.net/manual/en/filter.filters.flags.php)\_\_. \* **Returns**: `$_POST` if no parameters supplied, otherwise the POST value if found, or null if not \* **Return type**: `array|bool|float|int|object|string|null`
+found [here](https://www.php.net/manual/en/filter.filters.php). \* **Parameters** \* **$flags** `int` Flags to apply. A list of flags can be found [here](https://www.php.net/manual/en/filter.filters.flags.php). \* **Returns**: `$_POST` if no parameters supplied, otherwise the POST value if found, or null if not \* **Return type**: `array|bool|float|int|object|string|null`
 
 This method is identical to `getGet()`, only it fetches POST data.
 
@@ -536,7 +536,7 @@ This method is identical to `getGet()`, only it fetches POST data.
 
 - **$filter** `int` The type of filter to apply. A list of filters can be found in
 
-\[Types of filters](#https://www.php.net/manual/en/filter.filters.php)\_\_. \* **Parameters** \* **$flags** `int` Flags to apply. A list of flags can be found in \[Filter flags](#https://www.php.net/manual/en/filter.filters.flags.php)\_\_. \* **Returns**: `$_POST` and `$_GET` combined if no parameters specified (prefer POST value on conflict), otherwise looks for POST value, if nothing found looks for GET value, if no value found returns null \* **Return type**: `array|bool|float|int|object|string|null`
+[Types of filters](https://www.php.net/manual/en/filter.filters.php). \* **Parameters** \* **$flags** `int` Flags to apply. A list of flags can be found in [Filter flags](https://www.php.net/manual/en/filter.filters.flags.php). \* **Returns**: `$_POST` and `$_GET` combined if no parameters specified (prefer POST value on conflict), otherwise looks for POST value, if nothing found looks for GET value, if no value found returns null \* **Return type**: `array|bool|float|int|object|string|null`
 
 This method works pretty much the same way as `getPost()` and `getGet()`, only combined. It will search through both POST and GET streams for data, looking first in POST, and then in GET:
 
@@ -556,7 +556,7 @@ If no index is specified, it will return both POST and GET streams combined. Alt
 
 - **$filter** `int` The type of filter to apply. A list of filters can be found in
 
-\[Types of filters](#https://www.php.net/manual/en/filter.filters.php)\_\_. \* **Parameters** \* **$flags** `int` Flags to apply. A list of flags can be found in \[Filter flags](#https://www.php.net/manual/en/filter.filters.flags.php)\_\_. \* **Returns**: `$_GET` and `$_POST` combined if no parameters specified (prefer GET value on conflict), otherwise looks for GET value, if nothing found looks for POST value, if no value found returns null \* **Return type**: `array|bool|float|int|object|string|null`
+[Types of filters](https://www.php.net/manual/en/filter.filters.php). \* **Parameters** \* **$flags** `int` Flags to apply. A list of flags can be found in [Filter flags](https://www.php.net/manual/en/filter.filters.flags.php). \* **Returns**: `$_GET` and `$_POST` combined if no parameters specified (prefer GET value on conflict), otherwise looks for GET value, if nothing found looks for POST value, if no value found returns null \* **Return type**: `array|bool|float|int|object|string|null`
 
 This method works pretty much the same way as `getPost()` and `getGet()`, only combined. It will search through both GET and POST streams for data, looking first in GET, and then in POST:
 
@@ -576,7 +576,7 @@ If no index is specified, it will return both GET and POST streams combined. Alt
 
 - **$filter** `int` The type of filter to apply. A list of filters can be found in
 
-\[Types of filters](#https://www.php.net/manual/en/filter.filters.php)\_\_. \* **Parameters** \* **$flags** `int` Flags to apply. A list of flags can be found in \[Filter flags](#https://www.php.net/manual/en/filter.filters.flags.php)\_\_. \* **Returns**: `$_COOKIE` if no parameters supplied, otherwise the COOKIE value if found or null if not \* **Return type**: `array|bool|float|int|object|string|null`
+[Types of filters](https://www.php.net/manual/en/filter.filters.php). \* **Parameters** \* **$flags** `int` Flags to apply. A list of flags can be found in [Filter flags](https://www.php.net/manual/en/filter.filters.flags.php). \* **Returns**: `$_COOKIE` if no parameters supplied, otherwise the COOKIE value if found or null if not \* **Return type**: `array|bool|float|int|object|string|null`
 
 This method is identical to `getPost()` and `getGet()`, only it fetches cookie data:
 
@@ -607,7 +607,7 @@ function `get_cookie()`, this method does NOT prepend your configured `Config\Co
 
 - **$filter** `int` The type of filter to apply. A list of filters can be found in
 
-\[Types of filters](#https://www.php.net/manual/en/filter.filters.php)\_\_. \* **Parameters** \* **$flags** `int` Flags to apply. A list of flags can be found in \[Filter flags](#https://www.php.net/manual/en/filter.filters.flags.php)\_\_. \* **Returns**: `$_SERVER` item value if found, null if not \* **Return type**: `array|bool|float|int|object|string|null`
+[Types of filters](https://www.php.net/manual/en/filter.filters.php). \* **Parameters** \* **$flags** `int` Flags to apply. A list of flags can be found in [Filter flags](https://www.php.net/manual/en/filter.filters.flags.php). \* **Returns**: `$_SERVER` item value if found, null if not \* **Return type**: `array|bool|float|int|object|string|null`
 
 This method is identical to the `getPost()`, `getGet()` and `getCookie()` methods, only it fetches Server data (`$_SERVER`):
 

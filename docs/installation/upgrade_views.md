@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- \[View Documentation CodeIgniter 3.X](#http://codeigniter.com/userguide3/general/views.html)\_
+- [View Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/general/views.html)
 
 - [View Documentation CodeIgniter 4.X](#/outgoing/views)
 

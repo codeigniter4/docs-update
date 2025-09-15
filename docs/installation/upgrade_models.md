@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- \[Model Documentation CodeIgniter 3.X](#http://codeigniter.com/userguide3/general/models.html)\_
+- [Model Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/general/models.html)
 
 - [Model Documentation CodeIgniter 4.X](#/models/model)
 

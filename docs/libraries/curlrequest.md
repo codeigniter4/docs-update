@@ -29,10 +29,10 @@ The `CURLRequest` class is a lightweight HTTP client based on CURL that allows y
     - [verify](#verify)
     - [version](#version)
 
-This class is modeled after the \[Guzzle HTTP Client](#http://docs.guzzlephp.org/en/latest/)\_ library since it is one of the more widely used libraries. Where possible, the syntax has been kept the same so that if your application needs something a little more powerful than what this library provides, you will have to change very little to move over to use Guzzle.
+This class is modeled after the [Guzzle HTTP Client](http://docs.guzzlephp.org/en/latest/) library since it is one of the more widely used libraries. Where possible, the syntax has been kept the same so that if your application needs something a little more powerful than what this library provides, you will have to change very little to move over to use Guzzle.
 
 !!! note "Note"
-    This class requires the \[cURL Library](#https://www.php.net/manual/en/book.curl.php)\_ to be installed in your version of PHP. This is a very common library that is typically available but not all hosts will provide it, so please check with your host to verify if you run into problems.
+    This class requires the [cURL Library](https://www.php.net/manual/en/book.curl.php) to be installed in your version of PHP. This is a very common library that is typically available but not all hosts will provide it, so please check with your host to verify if you run into problems.
 
 ## Config for CURLRequest
 
@@ -134,7 +134,7 @@ libraries/curlrequest/008.php
 --8<--
 ```
 
-When a relative URI is provided to the `request()` method or any of the shortcut methods, it will be combined with the baseURI according to the rules described by \[RFC 2986, section 2](#https://tools.ietf.org/html/rfc3986#section-5.2)\_. To save you some time, here are some examples of how the combinations are resolved.
+When a relative URI is provided to the `request()` method or any of the shortcut methods, it will be combined with the baseURI according to the rules described by [RFC 2986, section 2](https://tools.ietf.org/html/rfc3986#section-5.2). To save you some time, here are some examples of how the combinations are resolved.
 
 > <table>
 > <thead>
@@ -251,7 +251,7 @@ libraries/curlrequest/015.php
 
 ### auth
 
-Allows you to provide Authentication details for \[HTTP Basic](#https://www.ietf.org/rfc/rfc2069.txt)\_ and \[Digest](#https://www.ietf.org/rfc/rfc2069.txt)\_ and authentication. Your script may have to do extra to support Digest authentication - this simply passes the username and password along for you. The value must be an array where the first element is the username, and the second is the password. The third parameter should be the type of authentication to use, either `basic` or `digest`:
+Allows you to provide Authentication details for [HTTP Basic](https://www.ietf.org/rfc/rfc2069.txt) and [Digest](https://www.ietf.org/rfc/rfc2069.txt) and authentication. Your script may have to do extra to support Digest authentication - this simply passes the username and password along for you. The value must be an array where the first element is the username, and the second is the password. The third parameter should be the type of authentication to use, either `basic` or `digest`:
 
 ```php
 --8<--
@@ -389,7 +389,7 @@ libraries/curlrequest/027.php
 
 ### multipart
 
-When you need to send files and other data via a POST request, you can use the `multipart` option, along with the \[CURLFile Class](#https://www.php.net/manual/en/class.curlfile.php)\_. The values should be an associative array of POST data to send. For safer usage, the legacy method of uploading files by prefixing their name with an <span class="title-ref">@</span> has been disabled. Any files that you want to send must be passed as instances of CURLFile:
+When you need to send files and other data via a POST request, you can use the `multipart` option, along with the [CURLFile Class](https://www.php.net/manual/en/class.curlfile.php). The values should be an associative array of POST data to send. For safer usage, the legacy method of uploading files by prefixing their name with an <span class="title-ref">@</span> has been disabled. Any files that you want to send must be passed as instances of CURLFile:
 
 ```php
 --8<--

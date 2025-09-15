@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- \[Template Parser Documentation CodeIgniter 3.X](#http://codeigniter.com/userguide3/libraries/parser.html)\_
+- [Template Parser Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/libraries/parser.html)
 
 - [View Parser Documentation CodeIgniter 4.X](#/outgoing/view-parser)
 

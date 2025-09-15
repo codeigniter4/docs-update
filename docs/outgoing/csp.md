@@ -15,13 +15,13 @@ This sounds complex, and on some sites, can definitely be challenging. For many 
 
 As this is a complex subject, this user guide will not go over all of the details. For more information, you should visit the following sites:
 
-- \[Content Security Policy main site](#https://content-security-policy.com/)\_
+- [Content Security Policy main site](https://content-security-policy.com/)
 
-- \[W3C Specification](#https://www.w3.org/TR/CSP)\_
+- [W3C Specification](https://www.w3.org/TR/CSP)
 
-- \[Introduction at HTML5Rocks](#https://www.html5rocks.com/en/tutorials/security/content-security-policy/)\_
+- [Introduction at HTML5Rocks](https://www.html5rocks.com/en/tutorials/security/content-security-policy/)
 
-- \[Article at SitePoint](#https://www.sitepoint.com/improving-web-security-with-the-content-security-policy/)\_
+- [Article at SitePoint](https://www.sitepoint.com/improving-web-security-with-the-content-security-policy/)
 
 ## Turning CSP On
 

@@ -80,13 +80,13 @@ To upgrade your project, we figured out two major tasks you have to work on. Fir
 
 - Input  
 
-- CI3's \[Input](#http://codeigniter.com/userguide3/libraries/input.html)\_ corresponds to CI4's [IncomingRequest](#/incoming/incomingrequest).
+- CI3's [Input](http://codeigniter.com/userguide3/libraries/input.html) corresponds to CI4's [IncomingRequest](#/incoming/incomingrequest).
 
 - For historical reasons, CI3 and CI4 used incorrect HTTP method names like "get", "post". Since v4.5.0, CI4 uses the correct HTTP method names like "GET", "POST".
 
 - Output  
 
-- CI3's \[Output](#http://codeigniter.com/userguide3/libraries/output.html)\_ corresponds to CI4's [Responses](#/outgoing/response).
+- CI3's [Output](http://codeigniter.com/userguide3/libraries/output.html) corresponds to CI4's [Responses](#/outgoing/response).
 
 ### Class Loading
 
@@ -112,21 +112,21 @@ To upgrade your project, we figured out two major tasks you have to work on. Fir
 
 - Since v4.3.0, you can autoload helpers by **app/Config/Autoload.php** as well as CI3.
 
-- Some helpers from CodeIgniter 3 no longer exists in Version 4. For all these helpers, you have to find a new way to implement your functions. These helpers are \[CAPTCHA Helper](#https://www.codeigniter.com/userguide3/helpers/captcha-helper.html)\_, \[Email Helper](#https://www.codeigniter.com/userguide3/helpers/email-helper.html)\_. \[Path Helper](#https://www.codeigniter.com/userguide3/helpers/path-helper.html)\_. and \[Smiley Helper](#https://www.codeigniter.com/userguide3/helpers/smiley-helper.html)\_.
+- Some helpers from CodeIgniter 3 no longer exists in Version 4. For all these helpers, you have to find a new way to implement your functions. These helpers are [CAPTCHA Helper](https://www.codeigniter.com/userguide3/helpers/captcha_helper.html), [Email Helper](https://www.codeigniter.com/userguide3/helpers/email_helper.html). [Path Helper](https://www.codeigniter.com/userguide3/helpers/path_helper.html). and [Smiley Helper](https://www.codeigniter.com/userguide3/helpers/smiley_helper.html).
 
-- \[Download Helper](#https://www.codeigniter.com/userguide3/helpers/download-helper.html)\_ in CI3 was removed. You need to use Response object where you are using `force_download()`. See `force-file-download`.
+- [Download Helper](https://www.codeigniter.com/userguide3/helpers/download_helper.html) in CI3 was removed. You need to use Response object where you are using `force_download()`. See `force-file-download`.
 
-- \[Language Helper](#https://www.codeigniter.com/userguide3/helpers/language-helper.html)\_ in CI3 was removed. But `lang()` is always available in CI4. See `lang()`.
+- [Language Helper](https://www.codeigniter.com/userguide3/helpers/language_helper.html) in CI3 was removed. But `lang()` is always available in CI4. See `lang()`.
 
-- \[Typography Helper](#https://www.codeigniter.com/userguide3/helpers/typography-helper.html)\_ in CI3 wll be [Typography Library](../general/../libraries/typography.md) in CI4.
+- [Typography Helper](https://www.codeigniter.com/userguide3/helpers/typography_helper.html) in CI3 wll be [Typography Library](../general/../libraries/typography.md) in CI4.
 
-- \[Directory Helper](#https://www.codeigniter.com/userguide3/helpers/directory-helper.html)\_ and \[File Helper](#https://www.codeigniter.com/userguide3/helpers/file-helper.html)\_ in CI3 will be [Filesystem Helper](../helpers/filesystem_helper.md) in CI4.
+- [Directory Helper](https://www.codeigniter.com/userguide3/helpers/directory_helper.html) and [File Helper](https://www.codeigniter.com/userguide3/helpers/file_helper.html) in CI3 will be [Filesystem Helper](../helpers/filesystem_helper.md) in CI4.
 
-- \[String Helper](#https://www.codeigniter.com/userguide3/helpers/string-helper.html)\_ functions in CI3 are included in [Text Helper](../helpers/text_helper.md) in CI4.
+- [String Helper](https://www.codeigniter.com/userguide3/helpers/string_helper.html) functions in CI3 are included in [Text Helper](../helpers/text_helper.md) in CI4.
 
 - In CI4, `redirect()` is completely changed from CI3's.  
 
-- \[redirect() Documentation CodeIgniter 3.X](#https://codeigniter.com/userguide3/helpers/url-helper.html#redirect)\_
+- [redirect() Documentation CodeIgniter 3.X](https://codeigniter.com/userguide3/helpers/url_helper.html#redirect)
 
 - \[redirect() Documentation CodeIgniter 4.X](#../general/common-functions.md#redirect)\_
 
@@ -138,7 +138,7 @@ To upgrade your project, we figured out two major tasks you have to work on. Fir
 
 ### Hooks
 
-- \[Hooks](#https://www.codeigniter.com/userguide3/general/hooks.html)\_ have been replaced by [Events](../extending/events.md).
+- [Hooks](https://www.codeigniter.com/userguide3/general/hooks.html) have been replaced by [Events](../extending/events.md).
 
 - Instead of CI3's `$hook['post_controller_constructor']` you now use `Events::on('post_controller_constructor', ['MyClass', 'MyFunction']);`, with the namespace `CodeIgniter\Events\Events;`.
 
@@ -166,7 +166,7 @@ To upgrade your project, we figured out two major tasks you have to work on. Fir
 
 - Instead of CI3's `$this->load->library('x');` you can now use `$this->x = new \App\Libraries\X();`, following namespaced conventions for your component. Alternatively, you can use [Factories](../concepts/factories.md): `$this->x = \CodeIgniter\Config\Factories::libraries('X');`.
 
-- Some libraries from CodeIgniter 3 no longer exists in Version 4. For all these libraries, you have to find a new way to implement your functions. These libraries are \[Calendaring](#http://codeigniter.com/userguide3/libraries/calendar.html)\_, \[FTP](#http://codeigniter.com/userguide3/libraries/ftp.html)\_, \[Javascript](#http://codeigniter.com/userguide3/libraries/javascript.html)\_, \[Shopping Cart](#http://codeigniter.com/userguide3/libraries/cart.html)\_, \[Trackback](#http://codeigniter.com/userguide3/libraries/trackback.html)\_, \[XML-RPC /-Server](#http://codeigniter.com/userguide3/libraries/xmlrpc.html)\_, and \[Zip Encoding](#http://codeigniter.com/userguide3/libraries/zip.html)\_.
+- Some libraries from CodeIgniter 3 no longer exists in Version 4. For all these libraries, you have to find a new way to implement your functions. These libraries are [Calendaring](http://codeigniter.com/userguide3/libraries/calendar.html), [FTP](http://codeigniter.com/userguide3/libraries/ftp.html), [Javascript](http://codeigniter.com/userguide3/libraries/javascript.html), [Shopping Cart](http://codeigniter.com/userguide3/libraries/cart.html), [Trackback](http://codeigniter.com/userguide3/libraries/trackback.html), [XML-RPC /-Server](http://codeigniter.com/userguide3/libraries/xmlrpc.html), and [Zip Encoding](http://codeigniter.com/userguide3/libraries/zip.html).
 
 - All the other libraries, which exist in both CodeIgniter versions, can be upgraded with some adjustments. The most important and mostly used libraries received an Upgrade Guide, which will help you with simple steps and examples to adjust your code.
 

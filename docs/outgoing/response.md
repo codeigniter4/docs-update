@@ -185,7 +185,7 @@ outgoing/./response/032.php:2:
 !!! note "Note"
     Due to a bug, in v4.3.3 or previous versions, the status code of the actual redirect response might be changed even if a status code was specified. See [ChangeLog v4.3.4](#v434-redirect-status-code).
 
-If you don't know HTTP status code for redirection, it is recommended to read \[Redirections in HTTP](#https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections)\_.
+If you don't know HTTP status code for redirection, it is recommended to read [Redirections in HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections).
 
 ## Force File Download
 
@@ -238,7 +238,7 @@ outgoing/response/033.php
 
 Built into the HTTP specification are tools help the client (often the web browser) cache the results. Used correctly, this can lead to a huge performance boost to your application because it will tell the client that they don't need to contact the server at all since nothing has changed. And you can't get faster than that.
 
-This are handled through the `Cache-Control` and `ETag` headers. This guide is not the proper place for a thorough introduction to all of the cache headers power, but you can get a good understanding over at \[Google Developers](#https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching)\_.
+This are handled through the `Cache-Control` and `ETag` headers. This guide is not the proper place for a thorough introduction to all of the cache headers power, but you can get a good understanding over at [Google Developers](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching).
 
 By default, all response objects sent through CodeIgniter have HTTP caching turned off. The options and exact circumstances are too varied for us to be able to create a good default other than turning it off. It's simple to set the Cache values to what you need, through the `setCache()` method:
 

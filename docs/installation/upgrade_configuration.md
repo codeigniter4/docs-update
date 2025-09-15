@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- \[Config Documentation CodeIgniter 3.X](#http://codeigniter.com/userguide3/libraries/config.html)\_
+- [Config Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/libraries/config.html)
 
 - [Configuration Documentation CodeIgniter 4.X](#/general/configuration)
 

@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- \[Output Class Documentation CodeIgniter 3.X](#http://codeigniter.com/userguide3/libraries/output.html)\_
+- [Output Class Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/libraries/output.html)
 
 - [HTTP Responses Documentation CodeIgniter 4.X](#/outgoing/response)
 

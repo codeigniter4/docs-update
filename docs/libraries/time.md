@@ -3,7 +3,7 @@
 CodeIgniter provides a fully-localized, immutable, date/time class that is built on PHP's DateTimeImmutable object, but uses the Intl extension's features to convert times across timezones and display the output correctly for different locales. This class is the `Time` class and lives in the `CodeIgniter\I18n` namespace.
 
 !!! note "Note"
-    Since the Time class extends `DateTimeImmutable`, if there are features that you need that this class doesn't provide, you can likely find them within the \[DateTimeImmutable](#https://www.php.net/manual/en/class.datetimeimmutable.php)\_ class itself.
+    Since the Time class extends `DateTimeImmutable`, if there are features that you need that this class doesn't provide, you can likely find them within the [DateTimeImmutable](https://www.php.net/manual/en/class.datetimeimmutable.php) class itself.
 
 !!! note "Note"
     Prior to v4.3.0, the Time class extended `DateTime` and some inherited methods changed the current object state. The bug was fixed in v4.3.0. If you need the old Time class for backward compatibility, you can use deprecated `TimeLegacy` class for the time being.
@@ -46,7 +46,7 @@ libraries/time/001.php
 --8<--
 ```
 
-You can pass in strings representing the timezone and the locale in the second and parameters, respectively. Timezones can be any supported by PHP's \[DateTimeZone](#https://www.php.net/manual/en/timezones.php)\_\_ class. The locale can be any supported by PHP's \[Locale](#https://www.php.net/manual/en/class.locale.php)\_\_ class. If no locale or timezone is provided, the application defaults will be used.
+You can pass in strings representing the timezone and the locale in the second and parameters, respectively. Timezones can be any supported by PHP's [DateTimeZone](https://www.php.net/manual/en/timezones.php) class. The locale can be any supported by PHP's [Locale](https://www.php.net/manual/en/class.locale.php) class. If no locale or timezone is provided, the application defaults will be used.
 
 ```php
 --8<--
@@ -180,7 +180,7 @@ Since the Time class extends DateTimeImmutable, you get all of the output method
 
 ### toLocalizedString()
 
-This is the localized version of DateTimeImmutable's `format()` method. Instead of using the values you might be familiar with, though, you must use values acceptable to the \[IntlDateFormatter](#https://www.php.net/manual/en/class.intldateformatter.php)\_\_ class. A full listing of values can be found \[here](#https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details)\_\_.
+This is the localized version of DateTimeImmutable's `format()` method. Instead of using the values you might be familiar with, though, you must use values acceptable to the [IntlDateFormatter](https://www.php.net/manual/en/class.intldateformatter.php) class. A full listing of values can be found [here](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html#details).
 
 ```php
 --8<--
@@ -190,7 +190,7 @@ libraries/time/015.php
 
 ### toDateTimeString()
 
-This is the first of three helper methods to work with the \[IntlDateFormatter](#https://www.php.net/manual/en/class.intldateformatter.php)\_ without having to remember their values. This will return a localized version of string formatted as (`Y-m-d H:i:s`):
+This is the first of three helper methods to work with the [IntlDateFormatter](https://www.php.net/manual/en/class.intldateformatter.php) without having to remember their values. This will return a localized version of string formatted as (`Y-m-d H:i:s`):
 
 ```php
 --8<--
@@ -357,7 +357,7 @@ libraries/time/025.php
 
 #### getTimezone()
 
-Returns a new \[DateTimeZone](#https://www.php.net/manual/en/class.datetimezone.php)\_\_ object set the timezone of the Time instance:
+Returns a new [DateTimeZone](https://www.php.net/manual/en/class.datetimezone.php) object set the timezone of the Time instance:
 
 ```php
 --8<--
@@ -367,7 +367,7 @@ libraries/time/026.php
 
 #### getTimezoneName()
 
-Returns the full \[timezone string](#https://www.php.net/manual/en/timezones.php)\_\_ of the Time instance:
+Returns the full [timezone string](https://www.php.net/manual/en/timezones.php) of the Time instance:
 
 ```php
 --8<--

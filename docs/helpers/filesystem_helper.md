@@ -120,7 +120,7 @@ helpers/filesystem_helper/007.php
 --8<--
 ```
 
-The default mode is `'wb'`. Please see \[fopen()](#https://www.php.net/manual/en/function.fopen.php)\_ in the PHP manual for mode options.
+The default mode is `'wb'`. Please see [fopen()](https://www.php.net/manual/en/function.fopen.php) in the PHP manual for mode options.
 
 !!! note "Note"
     In order for this function to write data to a file, its permissions must
@@ -251,7 +251,7 @@ Valid `$returnedValues` options are: `name`, `size`, `date`, `readable`, `writea
 
 - **Return type**: `string`
 
-Takes numeric permissions (such as is returned by \[fileperms()](#https://www.php.net/manual/en/function.fileperms.php)\_) and returns standard symbolic notation of file permissions.
+Takes numeric permissions (such as is returned by [fileperms()](https://www.php.net/manual/en/function.fileperms.php)) and returns standard symbolic notation of file permissions.
 
 ```php
 --8<--
@@ -269,7 +269,7 @@ helpers/filesystem_helper/012.php
 
 - **Return type**: `string`
 
-Takes numeric permissions (such as is returned by \[fileperms()](#https://www.php.net/manual/en/function.fileperms.php)\_) and returns a three character octal notation of file permissions.
+Takes numeric permissions (such as is returned by [fileperms()](https://www.php.net/manual/en/function.fileperms.php)) and returns a three character octal notation of file permissions.
 
 ```php
 --8<--

@@ -9,7 +9,7 @@
 
 ## Documentations
 
-- \[HTML Table Documentation CodeIgniter 3.X](#http://codeigniter.com/userguide3/libraries/table.html)\_
+- [HTML Table Documentation CodeIgniter 3.X](http://codeigniter.com/userguide3/libraries/table.html)
 
 - [HTML Table Documentation CodeIgniter 4.X](#/outgoing/table)
 

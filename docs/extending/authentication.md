@@ -16,4 +16,4 @@ Modules that fulfill these recommendations may indicate compatibility by adding 
         "codeigniter4/authentication-implementation": "1.0"
     },
 
-You may view a list of modules that provide this implementation on \[Packagist](#https://packagist.org/providers/codeigniter4/authentication-implementation)\_.
+You may view a list of modules that provide this implementation on [Packagist](https://packagist.org/providers/codeigniter4/authentication-implementation).

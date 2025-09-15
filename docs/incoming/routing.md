@@ -359,7 +359,7 @@ incoming/routing/019.php
 --8<--
 ```
 
-For those of you who don't know regular expressions and want to learn more about them, \[regular-expressions.info](#https://www.regular-expressions.info/)\_ might be a good starting point.
+For those of you who don't know regular expressions and want to learn more about them, [regular-expressions.info](https://www.regular-expressions.info/) might be a good starting point.
 
 !!! note "Note"
     You can also mix and match placeholders with regular expressions.

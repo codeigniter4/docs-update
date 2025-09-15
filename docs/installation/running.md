@@ -106,7 +106,7 @@ The local development server can be customized with three command line options:
 
 A CodeIgniter4 webapp is normally hosted on a web server. Apache HTTP Server is the "standard" platform, and assumed in much of our documentation.
 
-Apache is bundled with many platforms, but can also be downloaded in a bundle with a database engine and PHP from \[Bitnami](#https://bitnami.com/stacks/infrastructure)\_.
+Apache is bundled with many platforms, but can also be downloaded in a bundle with a database engine and PHP from [Bitnami](https://bitnami.com/stacks/infrastructure).
 
 ### Configure Main Config File
 
@@ -257,7 +257,7 @@ And edit **.htaccess** as follows:
 
 A common practice in shared hosting environments is to use the Apache module "mod_userdir" to enable per-user Virtual Hosts automatically. Additional configuration is required to allow CodeIgniter4 to be run from these per-user directories.
 
-The following assumes that the server is already configured for mod_userdir. A guide to enabling this module is available \[in the Apache documentation](#https://httpd.apache.org/docs/2.4/howto/public-html.html)\_.
+The following assumes that the server is already configured for mod_userdir. A guide to enabling this module is available [in the Apache documentation](https://httpd.apache.org/docs/2.4/howto/public_html.html).
 
 Because CodeIgniter4 expects the server to find the framework front controller at **public/index.php** by default, you must specify this location as an alternative to search for the request (even if CodeIgniter4 is installed within the per-user web directory).
 
