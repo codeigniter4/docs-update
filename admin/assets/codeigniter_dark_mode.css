@@ -180,4 +180,24 @@
         margin-top: 0;
         margin-bottom: 0;
     }
+
+    /* Navigation adjustments for better spacing in dark mode */
+
+    .md-nav[aria-expanded="true"] {
+        margin-bottom: 0.5rem !important;
+    }
+
+    .md-nav .md-nav .md-nav__list {
+        padding-left: 1.2rem !important;
+        /* background-color: rgba(245,245,255,0.01) !important; */
+    }
+
+    .md-nav__item {
+        line-height: 1.4 !important;
+    }
+
+    /* Hide site name in header - logo is sufficient */
+    .md-header__title {
+        visibility: hidden;
+    }
 }
