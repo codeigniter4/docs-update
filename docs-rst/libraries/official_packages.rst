@@ -34,7 +34,7 @@ Settings
 ********
 
 `CodeIgniter Settings <https://github.com/codeigniter4/settings>`_ is a wrapper around
-the configuration files that allows any configuration setting to saved to the database,
+the configuration files that allows any configuration setting to be saved to the database,
 while defaulting to the config files when not custom value has been stored. This allows
 an application to ship with the default config values, but adapt as the project grows
 or moves servers, without having to touch the code.
