@@ -95,6 +95,7 @@ define('SOURCE_DIR', getSourceDirectory());
 define('TARGET_DIR', __DIR__ . '/../docs/');
 
 define('BEFORE_FILTERS', [
+    'toctree',
     'includes',
     'docLink',
     'classReference',
@@ -166,7 +167,7 @@ function applyAfterFilters(string $path, string $sourceCopy): void {
  */
 function updateFile(array $file, string $function): void {
     $data = file_get_contents($file['path']);
-    $result = $function($data, $file['folder']);
+    $result = $function($data, $file['folder'], $file['path']);
 
     if ($result === null) {
         writeLine(sprintf('Error: %s failed on %s (%s), leaving the file unfiltered', $function, $file['path'], preg_last_error_msg()), STYLE_ERROR, STDERR);
@@ -176,6 +177,33 @@ function updateFile(array $file, string $function): void {
     file_put_contents($file['path'], $result);
 }
 
+/**
+ * `$path` relative to the source folder, or `$path` itself when it lies outside it.
+ */
+function sourceRelative(string $path): string {
+    foreach ([realpath(SOURCE_DIR), rtrim(SOURCE_DIR, '/')] as $root) {
+        if ($path === $root || str_starts_with($path, $root . '/')) {
+            return ltrim(substr($path, strlen($root)), '/');
+        }
+    }
+
+    return $path;
+}
+
+/**
+ * Markdown link from a page in `$directory` to the page `$page`, both relative to the docs root.
+ */
+function relativeLink(string $directory, string $page): string {
+    $from = $directory === '' ? [] : explode('/', $directory);
+    $to   = explode('/', $page);
+
+    while ($from !== [] && count($to) > 1 && $from[0] === $to[0]) {
+        array_shift($from);
+        array_shift($to);
+    }
+
+    return str_repeat('../', count($from)) . implode('/', $to) . '.md';
+}
 
 function clean(string $target): void {
     if (!is_dir($target)) {
@@ -458,6 +486,58 @@ function convert(string $source, string $target, array &$jobs): void {
     closedir($dir);
 }
 
+/**
+ * Writes the MkDocs nav, built from the toctrees under the root page, to `docs/.nav.yml` for `mkdocs.yml` to inherit.
+ */
+function writeMkDocsNav(): void {
+    $seen  = ['index'];
+    $lines = ['nav:', '  - Home: index.md'];
+
+    foreach (pageToctrees('index') as $toctree) {
+        foreach ($toctree['entries'] as $entry) {
+            array_push($lines, ...navItem($entry, 0, $seen));
+        }
+    }
+
+    file_put_contents(TARGET_DIR . '.nav.yml', implode("\n", $lines) . "\n");
+}
+
+/**
+ * Nav lines for `$entry`, as a section holding the page and its toctree entries when it has any, skipping pages already in `$seen`.
+ *
+ * @param array{title: ?string, page: string} $entry
+ * @param list<string>                        $seen
+ *
+ * @return list<string>
+ */
+function navItem(array $entry, int $depth, array &$seen): array {
+    if (in_array($entry['page'], $seen, true)) {
+        return [];
+    }
+
+    $seen[]   = $entry['page'];
+    $prefix   = str_repeat('    ', $depth) . '  - ';
+    $file     = $entry['page'] . '.md';
+    $title    = fn (string $title): string => json_encode($title, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    $children = [];
+
+    foreach (pageToctrees($entry['page']) as $toctree) {
+        foreach ($toctree['entries'] as $child) {
+            array_push($children, ...navItem($child, $depth + 1, $seen));
+        }
+    }
+
+    if ($children === []) {
+        return [$entry['title'] === null ? $prefix . $file : sprintf('%s%s: %s', $prefix, $title($entry['title']), $file)];
+    }
+
+    return [
+        sprintf('%s%s:', $prefix, $title($entry['title'] ?? pageTitle($entry['page']))),
+        sprintf('%s  - %s', str_repeat('    ', $depth + 1), $file),
+        ...$children,
+    ];
+}
+
 function convertSingleFile(string $filename): bool {
     loadFilters();
 
@@ -515,6 +595,9 @@ if (isset($argv[1])) {
         writeLine(sprintf('Conversion failed for %d file(s).', $failures), STYLE_ERROR, STDERR);
         exit(1);
     }
+
+    writeLine('Writing the MkDocs nav...', STYLE_STEP);
+    writeMkDocsNav();
 
     writeLine('Conversion completed successfully!', STYLE_SUCCESS);
 }

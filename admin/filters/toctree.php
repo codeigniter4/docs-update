@@ -2,236 +2,171 @@
 
 declare(strict_types=1);
 
-function after_filter_toctree(string $data, string $folder): ?string {
-    $pattern = '/<div class="toctree"[^>]*>\s*(.*?)\s*<\/div>/s';
+/**
+ * Rendered toctree lists held back from pandoc, keyed by the number in their `TocTreePlaceholder<n>` marker.
+ *
+ * @return list<string>
+ */
+function &toctreeLists(): array {
+    static $lists = [];
 
-    return preg_replace_callback($pattern, function(array $matches) use ($folder): string {
-        $content = trim($matches[1]);
+    return $lists;
+}
 
-        $result = [];
+/**
+ * Replaces each visible toctree with a `TocTreePlaceholder<n>` marker line and drops each hidden one.
+ */
+function before_filter_toctree(string $data, string $folder, string $path): ?string {
+    $page  = sourceRelative(preg_replace('/\.rst_?$/', '', $path));
+    $lists = &toctreeLists();
 
-        // pandoc writes the entries either as "Title \<filename\>" pairs or as bare filenames.
-        preg_match_all('/([^\\\\]+?)\s*\\\\<([^\\\\>]+?)\\\\>/', $content, $entryMatches, PREG_SET_ORDER);
+    return preg_replace_callback(TOCTREE_PATTERN, function (array $matches) use ($page, &$lists): string {
+        $toctree = parseToctree($matches[1], $page);
 
-        if (count($entryMatches) > 0) {
-            foreach ($entryMatches as $match) {
-                $title = trim($match[1]);
-                $filename = trim($match[2]);
-
-            if (empty($filename)) continue;
-
-            if ((strpos($filename, '/index') !== false) &&
-                (strpos($filename, '/') !== false)) {
-                $subdirToctree = getSubdirectoryToctree($filename, $folder);
-                if ($subdirToctree) {
-                    $result = array_merge($result, $subdirToctree);
-                    continue;
-                }
-            }
-
-            if (!empty($title)) {
-                $displayName = $title;
-            } else {
-                $headerDisplayName = getFirstHeaderFromFile($filename, $folder);
-
-                if ($headerDisplayName) {
-                    $displayName = $headerDisplayName;
-                } else {
-                    $displayName = ucwords(str_replace(['_', '-'], ' ', basename($filename, '.md')));
-                }
-            }
-
-            $linkPath = $filename;
-            if (strpos($filename, '../') !== 0 && !str_ends_with($filename, '.md')) {
-                $linkPath = $filename . '.md';
-            } elseif (strpos($filename, '../') === 0 && !str_ends_with($filename, '.md')) {
-                $linkPath = $filename . '.md';
-            }
-
-            $result[] = "- [$displayName]($linkPath)";
-        }
-        } else {
-            $lines = preg_split('/\s+/', $content);
-
-            foreach ($lines as $filename) {
-                $filename = trim($filename);
-                if (empty($filename)) continue;
-
-                if ((strpos($filename, '/index') !== false) &&
-                    (strpos($filename, '/') !== false)) {
-                    $subdirToctree = getSubdirectoryToctree($filename, $folder);
-                    if ($subdirToctree) {
-                        $result = array_merge($result, $subdirToctree);
-                        continue;
-                    }
-                }
-
-                $headerDisplayName = getFirstHeaderFromFile($filename, $folder);
-
-                if ($headerDisplayName) {
-                    $displayName = $headerDisplayName;
-                } else {
-                    $displayName = ucwords(str_replace(['_', '-'], ' ', basename($filename, '.md')));
-                }
-
-                $linkPath = $filename;
-                if (strpos($filename, '../') !== 0 && !str_ends_with($filename, '.md')) {
-                    $linkPath = $filename . '.md';
-                } elseif (strpos($filename, '../') === 0 && !str_ends_with($filename, '.md')) {
-                    $linkPath = $filename . '.md';
-                }
-
-                $result[] = "- [$displayName]($linkPath)";
-            }
+        if ($toctree['hidden']) {
+            return "\n";
         }
 
-        return implode("\n", $result);
+        $lists[] = implode("\n", renderToctree($toctree, dirname($page) === '.' ? '' : dirname($page), 0, [$page]));
+
+        return sprintf("TocTreePlaceholder%d\n\n", count($lists) - 1);
     }, $data);
 }
 
+function after_filter_toctree(string $data, string $folder): ?string {
+    $lists = &toctreeLists();
+
+    return preg_replace_callback('/^TocTreePlaceholder(\d+)[ \t]*$/m', fn (array $matches): string => $lists[(int) $matches[1]], $data);
+}
+
+const TOCTREE_PATTERN = '/^\.\. toctree::[ \t]*\r?\n((?:[ \t]+[^\r\n]*\r?\n|[ \t]*\r?\n)*)/m';
+
 /**
- * Entries of the first toctree in the RST index at `$subdirPath`, led by that index's title, or null when it has none.
+ * Toctree with the directive body `$body`, its entries resolved against the source page `$page`.
  *
- * @return list<string>|null
+ * @return array{hidden: bool, includeHidden: bool, maxDepth: int, entries: list<array{title: ?string, page: string}>}
  */
-function getSubdirectoryToctree(string $subdirPath, string $folder): ?array {
-    $sourcePath = rtrim(SOURCE_DIR, '/') . substr(realpath($folder), strlen(realpath(TARGET_DIR)));
+function parseToctree(string $body, string $page): array {
+    $options = [];
+    $entries = [];
+    $directory = dirname($page) === '.' ? '' : dirname($page);
 
-    if (strpos($subdirPath, '../') === 0) {
-        $relativePath = substr($subdirPath, 3);
-        $subdirRstFile = dirname($sourcePath) . '/' . $relativePath . '.rst';
-    } else {
-        $subdirRstFile = $sourcePath . '/' . $subdirPath . '.rst';
-    }
+    foreach (preg_split('/\r?\n/', $body) as $line) {
+        $line = trim($line);
 
-    if (!file_exists($subdirRstFile)) {
-        return null;
-    }
-
-    $content = file_get_contents($subdirRstFile);
-
-    if (preg_match('/\.\. toctree::\s*\n((?:[ \t]+:[^:]+:[^\n]*\n)*)\s*\n((?:[ \t]+[^\s][^\n]*\n?)*)/m', $content, $matches)) {
-        $toctreeContent = $matches[2];
-
-        $lines = explode("\n", $toctreeContent);
-        $entries = [];
-
-        if (preg_match('/^([^\s#*=.][^\n]*)\n[#*=]{3,}[ \t]*$/m', $content, $titleMatch)) {
-            $mainTitle = trim($titleMatch[1]);
-
-            if (strpos($subdirPath, '../') === 0) {
-                $mainLinkPath = $subdirPath . '.md';
-            } else {
-                $mainLinkPath = $subdirPath . '.md';
-            }
-
-            $entries[] = "- [$mainTitle]($mainLinkPath)";
+        if ($line === '' || $line === 'self') {
+            continue;
         }
 
-        foreach ($lines as $line) {
-            $trimmed = trim($line);
-            if (empty($trimmed)) continue;
-
-            $displayName = '';
-            $filename = '';
-
-            if (preg_match('/^(.+?)\s*<(.+?)>$/', $trimmed, $matches)) {
-                $displayName = trim($matches[1]);
-                $filename = trim($matches[2]);
-            } else {
-                $filename = $trimmed;
-            }
-
-            if (strpos($subdirPath, '../') === 0) {
-                $pathParts = explode('/', substr($subdirPath, 3));
-                $subdirName = $pathParts[0];
-            } else {
-                $subdirName = dirname($subdirPath);
-                if ($subdirName === '.') {
-                    $subdirName = basename($subdirPath, '/index');
-                }
-            }
-
-            if (strpos($filename, '../') === 0) {
-                if (str_ends_with($filename, '/index')) {
-                    $currentSubdirPath = dirname($subdirPath);
-                    if ($currentSubdirPath === '.') {
-                        $currentSubdirPath = '';
-                    }
-
-                    $contextFolder = $folder;
-                    if (!empty($currentSubdirPath)) {
-                        $contextFolder = $folder . '/' . $currentSubdirPath;
-                    }
-
-                    $subdirToctree = getSubdirectoryToctree($filename, $contextFolder);
-                    if ($subdirToctree) {
-                        $entries = array_merge($entries, $subdirToctree);
-                        continue;
-                    }
-                }
-
-                $linkPath = $filename;
-                if (!str_ends_with($linkPath, '.md')) {
-                    $linkPath .= '.md';
-                }
-
-                if (!empty($displayName)) {
-                    $finalDisplayName = $displayName;
-                } else {
-                    $headerDisplayName = getFirstHeaderFromFile($filename, dirname($folder));
-                    $finalDisplayName = $headerDisplayName ?: ucwords(str_replace(['_', '-'], ' ', basename($filename, '.md')));
-                }
-            } else {
-                $subdirFile = $subdirName . '/' . $filename;
-
-                $linkPath = $subdirFile;
-                if (!str_ends_with($linkPath, '.md')) {
-                    $linkPath .= '.md';
-                }
-
-                if (!empty($displayName)) {
-                    $finalDisplayName = $displayName;
-                } else {
-                    $headerDisplayName = getFirstHeaderFromFile($subdirFile, TARGET_DIR);
-                    $finalDisplayName = $headerDisplayName ?: ucwords(str_replace(['_', '-'], ' ', basename($filename, '.md')));
-                }
-            }
-
-            $entries[] = "    - [$finalDisplayName]($linkPath)";
+        if (preg_match('/^:([a-z]+):\s*(.*)$/', $line, $matches) === 1) {
+            $options[$matches[1]] = $matches[2];
+            continue;
         }
 
-        return $entries;
+        $title = null;
+
+        if (preg_match('/^(.+?)\s*<([^<>]+)>$/', $line, $matches) === 1) {
+            [, $title, $line] = $matches;
+        }
+
+        $target = normalizePath(str_starts_with($line, '/') ? $line : $directory . '/' . $line);
+
+        if (isset($options['glob']) && strpbrk($target, '*?[') !== false) {
+            $matched = array_map(fn (string $file): string => sourceRelative(substr($file, 0, -4)), glob(SOURCE_DIR . $target . '.rst'));
+            sort($matched);
+
+            foreach (array_diff($matched, [$page]) as $match) {
+                $entries[] = ['title' => null, 'page' => $match];
+            }
+
+            continue;
+        }
+
+        $entries[] = ['title' => $title, 'page' => $target];
     }
 
-    return null;
+    return [
+        'hidden'        => isset($options['hidden']),
+        'includeHidden' => isset($options['includehidden']),
+        'maxDepth'      => (int) ($options['maxdepth'] ?? 0) > 0 ? (int) $options['maxdepth'] : PHP_INT_MAX,
+        'entries'       => $entries,
+    ];
 }
 
 /**
- * First `#` heading of the converted page at `$filename`, a path relative to the `$folder` output directory.
+ * Toctrees of the source page `$page`, hidden ones included.
+ *
+ * @return list<array{hidden: bool, includeHidden: bool, maxDepth: int, entries: list<array{title: ?string, page: string}>}>
  */
-function getFirstHeaderFromFile(string $filename, string $folder): ?string {
-    $targetFile = '';
+function pageToctrees(string $page): array {
+    static $cache = [];
 
-    $docsPath = realpath($folder) . '/';
+    if (! isset($cache[$page])) {
+        preg_match_all(TOCTREE_PATTERN, (string) @file_get_contents(SOURCE_DIR . $page . '.rst'), $matches);
 
-    if (strpos($filename, '../') === 0) {
-        $relativePath = substr($filename, 3);
-        $targetFile = dirname($docsPath) . '/' . $relativePath . '.md';
-    } elseif (strpos($filename, '/') !== false) {
-        $targetFile = $docsPath . $filename . '.md';
-    } else {
-        $targetFile = $docsPath . $filename . '.md';
+        $cache[$page] = array_map(fn (string $body): array => parseToctree($body, $page), $matches[1]);
     }
 
-    if (file_exists($targetFile)) {
-        $content = file_get_contents($targetFile);
+    return $cache[$page];
+}
 
-        if (preg_match('/^#\s+(.+)$/m', $content, $matches)) {
-            $header = trim($matches[1]);
-            return $header;
+/**
+ * Nested Markdown list of `$toctree`, linked from the docs directory `$directory`, expanding each entry's own toctrees as Sphinx does.
+ *
+ * @param array{hidden: bool, includeHidden: bool, maxDepth: int, entries: list<array{title: ?string, page: string}>} $toctree
+ * @param list<string>                                                                                                $ancestors
+ *
+ * @return list<string>
+ */
+function renderToctree(array $toctree, string $directory, int $depth, array $ancestors): array {
+    $lines = [];
+
+    foreach ($toctree['entries'] as $entry) {
+        $lines[] = sprintf('%s- [%s](%s)', str_repeat('    ', $depth), $entry['title'] ?? pageTitle($entry['page']), relativeLink($directory, $entry['page']));
+
+        if ($depth + 1 >= $toctree['maxDepth'] || in_array($entry['page'], $ancestors, true)) {
+            continue;
+        }
+
+        foreach (pageToctrees($entry['page']) as $child) {
+            if ($child['hidden'] && ! $toctree['includeHidden']) {
+                continue;
+            }
+
+            $child['maxDepth']      = $toctree['maxDepth'];
+            $child['includeHidden'] = $toctree['includeHidden'];
+
+            array_push($lines, ...renderToctree($child, $directory, $depth + 1, [...$ancestors, $entry['page']]));
         }
     }
 
-    return null;
+    return $lines;
+}
+
+/**
+ * Title of the source page `$page`, in Markdown, or its file name in title case when it has none.
+ */
+function pageTitle(string $page): string {
+    $rst = (string) @file_get_contents(SOURCE_DIR . $page . '.rst');
+    $punctuation = '[!-\/:-@\[-`{-~]';
+
+    if (preg_match(sprintf('/^(?:(%1$s)\1{2,}[ \t]*\r?\n)?(?!%1$s+[ \t]*\r?$)(\S[^\r\n]*?)[ \t]*\r?\n(%1$s)\3{2,}[ \t]*\r?$/m', $punctuation), $rst, $matches) === 1) {
+        return str_replace('``', '`', $matches[2]);
+    }
+
+    return ucwords(str_replace(['_', '-'], ' ', basename($page)));
+}
+
+function normalizePath(string $path): string {
+    $parts = [];
+
+    foreach (explode('/', $path) as $part) {
+        if ($part === '..') {
+            array_pop($parts);
+        } elseif ($part !== '' && $part !== '.') {
+            $parts[] = $part;
+        }
+    }
+
+    return implode('/', $parts);
 }

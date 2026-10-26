@@ -8,10 +8,10 @@ All filters are declared in `convert.php`, in two lists:
 - `AFTER_FILTERS` run on the converted page (`.md`).
 
 They run in the order listed. Each name matches a file in the `filters` directory, without the `.php` extension.
-The file defines `before_filter_<name>()`, `after_filter_<name>()`, or both, each taking the page content and its folder:
+The file defines `before_filter_<name>()`, `after_filter_<name>()`, or both, each taking the page content, its folder and, when needed, its path:
 
 ```php
-function after_filter_example(string $data, string $folder): ?string
+function after_filter_example(string $data, string $folder, string $path): ?string
 ```
 
 A filter returns the new content, or `null` when a `preg_*` call fails, in which case the page keeps its previous content and the converter reports the error.
@@ -30,7 +30,7 @@ all before filters on every page, then pandoc on every page, then all after filt
 | `images` | | Converts image tags to Markdown |
 | `alerts` | | Converts `> [!NOTE]` alerts and unwraps the blockquotes left by indented RST text |
 | `dollarSign` | | Unescapes `\$` |
-| `toctree` | | Converts `toctree` directives into link lists, with titles from the converted pages |
+| `toctree` | Replaces each `toctree` with a `TocTreePlaceholder<n>` line holding its nested link list, and drops hidden ones | Replaces each placeholder with its list |
 | `contents` | | Removes `contents` directives, since the sidebar shows the page contents |
 | `admonitions` | | Converts note, warning, version and other admonitions into `!!!` blocks, nested ones included |
 

@@ -66,6 +66,7 @@ php ./admin/convert.php
 > [!NOTE]
 > This first deletes everything in the `./docs` directory, then copies the images and theme assets back in.
 
+It also writes the MkDocs nav to `docs/.nav.yml`, built from the toctrees, which `mkdocs.yml` inherits.
 It exits non-zero when pandoc fails on any page.
 
 You can also convert a single page, given by its path relative to the source folder, without the extension:
