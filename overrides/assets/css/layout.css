@@ -1,0 +1,84 @@
+/* Search field and its shortcut hint */
+.md-search__form {
+    border-radius: .4rem;
+}
+
+[data-md-toggle="search"]:checked ~ .md-header .md-search__form {
+    border-radius: .4rem .4rem 0 0;
+}
+
+.md-search__output {
+    border-radius: 0 0 .4rem .4rem;
+}
+
+@media screen and (min-width: 60em) {
+    .md-search__form {
+        background-color: #ffffff1f;
+    }
+
+    .md-search__form:hover {
+        background-color: #00000042;
+    }
+}
+
+.md-search__form[data-shortcut]::after {
+    content: attr(data-shortcut);
+    position: absolute;
+    top: 50%;
+    right: .6rem;
+    z-index: 2;
+    padding: 0 .3rem;
+    border: .05rem solid currentColor;
+    border-radius: .2rem;
+    color: var(--md-primary-bg-color--light);
+    font-size: .6rem;
+    line-height: 1.4;
+    pointer-events: none;
+    transform: translateY(-50%);
+}
+
+[data-md-toggle="search"]:checked ~ .md-header .md-search__form::after {
+    display: none;
+}
+
+/* Wider content column */
+.md-grid {
+    max-width: 68rem;
+}
+
+.md-sidebar--secondary {
+    width: 9.6rem;
+}
+
+/* Translucent header */
+.md-header {
+    background-color: color-mix(in srgb, var(--md-primary-fg-color) 85%, transparent);
+    -webkit-backdrop-filter: blur(.4rem);
+    backdrop-filter: blur(.4rem);
+}
+
+/* Labelled edit button */
+.md-typeset .md-content__button--labelled {
+    display: inline-flex;
+    gap: .3rem;
+    align-items: center;
+    padding: .2rem .6rem;
+    border-radius: .4rem;
+    background-color: var(--md-default-fg-color--lightest);
+    color: var(--md-default-fg-color--light);
+    font-size: .7rem;
+}
+
+.md-typeset .md-content__button--labelled:hover {
+    background-color: var(--md-accent-fg-color--transparent);
+    color: var(--md-accent-fg-color);
+}
+
+/* Smaller previous and next links */
+.md-footer__title {
+    font-size: .8rem;
+}
+
+.md-footer__direction {
+    font-size: .6rem;
+}
