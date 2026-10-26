@@ -1,10 +1,7 @@
 <?php
 
-// Handle images
-function after_filter_images($data, $folder) {
-    $pattern = '/<img(?:[^>]*)\ssrc="([^"]+)"(?:[^>]*)\salt="([^"]+)"(?:[^>]*)>/';
+declare(strict_types=1);
 
-    $replacement = '![${2}](${1})';
-
-    return preg_replace($pattern, $replacement, $data);
+function after_filter_images(string $data, string $folder): ?string {
+    return preg_replace('/<img(?:[^>]*)\ssrc="([^"]+)"(?:[^>]*)\salt="([^"]+)"(?:[^>]*)>/', '![${2}](${1})', $data);
 }
