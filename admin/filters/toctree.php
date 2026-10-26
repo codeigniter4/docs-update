@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 // Handle toctree functionality from RST
-function after_filter_toctree($data, $folder) {
+function after_filter_toctree(string $data, string $folder): ?string {
     // Look for HTML toctree divs created by pandoc with --wrap=none
     $pattern = '/<div class="toctree"[^>]*>\s*(.*?)\s*<\/div>/s';
 
-    return preg_replace_callback($pattern, function($matches) use ($folder) {
+    return preg_replace_callback($pattern, function(array $matches) use ($folder): string {
         $content = trim($matches[1]);
 
         // Parse the toctree content which can be in two formats:
@@ -104,16 +106,12 @@ function after_filter_toctree($data, $folder) {
     }, $data);
 }
 
-function getSubdirectoryToctree($subdirPath, $folder) {
-    // Convert the target folder (docs) back to source folder (docs-rst)
-    $targetPath = realpath($folder);
-
-    // Handle both '/docs/' (middle of path) and '/docs' (end of path)
-    if (str_ends_with($targetPath, '/docs')) {
-        $sourcePath = substr($targetPath, 0, -5) . '/docs-rst';
-    } else {
-        $sourcePath = str_replace('/docs/', '/docs-rst/', $targetPath);
-    }
+/**
+ * @return list<string>|null
+ */
+function getSubdirectoryToctree(string $subdirPath, string $folder): ?array {
+    // Convert the target folder (docs) back to source folder
+    $sourcePath = rtrim(SOURCE_DIR, '/') . substr(realpath($folder), strlen(realpath(TARGET_DIR)));
 
     // Handle relative paths properly
     if (strpos($subdirPath, '../') === 0) {
@@ -132,7 +130,7 @@ function getSubdirectoryToctree($subdirPath, $folder) {
     $content = file_get_contents($subdirRstFile);
 
     // Look for toctree sections - improved regex to handle multiple toctree blocks
-    if (preg_match('/\.\. toctree::\s*\n((?:\s+:[^:]+:[^\n]*\n)*)\s*\n((?:\s+[^\s][^\n]*\n?)*)/m', $content, $matches)) {
+    if (preg_match('/\.\. toctree::\s*\n((?:[ \t]+:[^:]+:[^\n]*\n)*)\s*\n((?:[ \t]+[^\s][^\n]*\n?)*)/m', $content, $matches)) {
         $toctreeContent = $matches[2];
 
         // Extract individual entries (lines that are indented)
@@ -140,7 +138,7 @@ function getSubdirectoryToctree($subdirPath, $folder) {
         $entries = [];
 
         // Get the main title of this index file to include as the first entry
-        if (preg_match('/^#+\s*(.+)$/m', $content, $titleMatch)) {
+        if (preg_match('/^([^\s#*=.][^\n]*)\n[#*=]{3,}[ \t]*$/m', $content, $titleMatch)) {
             $mainTitle = trim($titleMatch[1]);
 
             // Determine the link path for the main index file
@@ -237,7 +235,7 @@ function getSubdirectoryToctree($subdirPath, $folder) {
                 if (!empty($displayName)) {
                     $finalDisplayName = $displayName;
                 } else {
-                    $headerDisplayName = getFirstHeaderFromFile($subdirFile, dirname($folder));
+                    $headerDisplayName = getFirstHeaderFromFile($subdirFile, TARGET_DIR);
                     $finalDisplayName = $headerDisplayName ?: ucwords(str_replace(['_', '-'], ' ', basename($filename, '.md')));
                 }
             }
@@ -251,7 +249,7 @@ function getSubdirectoryToctree($subdirPath, $folder) {
     return null;
 }
 
-function getFirstHeaderFromFile($filename, $folder) {
+function getFirstHeaderFromFile(string $filename, string $folder): ?string {
     // Construct the full path to the target markdown file
     $targetFile = '';
 
