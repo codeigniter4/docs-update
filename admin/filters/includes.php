@@ -53,7 +53,7 @@ function before_filter_includes(string $data, string $folder): ?string {
         $file = str_starts_with($matches[3], '/') ? rtrim(SOURCE_DIR, '/') . $matches[3] : $folder . '/' . $matches[3];
 
         if (! is_file($file)) {
-            fwrite(STDERR, sprintf("Warning: sample %s not found for literalinclude in %s\n", $matches[3], $folder));
+            writeLine(sprintf('Warning: sample %s not found for literalinclude in %s', $matches[3], $folder), STYLE_WARNING, STDERR);
             array_push($result, ...$directive);
 
             continue;

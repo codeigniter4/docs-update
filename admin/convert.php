@@ -38,14 +38,27 @@ function loadEnvConfig(): array {
     return $config;
 }
 
+/**
+ * Writes `$message` and a newline, in the ANSI SGR `$style` when `$stream` is a terminal and `NO_COLOR` is unset.
+ *
+ * @param resource $stream
+ */
+function writeLine(string $message, string $style = '', $stream = STDOUT): void {
+    if ($style !== '' && (string) getenv('NO_COLOR') === '' && stream_isatty($stream)) {
+        $message = sprintf("\033[%sm%s\033[0m", $style, $message);
+    }
+
+    fwrite($stream, $message . "\n");
+}
+
 function getSourceDirectory(): string {
     $config = loadEnvConfig();
 
     if ($config['DOCS_SOURCE_TYPE'] === 'project' && !empty($config['DOCS_PROJECT_PATH'])) {
         $projectPath = rtrim($config['DOCS_PROJECT_PATH'], '/') . '/';
         if (!is_dir($projectPath)) {
-            echo "Error: Project path does not exist: $projectPath\n";
-            echo "Please check your .env file configuration.\n";
+            writeLine(sprintf('Error: Project path does not exist: %s', $projectPath), STYLE_ERROR, STDERR);
+            writeLine('Please check your .env file configuration.', '', STDERR);
             exit(1);
         }
         return $projectPath;
@@ -58,16 +71,21 @@ function checkPandocVersion(): void {
     exec('pandoc --version', $output, $exitCode);
 
     if ($exitCode !== 0) {
-        fwrite(STDERR, "Error: pandoc is not installed. Install pandoc " . PANDOC_VERSION . ".\n");
+        writeLine(sprintf('Error: pandoc is not installed. Install pandoc %s.', PANDOC_VERSION), STYLE_ERROR, STDERR);
         exit(1);
     }
 
     $installed = trim(str_replace('pandoc', '', $output[0]));
 
     if ($installed !== PANDOC_VERSION) {
-        fwrite(STDERR, "Warning: pandoc $installed is installed, but the conversion is verified against pandoc " . PANDOC_VERSION . ".\n");
+        writeLine(sprintf('Warning: pandoc %s is installed, but the conversion is verified against pandoc %s.', $installed, PANDOC_VERSION), STYLE_WARNING, STDERR);
     }
 }
+
+const STYLE_ERROR   = '31';
+const STYLE_WARNING = '33';
+const STYLE_SUCCESS = '32';
+const STYLE_STEP    = '1';
 
 define('PANDOC_VERSION', '3.12.1');
 define('PANDOC_WORKERS', 8);
@@ -150,7 +168,7 @@ function updateFile(array $file, string $function): void {
     $result = $function($data, $file['folder']);
 
     if ($result === null) {
-        fwrite(STDERR, "Error: $function failed on {$file['path']} (" . preg_last_error_msg() . "), leaving the file unfiltered\n");
+        writeLine(sprintf('Error: %s failed on %s (%s), leaving the file unfiltered', $function, $file['path'], preg_last_error_msg()), STYLE_ERROR, STDERR);
         return;
     }
 
@@ -241,7 +259,7 @@ function createMkDocsAssets(): void {
     $assetsDir = TARGET_DIR . 'assets/';
 
     if (!is_dir($staticDir)) {
-        echo "Warning: _static directory not found, skipping MkDocs assets creation\n";
+        writeLine('Warning: _static directory not found, skipping MkDocs assets creation', STYLE_WARNING);
         return;
     }
 
@@ -297,7 +315,7 @@ function createMkDocsThemeCSS(): void {
             echo "Copying MkDocs theme CSS: $sourcePath to $targetPath\n";
             copy($sourcePath, $targetPath);
         } else {
-            echo "Warning: CSS file not found: $sourcePath\n";
+            writeLine(sprintf('Warning: CSS file not found: %s', $sourcePath), STYLE_WARNING);
         }
     }
 
@@ -313,7 +331,7 @@ function createMkDocsThemeCSS(): void {
             echo "Copying MkDocs theme JS: $sourcePath to $targetPath\n";
             copy($sourcePath, $targetPath);
         } else {
-            echo "Warning: JS file not found: $sourcePath\n";
+            writeLine(sprintf('Warning: JS file not found: %s', $sourcePath), STYLE_WARNING);
         }
     }
 }
@@ -340,7 +358,7 @@ function convertRstToMd(array $jobs): int {
         applyAfterFilters($job['target'], $copies[$i]);
 
         if ($exitCodes[$i] !== 0) {
-            fwrite(STDERR, "Error: pandoc failed with exit code {$exitCodes[$i]} on {$job['source']}\n");
+            writeLine(sprintf('Error: pandoc failed with exit code %d on %s', $exitCodes[$i], $job['source']), STYLE_ERROR, STDERR);
             $failures++;
         }
     }
@@ -430,7 +448,7 @@ function convertSingleFile(string $filename): bool {
     $targetFile = TARGET_DIR . $filename . '.md';
 
     if ($sourceFile === false) {
-        echo "Error: File '$filename.rst' not found in " . SOURCE_DIR . "\n";
+        writeLine(sprintf("Error: File '%s.rst' not found in %s", $filename, SOURCE_DIR), STYLE_ERROR, STDERR);
         return false;
     }
 
@@ -443,7 +461,7 @@ function convertSingleFile(string $filename): bool {
         return false;
     }
 
-    echo "Conversion completed successfully!\n";
+    writeLine('Conversion completed successfully!', STYLE_SUCCESS);
     return true;
 }
 
@@ -453,31 +471,31 @@ if (isset($argv[1])) {
     $filename = $argv[1];
     exit(convertSingleFile($filename) ? 0 : 1);
 } else {
-    echo "Starting full conversion...\n";
+    writeLine('Starting full conversion...', STYLE_STEP);
 
     if (!is_dir(TARGET_DIR)) {
-        echo "Creating target directory...\n";
+        writeLine('Creating target directory...', STYLE_STEP);
         mkdir(TARGET_DIR, 0755, true);
     }
 
-    echo "Cleaning target directory...\n";
+    writeLine('Cleaning target directory...', STYLE_STEP);
     clean(TARGET_DIR);
 
-    echo "Copying essential assets...\n";
+    writeLine('Copying essential assets...', STYLE_STEP);
     copyAssets();
 
-    echo "Loading filters...\n";
+    writeLine('Loading filters...', STYLE_STEP);
     loadFilters();
 
-    echo "Converting RST files to Markdown...\n";
+    writeLine('Converting RST files to Markdown...', STYLE_STEP);
     $jobs = [];
     convert(SOURCE_DIR, TARGET_DIR, $jobs);
     $failures = convertRstToMd($jobs);
 
     if ($failures > 0) {
-        fwrite(STDERR, "Conversion failed for $failures file(s).\n");
+        writeLine(sprintf('Conversion failed for %d file(s).', $failures), STYLE_ERROR, STDERR);
         exit(1);
     }
 
-    echo "Conversion completed successfully!\n";
+    writeLine('Conversion completed successfully!', STYLE_SUCCESS);
 }

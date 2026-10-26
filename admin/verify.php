@@ -11,6 +11,58 @@ define('TAIL_TOKENS', 4);
 define('ALIGNMENT_WINDOW', 3);
 define('MAX_LISTED_FAILURES', 20);
 
+const STYLE_HEADING = '1';
+const STYLE_PASS    = '32';
+const STYLE_FAIL    = '1;31';
+
+/**
+ * `$text` in the ANSI SGR `$style` when standard output is a terminal and `NO_COLOR` is unset.
+ */
+function styled(string $text, string $style): string {
+    if ((string) getenv('NO_COLOR') !== '' || ! stream_isatty(STDOUT)) {
+        return $text;
+    }
+
+    return sprintf("\033[%sm%s\033[0m", $style, $text);
+}
+
+/**
+ * ASCII table with a bold header row, padding each cell before styling it.
+ *
+ * @param list<string>                       $headers
+ * @param list<list<array{string, string}>>  $rows         Cells as `[text, style]` pairs
+ * @param list<int>                          $rightAligned Column indexes
+ */
+function renderTable(array $headers, array $rows, array $rightAligned): string {
+    $widths = array_map('strlen', $headers);
+
+    foreach ($rows as $row) {
+        foreach ($row as $column => [$text]) {
+            $widths[$column] = max($widths[$column], strlen($text));
+        }
+    }
+
+    $border = '+' . implode('+', array_map(fn (int $width): string => str_repeat('-', $width + 2), $widths)) . "+\n";
+    $line   = function (array $cells) use ($widths, $rightAligned): string {
+        $padded = [];
+
+        foreach ($cells as $column => [$text, $style]) {
+            $text     = str_pad($text, $widths[$column], ' ', in_array($column, $rightAligned, true) ? STR_PAD_LEFT : STR_PAD_RIGHT);
+            $padded[] = $style === '' ? $text : styled($text, $style);
+        }
+
+        return sprintf("| %s |\n", implode(' | ', $padded));
+    };
+
+    $table = $border . $line(array_map(fn (string $header): array => [$header, STYLE_HEADING], $headers)) . $border;
+
+    foreach ($rows as $row) {
+        $table .= $line($row);
+    }
+
+    return $table . $border;
+}
+
 function usage(): never {
     fwrite(STDERR, "Usage: php admin/verify.php --source <rst dir> --output <docs dir> [--summary <file>]\n");
     exit(2);
@@ -429,15 +481,14 @@ function checkLeftovers(array &$checks, array $markdown, string $outputFile): vo
  * @param array<string, array{expected: int, actual: int, failures: list<string>}> $checks
  */
 function report(array $checks, ?string $summaryFile): void {
-    printf("%-20s %10s %10s  %s\n", 'Check', 'Expected', 'Actual', 'Result');
-
+    $rows     = [];
     $markdown = "## Conversion checks\n\n| Check | Expected | Actual | Result |\n| --- | ---: | ---: | --- |\n";
     $details  = '';
 
     foreach ($checks as $name => $check) {
         $passed = $check['failures'] === [];
 
-        printf("%-20s %10d %10d  %s\n", $name, $check['expected'], $check['actual'], $passed ? 'pass' : 'FAIL');
+        $rows[]    = [[$name, ''], [(string) $check['expected'], ''], [(string) $check['actual'], ''], $passed ? ['pass', STYLE_PASS] : ['FAIL', STYLE_FAIL]];
         $markdown .= sprintf("| `%s` | %d | %d | %s |\n", $name, $check['expected'], $check['actual'], $passed ? '✅' : '❌');
 
         if (! $passed) {
@@ -448,9 +499,11 @@ function report(array $checks, ?string $summaryFile): void {
         }
     }
 
+    echo renderTable(['Check', 'Expected', 'Actual', 'Result'], $rows, [1, 2]);
+
     foreach ($checks as $name => $check) {
         if ($check['failures'] !== []) {
-            printf("\n%s (%d):\n", $name, count($check['failures']));
+            printf("\n%s\n", styled(sprintf('%s (%d):', $name, count($check['failures'])), STYLE_HEADING));
 
             foreach (array_slice($check['failures'], 0, MAX_LISTED_FAILURES) as $failure) {
                 echo '  ', $failure, "\n";
