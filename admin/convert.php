@@ -400,17 +400,19 @@ function runPandoc(array $jobs, array $copies): array {
     return $exitCodes;
 }
 
+function ensureDirectory(string $directory): void {
+    if (! is_dir($directory)) {
+        mkdir($directory, 0755, true);
+    }
+}
+
 /**
- * Mirrors `$source` into `$target`, appending the RST pages to `$jobs` and skipping the PHP samples, which the includes filter inlines, and any `.rst_` copies left by an interrupted run.
+ * Mirrors `$source` into `$target`, creating only the directories that receive a file, appending the RST pages to `$jobs` and skipping the PHP samples, which the includes filter inlines, and any `.rst_` copies left by an interrupted run.
  *
  * @param list<array{source: string, target: string}> $jobs Accumulated RST conversion jobs
  */
 function convert(string $source, string $target, array &$jobs): void {
     $dir = opendir($source);
-
-    if (! is_dir($target)) {
-        mkdir($target);
-    }
 
     // Copied by copyAssets() instead.
     $skipAssets = ['_static', 'images', '.nojekyll', 'conf.py', 'assets'];
@@ -429,9 +431,11 @@ function convert(string $source, string $target, array &$jobs): void {
 
         if (is_dir($sourceFile)) {
             convert($sourceFile, $targetFile, $jobs);
-        } else if (preg_match('/\.rst$/', $file)) {
+        } elseif (preg_match('/\.rst$/', $file)) {
+            ensureDirectory($target);
             $jobs[] = ['source' => $sourceFile, 'target' => preg_replace('/\.rst$/', '.md', $targetFile)];
         } elseif (! str_ends_with($file, '.php') && ! str_ends_with($file, '.rst_')) {
+            ensureDirectory($target);
             echo "Copying $sourceFile\n";
             copy($sourceFile, $targetFile);
         }
