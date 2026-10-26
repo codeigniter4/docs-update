@@ -188,9 +188,4 @@
     .md-nav__item {
         line-height: 1.4 !important;
     }
-
-    /* Hide site name in header - logo is sufficient */
-    .md-header__title {
-        visibility: hidden;
-    }
 }
