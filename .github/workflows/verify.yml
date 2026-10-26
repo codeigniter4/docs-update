@@ -1,0 +1,78 @@
+name: Verify conversion
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Convert and verify (CI4 ${{ matrix.ci4-ref }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ci4-ref:
+          - develop
+          - '4.8'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Checkout CodeIgniter4 user guide
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: codeigniter4/CodeIgniter4
+          ref: ${{ matrix.ci4-ref }}
+          path: ci4
+          sparse-checkout: user_guide_src/source
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Install pandoc
+        env:
+          PANDOC_VERSION: 3.12.1
+        run: |
+          curl -fsSL -o pandoc.deb "https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-1-amd64.deb"
+          sudo dpkg -i pandoc.deb
+          pandoc --version | head -1
+
+      - name: Convert
+        env:
+          DOCS_SOURCE_TYPE: project
+          DOCS_PROJECT_PATH: ${{ github.workspace }}/ci4/user_guide_src/source/
+        run: php admin/convert.php > convert.log 2>&1
+
+      - name: Verify
+        run: php admin/verify.php --source ci4/user_guide_src/source --output docs --summary "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload converted docs
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: docs-${{ matrix.ci4-ref }}
+          path: |
+            docs/
+            convert.log
+          retention-days: 7

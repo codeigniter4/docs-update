@@ -76,6 +76,18 @@ php ./admin/convert.php filename
 
 See [how to use filters](./admin/how_to_use_filters.md) for more details about the conversion process.
 
+### Verifying the converted files
+
+To compare the converted files with their RST source:
+
+```bash
+php ./admin/verify.php --source /path/to/CodeIgniter4/user_guide_src/source --output ./docs
+```
+
+It prints a table of checks, lists the first failures of each, and exits non-zero when any check fails.
+`--summary <file>` also appends the results as Markdown to that file.
+The [Verify conversion](./.github/workflows/verify.yml) workflow runs both against the `develop` and `4.8` branches of CodeIgniter4.
+
 ### Previewing the converted files
 
 See the [How to Build Docs](./admin/how_to_build_docs.md) document for instructions on building and previewing the converted files.
