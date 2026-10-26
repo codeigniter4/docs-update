@@ -96,7 +96,7 @@ function admonitionHeader(string $class, array $body): array {
     }
 
     if ($first !== null && preg_match('/^<div class="title">\s*$/', trim($body[$first])) && ($end = closingDivLine($body, $first)) !== null) {
-        $title = trim(implode(' ', array_map('trim', array_slice($body, $first + 1, $end - $first - 1))));
+        $title = trim(implode(' ', array_map(trim(...),array_slice($body, $first + 1, $end - $first - 1))));
 
         return [$class, $title, array_values(array_slice($body, $end + 1))];
     }

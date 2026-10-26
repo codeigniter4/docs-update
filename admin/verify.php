@@ -34,7 +34,7 @@ function styled(string $text, string $style): string {
  * @param list<int>                          $rightAligned Column indexes
  */
 function renderTable(array $headers, array $rows, array $rightAligned): string {
-    $widths = array_map('strlen', $headers);
+    $widths = array_map(strlen(...), $headers);
 
     foreach ($rows as $row) {
         foreach ($row as $column => [$text]) {
@@ -87,7 +87,7 @@ function isBlank(string $line): bool {
  * @param list<string> $lines
  */
 function normaliseCode(array $lines): string {
-    $lines = array_map('rtrim', $lines);
+    $lines = array_map(rtrim(...), $lines);
 
     while ($lines !== [] && $lines[0] === '') {
         array_shift($lines);
@@ -97,7 +97,7 @@ function normaliseCode(array $lines): string {
         array_pop($lines);
     }
 
-    $indents = array_map('indentOf', array_filter($lines, fn (string $line): bool => $line !== ''));
+    $indents = array_map(indentOf(...),array_filter($lines, fn (string $line): bool => $line !== ''));
     $indent  = $indents === [] ? 0 : min($indents);
 
     return implode("\n", array_map(fn (string $line): string => substr($line, $indent), $lines));
@@ -374,7 +374,7 @@ function newCheck(): array {
  * @param callable(array<string, mixed>): string                     $describe
  */
 function matchMultiset(array &$check, array $wanted, array $available, string $key, string $sourceFile, callable $describe): void {
-    $pool = array_count_values(array_filter(array_column($available, $key), 'is_string'));
+    $pool = array_count_values(array_filter(array_column($available, $key), is_string(...)));
 
     foreach ($wanted as $item) {
         $check['expected']++;
