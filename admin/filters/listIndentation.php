@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Fix excessive list indentation in RST files before Pandoc conversion
  * Convert 7+ space indented list items to proper RST list formatting
  */
-function before_filter_listIndentation($data, $folder) {
+function before_filter_listIndentation(string $data, string $folder): ?string {
     // Pattern to match lines with excessive indentation (7+ spaces) followed by a dash
     $pattern = '/^(\s{7,})(-\s+)/m';
 
@@ -19,16 +21,20 @@ function before_filter_listIndentation($data, $folder) {
  * Convert 4+ space indented list items to proper markdown list formatting
  * and ensure blank lines before lists
  */
-function after_filter_listIndentation($data, $folder) {
+function after_filter_listIndentation(string $data, string $folder): ?string {
     // Pattern to match lines with 4+ spaces followed by a dash (markdown code block territory)
     $pattern = '/^(\s{4,})(-\s+)/m';
 
     // Replace with no leading spaces for proper markdown list formatting
     $data = preg_replace($pattern, '$2', $data);
 
+    if ($data === null) {
+        return null;
+    }
+
     // Ensure blank line before list items
     // Look for lines ending with text followed immediately by a list item
-    $pattern = '/([^\n])\n(-\s+)/';
+    $pattern = '/^(?!\h*(?:[-*+]|\d+\.)\s)(\h*\S[^\n]*)\n(-\s+)/m';
     $data = preg_replace($pattern, '$1' . "\n\n" . '$2', $data);
 
     return $data;
