@@ -105,6 +105,7 @@ define('AFTER_FILTERS', [
     'images',
     'alerts',
     'dollar_sign',
+    'line_breaks',
     'class_reference',
     'list_indentation',
     'toctree',
