@@ -71,18 +71,16 @@ markdown_extensions:
   - admonition
   - pymdownx.superfences
   - pymdownx.highlight:
-      use_pygments: false
+      extend_pygments_lang:
+        # Sphinx highlights PHP with startinline, so samples need no opening tag.
+        - name: php
+          lang: php
+          options:
+            startinline: true
   - toc:
       toc_depth: 3
   - tables
 
 extra_css:
-  - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.12.0/build/styles/github.min.css
   - assets/css/codeigniter.css
   - assets/css/codeigniter_dark_mode.css
-
-extra_javascript:
-  - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.12.0/build/highlight.min.js
-  - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.12.0/build/languages/apache.min.js
-  - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.12.0/build/languages/nginx.min.js
-  - assets/js/hljs.js

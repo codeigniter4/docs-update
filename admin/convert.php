@@ -299,20 +299,14 @@ function create_mkdocs_assets(): void {
 }
 
 /**
- * Copies the theme CSS and JavaScript from `admin/assets`.
+ * Copies the theme CSS from `admin/assets`.
  */
 function create_mkdocs_theme_css(): void {
-    $assetsDir = TARGET_DIR . 'assets/';
-    $assetsCssDir = $assetsDir . 'css/';
-    $assetsJsDir = $assetsDir . 'js/';
+    $assetsCssDir = TARGET_DIR . 'assets/css/';
     $adminAssetsDir = __DIR__ . '/assets/';
 
     if (!is_dir($assetsCssDir)) {
         mkdir($assetsCssDir, 0755, true);
-    }
-
-    if (!is_dir($assetsJsDir)) {
-        mkdir($assetsJsDir, 0755, true);
     }
 
     $cssFiles = [
@@ -329,22 +323,6 @@ function create_mkdocs_theme_css(): void {
             copy($sourcePath, $targetPath);
         } else {
             write_line(sprintf('Warning: CSS file not found: %s', $sourcePath), STYLE_WARNING);
-        }
-    }
-
-    $jsFiles = [
-        'hljs.js' => 'hljs.js'
-    ];
-
-    foreach ($jsFiles as $sourceFile => $targetFile) {
-        $sourcePath = $adminAssetsDir . $sourceFile;
-        $targetPath = $assetsJsDir . $targetFile;
-
-        if (file_exists($sourcePath)) {
-            echo "Copying MkDocs theme JS: $sourcePath to $targetPath\n";
-            copy($sourcePath, $targetPath);
-        } else {
-            write_line(sprintf('Warning: JS file not found: %s', $sourcePath), STYLE_WARNING);
         }
     }
 }

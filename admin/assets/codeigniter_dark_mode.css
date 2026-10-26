@@ -50,45 +50,14 @@
         color: #e9ecef;
     }
 
-    .hljs-title,
-    .hljs-title.class_,
-    .hljs-title.class_.inherited__,
-    .hljs-title.function_ {
-        color: #c9a69b;
-    }
-
-    .hljs-meta .hljs-string,
-    .hljs-regexp,
-    .hljs-string {
-        color: #a3b4c7;
-    }
-
-    .hljs-attr,
-    .hljs-attribute,
-    .hljs-literal,
-    .hljs-meta,
-    .hljs-number,
-    .hljs-operator,
-    .hljs-selector-attr,
-    .hljs-selector-class,
-    .hljs-selector-id,
-    .hljs-variable {
-        color: #c1b79f;
-    }
-
-    .hljs-doctag,
-    .hljs-keyword,
-    .hljs-meta .hljs-keyword,
-    .hljs-template-tag,
-    .hljs-template-variable,
-    .hljs-type,
-    .hljs-variable.language_ {
-        color: #c97100;
-    }
-
-    .hljs-subst {
-        color: #ddba52
-    }
+    --md-code-hl-function-color: #c9a69b;
+    --md-code-hl-string-color:   #a3b4c7;
+    --md-code-hl-number-color:   #c1b79f;
+    --md-code-hl-constant-color: #c1b79f;
+    --md-code-hl-variable-color: #c1b79f;
+    --md-code-hl-operator-color: #c1b79f;
+    --md-code-hl-keyword-color:  #c97100;
+    --md-code-hl-special-color:  #ddba52;
 
     /* Inline code styling - orange color like links */
     .md-typeset p code,
