@@ -20,7 +20,7 @@ function usage(): never {
  * @return list<string>
  */
 function readLines(string $path): array {
-    return preg_split('/\R/', file_get_contents($path));
+    return preg_split('/\r\n|\n|\r/', file_get_contents($path));
 }
 
 function indentOf(string $line): int {
