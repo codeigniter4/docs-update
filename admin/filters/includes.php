@@ -25,8 +25,10 @@ function before_filter_includes(string $data, string $folder): ?string {
         if (preg_match('/^(\s*)(?!\.\.\s)(.*)::\s*$/', $lines[$i], $literal) && literalBlockFollows($lines, $i, strlen($literal[1]))) {
             // Sphinx shows "text::" as "text:", "text ::" as "text", and drops a lone "::".
             if (trim($literal[2]) !== '') {
-                array_push($result, $literal[1] . rtrim($literal[2]) . (str_ends_with($literal[2], ' ') ? '' : ':'), '');
+                $result[] = $literal[1] . rtrim($literal[2]) . (str_ends_with($literal[2], ' ') ? '' : ':');
             }
+
+            $result[] = '';
 
             $body = [];
 
