@@ -15,7 +15,6 @@
     /* Enhanced heading styles for better visibility */
     .md-typeset h1 {
         font-weight: 700;
-        font-size: 2.2em;
         color: #1a202c;
         border-bottom: 2px solid #dd4814;
         padding-bottom: 0.3em;
@@ -24,7 +23,6 @@
 
     .md-typeset h2 {
         font-weight: 600;
-        font-size: 1.8em;
         color: #2d3748;
         border-bottom: 1px solid #cbd5e0;
         padding-bottom: 0.2em;
@@ -33,14 +31,12 @@
 
     .md-typeset h3 {
         font-weight: 600;
-        font-size: 1.4em;
         color: #1a202c;
         margin-top: 1em;
     }
 
     .md-typeset h4 {
         font-weight: 600;
-        font-size: 1.2em;
         color: #2d3748;
         margin-top: 0.8em;
     }
@@ -48,7 +44,7 @@
     .md-typeset h5 {
         text-transform: none;
         font-weight: 600;
-        font-size: 1.1em;
+        font-size: 1em;
         color: #1a202c;
         margin-top: 0.8em;
     }
