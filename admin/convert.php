@@ -379,7 +379,7 @@ function runPandoc(array $jobs, array $copies): array {
 
     while ($next < count($jobs) || $running !== []) {
         while ($next < count($jobs) && count($running) < PANDOC_WORKERS) {
-            $command        = ['pandoc', '-f', 'rst', '-t', 'commonmark', '--wrap=none', '-o', $jobs[$next]['target'], $copies[$next]];
+            $command        = ['pandoc', '-f', 'rst', '-t', 'commonmark+pipe_tables', '--wrap=none', '-o', $jobs[$next]['target'], $copies[$next]];
             $running[$next] = proc_open($command, [1 => STDOUT, 2 => STDERR], $pipes);
             $next++;
         }
