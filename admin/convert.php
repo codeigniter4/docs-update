@@ -1,7 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 // Load environment configuration
-function loadEnvConfig() {
+/**
+ * @return array<string, string>
+ */
+function loadEnvConfig(): array {
     $envFile = __DIR__ . '/../.env';
     $config = [
         'DOCS_SOURCE_TYPE' => 'local',
@@ -23,11 +28,19 @@ function loadEnvConfig() {
         }
     }
 
+    foreach (array_keys($config) as $key) {
+        $value = getenv($key);
+
+        if ($value !== false) {
+            $config[$key] = $value;
+        }
+    }
+
     return $config;
 }
 
 // Get source directory based on configuration
-function getSourceDirectory() {
+function getSourceDirectory(): string {
     $config = loadEnvConfig();
 
     if ($config['DOCS_SOURCE_TYPE'] === 'project' && !empty($config['DOCS_PROJECT_PATH'])) {
@@ -44,6 +57,22 @@ function getSourceDirectory() {
     return __DIR__ . '/../docs-rst/';
 }
 
+function checkPandocVersion(): void {
+    exec('pandoc --version', $output, $exitCode);
+
+    if ($exitCode !== 0) {
+        fwrite(STDERR, "Error: pandoc is not installed. Install pandoc " . PANDOC_VERSION . ".\n");
+        exit(1);
+    }
+
+    $installed = trim(str_replace('pandoc', '', $output[0]));
+
+    if ($installed !== PANDOC_VERSION) {
+        fwrite(STDERR, "Warning: pandoc $installed is installed, but the conversion is verified against pandoc " . PANDOC_VERSION . ".\n");
+    }
+}
+
+define('PANDOC_VERSION', '3.12.1');
 define('SOURCE_DIR', getSourceDirectory());
 define('TARGET_DIR', __DIR__ . '/../docs/');
 
@@ -69,7 +98,7 @@ define('AFTER_FILTERS', [
 ]);
 
 // Load all filters
-function loadFilters() {
+function loadFilters(): void {
     $filters = array_unique(array_merge(BEFORE_FILTERS, AFTER_FILTERS));
     foreach ($filters as $filter) {
         include_once(__DIR__ . '/filters/' . $filter . '.php');
@@ -77,7 +106,7 @@ function loadFilters() {
 }
 
 // Apply before filters
-function applyBeforeFilters($path) {
+function applyBeforeFilters(string $path): string {
     $file = [
         'path'   => $path . '_',
         'folder' => dirname($path),
@@ -101,7 +130,7 @@ function applyBeforeFilters($path) {
 }
 
 // Apply after filters
-function applyAfterFilters($path, $sourceCopy) {
+function applyAfterFilters(string $path, string $sourceCopy): void {
     if (file_exists($sourceCopy)) {
         unlink($sourceCopy);
     }
@@ -121,15 +150,25 @@ function applyAfterFilters($path, $sourceCopy) {
 }
 
 // Modify file
-function updateFile($file, $function) {
+/**
+ * @param array{path: string, folder: string} $file
+ * @param callable-string                     $function
+ */
+function updateFile(array $file, string $function): void {
     $data = file_get_contents($file['path']);
-    $data = $function($data, $file['folder']);
-    file_put_contents($file['path'], $data);
+    $result = $function($data, $file['folder']);
+
+    if ($result === null) {
+        fwrite(STDERR, "Error: $function failed on {$file['path']} (" . preg_last_error_msg() . "), leaving the file unfiltered\n");
+        return;
+    }
+
+    file_put_contents($file['path'], $result);
 }
 
 
 // Completely empties the target directory
-function clean($target) {
+function clean(string $target): void {
     if (!is_dir($target)) {
         // Directory doesn't exist, create it
         mkdir($target, 0755, true);
@@ -156,7 +195,7 @@ function clean($target) {
 }
 
 // Copy a directory and all its contents recursively
-function copyDirectory($source, $target) {
+function copyDirectory(string $source, string $target): bool {
     if (!is_dir($source)) {
         return false;
     }
@@ -186,7 +225,7 @@ function copyDirectory($source, $target) {
 }
 
 // Copy essential assets that are needed for the docs
-function copyAssets() {
+function copyAssets(): void {
     $assetsToTransfer = [
         '_static' => '_static',
         'images' => 'images',
@@ -212,7 +251,7 @@ function copyAssets() {
 }
 
 // Create the assets folder structure that MkDocs expects
-function createMkDocsAssets() {
+function createMkDocsAssets(): void {
     $staticDir = TARGET_DIR . '_static/';
     $assetsDir = TARGET_DIR . 'assets/';
 
@@ -252,7 +291,7 @@ function createMkDocsAssets() {
 }
 
 // Copy CSS files from admin/assets folder
-function createMkDocsThemeCSS() {
+function createMkDocsThemeCSS(): void {
     $assetsDir = TARGET_DIR . 'assets/';
     $assetsCssDir = $assetsDir . 'css/';
     $assetsJsDir = $assetsDir . 'js/';
@@ -303,19 +342,26 @@ function createMkDocsThemeCSS() {
 }
 
 // Core conversion function that handles the actual pandoc conversion
-function convertRstToMd($sourceFile, $targetFile) {
+function convertRstToMd(string $sourceFile, string $targetFile): bool {
     echo "Converting $sourceFile to $targetFile\n";
 
     // Work with source copy
     $sourceFileCopy = applyBeforeFilters($sourceFile);
-    exec("pandoc -f rst -t commonmark --wrap=none -o $targetFile $sourceFileCopy");
+    exec("pandoc -f rst -t commonmark --wrap=none -o $targetFile $sourceFileCopy", $output, $exitCode);
     applyAfterFilters($targetFile, $sourceFileCopy);
+
+    if ($exitCode !== 0) {
+        fwrite(STDERR, "Error: pandoc failed with exit code $exitCode on $sourceFile\n");
+    }
+
+    return $exitCode === 0;
 }
 
 // Recursively scan the source directory,
 // using pandoc to convert any .rst files to .md
 // and copying any other files and directories as-is
-function convert($source, $target) {
+function convert(string $source, string $target): int {
+    $failures = 0;
     $dir = opendir($source);
 
     if (! is_dir($target)) {
@@ -339,20 +385,22 @@ function convert($source, $target) {
         $targetFile = $target . '/' . $file;
 
         if (is_dir($sourceFile)) {
-            convert($sourceFile, $targetFile);
+            $failures += convert($sourceFile, $targetFile);
         } else if (preg_match('/\.rst$/', $file)) {
             $targetFile = preg_replace('/\.rst$/', '.md', $targetFile);
-            convertRstToMd($sourceFile, $targetFile);
+            $failures += convertRstToMd($sourceFile, $targetFile) ? 0 : 1;
         } else {
             echo "Copying $sourceFile\n";
             copy($sourceFile, $targetFile);
         }
     }
     closedir($dir);
+
+    return $failures;
 }
 
 // Convert a single RST file
-function convertSingleFile($filename) {
+function convertSingleFile(string $filename): bool {
     loadFilters();
 
     // Remove .rst extension if provided
@@ -361,7 +409,7 @@ function convertSingleFile($filename) {
     $sourceFile = realpath(SOURCE_DIR . $filename . '.rst');
     $targetFile = TARGET_DIR . $filename . '.md';
 
-    if (!file_exists($sourceFile)) {
+    if ($sourceFile === false) {
         echo "Error: File '$filename.rst' not found in " . SOURCE_DIR . "\n";
         return false;
     }
@@ -372,16 +420,20 @@ function convertSingleFile($filename) {
         mkdir($targetDir, 0755, true);
     }
 
-    convertRstToMd($sourceFile, $targetFile);
+    if (! convertRstToMd($sourceFile, $targetFile)) {
+        return false;
+    }
 
     echo "Conversion completed successfully!\n";
     return true;
 }
 
+checkPandocVersion();
+
 // Check for CLI argument
 if (isset($argv[1])) {
     $filename = $argv[1];
-    convertSingleFile($filename);
+    exit(convertSingleFile($filename) ? 0 : 1);
 } else {
     // Do full conversion
     echo "Starting full conversion...\n";
@@ -402,7 +454,12 @@ if (isset($argv[1])) {
     loadFilters();
 
     echo "Converting RST files to Markdown...\n";
-    convert(SOURCE_DIR, TARGET_DIR);
+    $failures = convert(SOURCE_DIR, TARGET_DIR);
+
+    if ($failures > 0) {
+        fwrite(STDERR, "Conversion failed for $failures file(s).\n");
+        exit(1);
+    }
 
     echo "Conversion completed successfully!\n";
 }

@@ -30,6 +30,8 @@ DOCS_SOURCE_TYPE=project
 DOCS_PROJECT_PATH=/path/to/CodeIgniter4/user_guide_src/source/
 ```
 
+Environment variables of the same names take precedence over `.env`.
+
 ## The Conversion Process
 
 The conversion process is being done using pandoc to do the initial conversion.
@@ -40,7 +42,7 @@ to be made for consistency, clarity, and ease of understanding.
 
 ## Requirements
 
-To convert, pandoc is required. To install it, see <https://pandoc.org/installing.html>.
+To convert, pandoc 3.12.1 is required. The converter warns when another version is installed. To install it, see <https://github.com/jgm/pandoc/releases/tag/3.12.1>.
 
 Generation of the final documentation uses [MkDocs](https://www.mkdocs.org/) with the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) theme. See [How to Build Docs](./admin/how_to_build_docs.md) for more details.
 
