@@ -1,25 +1,24 @@
 <?php
 
-function before_filter_classReference($data, $folder) {
-    // Replace with php:method since there is no difference
+declare(strict_types=1);
+
+function before_filter_classReference(string $data, string $folder): ?string {
+    // Sphinx renders static methods and functions the same way as methods.
     $staticMethod = '.. php:staticmethod::';
     if (str_contains($data, $staticMethod)) {
         $data = str_replace($staticMethod, '.. php:method::', $data);
     }
 
-    // Replace with php:method since there is no difference
     $function1 = '.. php:function::';
     if (str_contains($data, $function1)) {
         $data = str_replace($function1, '.. php:method::', $data);
     }
 
-    // Replace with php:method since there is no difference
     $function2 = '..  php:function::';
     if (str_contains($data, $function2)) {
         $data = str_replace($function2, '.. php:method::', $data);
     }
 
-    // Remove indentation for the whole block
     $indent = '    .. php:method::';
     if (str_contains($data, $indent)) {
         $data = removeIndentLevel($data, $indent);
@@ -47,32 +46,27 @@ function before_filter_classReference($data, $folder) {
             $insideBlock = true;
         }
 
-        // Replace namespace
         if (str_starts_with($line, $stringNamespace)) {
             $line = str_replace([$stringNamespace, '\\'], ['##', '\\\\'], $line);
         }
 
-        // Replace class
         if (str_starts_with($line, $stringClass)) {
             $line = str_replace($stringClass, '###', $line);
         }
 
-        // Replace method
         if (str_starts_with($line, $stringMethod)) {
             $line = str_replace($stringMethod, '####', $line);
         }
 
         if ($insideBlock) {
-            $line = ltrim($line);
+            $line = preg_replace('/^ {1,4}/', '', $line);
 
-            // Replace param
             if (str_starts_with($line, $stringParam)) {
                 if (! $paramsStarted) {
                     $paramsStarted = true;
                     $lines[$no - 1] = $lines[$no - 1] . PHP_EOL . "* **Parameters**";
                 }
                 $line = str_replace($stringParam, "     *", $line);
-                // Replace order of the data type and variable name
                 $pattern = '/\*\s*(\w+(?:\|\w+)*)\s*\$(\w+):\s*(.+)$/';
                 if (preg_match($pattern, $line, $matches) === 1) {
                     $dataType     = $matches[1];
@@ -91,20 +85,17 @@ function before_filter_classReference($data, $folder) {
                 $paramsStarted = false;
             }
 
-            // Replace returns
             if (str_starts_with($line, $stringReturn)) {
                 $line = str_replace($stringReturn, '* **Returns**', $line);
             }
 
-            // Replace return type
             if (str_starts_with($line, $stringReturnType)) {
                 $pattern = "/$stringReturnType:(.*)$/m";
-                $line = preg_replace_callback($pattern, function ($matches) {
+                $line = preg_replace_callback($pattern, function (array $matches): string {
                     return '* **Return type**: ``' . str_replace('\\\\', '\\', trim($matches[1])) . '``';
                 }, $line);
             }
 
-            // Replace throws
             if (str_starts_with($line, $stringThrows)) {
                 $line = str_replace($stringThrows, '* **Throws**', $line);
             }
@@ -124,12 +115,12 @@ function before_filter_classReference($data, $folder) {
     return implode(PHP_EOL, $lines);
 }
 
-function after_filter_classReference($data, $folder) {
+function after_filter_classReference(string $data, string $folder): ?string {
+    // Python-Markdown nests list items by four spaces, not two.
     return str_replace(['\#', '  -'], ['#', '    -'], $data);
 }
 
-// helper function
-function removeIndentLevel($data, $indent) {
+function removeIndentLevel(string $data, string $indent): string {
     $lines = explode(PHP_EOL, $data);
 
     $insideBlock = false;
@@ -145,10 +136,12 @@ function removeIndentLevel($data, $indent) {
 
         $next = $no + 1;
 
-        if ($insideBlock
+        if (
+            $insideBlock
             && isset($lines[$next])
             && $lines[$next] !== ''
-            && $lines[$next] === ltrim($lines[$next])) {
+            && $lines[$next] === ltrim($lines[$next])
+        ) {
             $insideBlock = false;
         }
     }
