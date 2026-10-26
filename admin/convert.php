@@ -378,20 +378,34 @@ function runPandoc(array $jobs, array $copies): array {
 
     while ($next < count($jobs) || $running !== []) {
         while ($next < count($jobs) && count($running) < PANDOC_WORKERS) {
-            $command        = ['pandoc', '-f', 'rst', '-t', 'commonmark+pipe_tables', '--wrap=none', '-o', $jobs[$next]['target'], $copies[$next]];
-            $running[$next] = proc_open($command, [1 => STDOUT, 2 => STDERR], $pipes);
+            $command = ['pandoc', '-f', 'rst', '-t', 'commonmark+pipe_tables', '--wrap=none', '-o', $jobs[$next]['target'], $copies[$next]];
+            // pandoc writes to `-o`, and sharing the converter's stdout with it loses the converter's later output.
+            $process = proc_open($command, [0 => ['file', '/dev/null', 'r'], 1 => ['file', '/dev/null', 'w'], 2 => ['pipe', 'w']], $pipes);
+            stream_set_blocking($pipes[2], false);
+
+            $running[$next] = ['process' => $process, 'stderr' => $pipes[2], 'messages' => ''];
             $next++;
         }
 
-        foreach ($running as $i => $process) {
-            $status = proc_get_status($process);
+        foreach ($running as $i => &$job) {
+            $job['messages'] .= stream_get_contents($job['stderr']);
+            $status           = proc_get_status($job['process']);
 
             if (! $status['running']) {
-                $exitCodes[$i] = $status['exitcode'];
-                proc_close($process);
+                $job['messages'] .= stream_get_contents($job['stderr']);
+                $exitCodes[$i]    = $status['exitcode'];
+
+                foreach (array_filter(explode("\n", $job['messages']), fn (string $line): bool => trim($line) !== '') as $message) {
+                    writeLine($message, STYLE_WARNING, STDERR);
+                }
+
+                fclose($job['stderr']);
+                proc_close($job['process']);
                 unset($running[$i]);
             }
         }
+
+        unset($job);
 
         usleep(5000);
     }
