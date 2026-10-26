@@ -77,12 +77,12 @@ markdown_extensions:
   - tables
 
 extra_css:
-  - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/styles/github.min.css
+  - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.12.0/build/styles/github.min.css
   - assets/css/codeigniter.css
   - assets/css/codeigniter_dark_mode.css
 
 extra_javascript:
-  - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/highlight.min.js
-  - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/languages/apache.min.js
-  - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/languages/nginx.min.js
+  - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.12.0/build/highlight.min.js
+  - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.12.0/build/languages/apache.min.js
+  - https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.12.0/build/languages/nginx.min.js
   - assets/js/hljs.js
