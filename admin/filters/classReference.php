@@ -3,21 +3,12 @@
 declare(strict_types=1);
 
 function before_filter_classReference(string $data, string $folder): ?string {
-    // Sphinx renders static methods and functions the same way as methods.
-    $staticMethod = '.. php:staticmethod::';
-    if (str_contains($data, $staticMethod)) {
-        $data = str_replace($staticMethod, '.. php:method::', $data);
-    }
-
-    $function1 = '.. php:function::';
-    if (str_contains($data, $function1)) {
-        $data = str_replace($function1, '.. php:method::', $data);
-    }
-
-    $function2 = '..  php:function::';
-    if (str_contains($data, $function2)) {
-        $data = str_replace($function2, '.. php:method::', $data);
-    }
+    // Sphinx renders static methods, functions and attributes the same way as methods.
+    $data = str_replace(
+        ['.. php:staticmethod::', '.. php:function::', '..  php:function::', '.. php:attr::', '.. attribute::'],
+        '.. php:method::',
+        $data,
+    );
 
     $indent = '    .. php:method::';
     if (str_contains($data, $indent)) {
@@ -30,6 +21,7 @@ function before_filter_classReference(string $data, string $folder): ?string {
     $stringParam      = ':param';
     $stringReturn     = ':returns';
     $stringReturnType = ':rtype';
+    $stringType       = ':type:';
     $stringThrows     = ':throws';
 
     if (! str_contains($data, $stringMethod)) {
@@ -92,8 +84,12 @@ function before_filter_classReference(string $data, string $folder): ?string {
             if (str_starts_with($line, $stringReturnType)) {
                 $pattern = "/$stringReturnType:(.*)$/m";
                 $line = preg_replace_callback($pattern, function (array $matches): string {
-                    return '* **Return type**: ``' . str_replace('\\\\', '\\', trim($matches[1])) . '``';
+                    return sprintf('* **Return type**: ``%s``', str_replace('\\\\', '\\', trim($matches[1])));
                 }, $line);
+            }
+
+            if (str_starts_with($line, $stringType)) {
+                $line = sprintf('* **Type**: ``%s``', trim(substr($line, strlen($stringType))));
             }
 
             if (str_starts_with($line, $stringThrows)) {
