@@ -452,6 +452,7 @@ function checkAdmonitions(array &$admonitions, array &$notesSamples, array $sour
 function checkLeftovers(array &$checks, array $markdown, string $outputFile): void {
     $patterns = [
         'leftover-div'        => '/<div\b/i',
+        'leftover-table'      => '/<table\b/i',
         'leftover-span'       => '/<span\b/i',
         'leftover-a'          => '/<a\s/i',
         'leftover-directives' => '/^\s*\.\.\s+[A-Za-z][\w:-]*::/',
@@ -525,7 +526,7 @@ if (! isset($options['source'], $options['output']) || ! is_dir($options['source
 $sourceRoot = rtrim(realpath($options['source']), '/');
 $outputRoot = rtrim(realpath($options['output']), '/');
 
-$names  = ['pages', 'signatures', 'samples', 'admonitions', 'notes-samples', 'leftover-snippets', 'leftover-div', 'leftover-span', 'leftover-a', 'leftover-directives', 'leftover-roles'];
+$names  = ['pages', 'signatures', 'samples', 'admonitions', 'notes-samples', 'leftover-snippets', 'leftover-table', 'leftover-div', 'leftover-span', 'leftover-a', 'leftover-directives', 'leftover-roles'];
 $checks = array_fill_keys($names, newCheck());
 
 foreach (sourcePages($sourceRoot) as $page) {
