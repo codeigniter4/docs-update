@@ -260,31 +260,14 @@ function copyDirectory(string $source, string $target): bool {
 }
 
 function copyAssets(): void {
-    $assetsToTransfer = [
-        '_static' => '_static',
-        'images' => 'images',
-        '.nojekyll' => '.nojekyll',
-        'conf.py' => 'conf.py'
-    ];
-
-    foreach ($assetsToTransfer as $source => $target) {
-        $sourcePath = SOURCE_DIR . $source;
-        $targetPath = TARGET_DIR . $target;
-
-        if (is_dir($sourcePath)) {
-            echo "Copying directory: $sourcePath to $targetPath\n";
-            copyDirectory($sourcePath, $targetPath);
-        } elseif (file_exists($sourcePath)) {
-            echo "Copying file: $sourcePath to $targetPath\n";
-            copy($sourcePath, $targetPath);
-        }
-    }
+    printf("Copying directory: %simages to %simages\n", SOURCE_DIR, TARGET_DIR);
+    copyDirectory(SOURCE_DIR . 'images', TARGET_DIR . 'images');
 
     createMkDocsAssets();
 }
 
 function createMkDocsAssets(): void {
-    $staticDir = TARGET_DIR . '_static/';
+    $staticDir = SOURCE_DIR . '_static/';
     $assetsDir = TARGET_DIR . 'assets/';
 
     if (!is_dir($staticDir)) {
@@ -457,7 +440,7 @@ function ensureDirectory(string $directory): void {
 function convert(string $source, string $target, array &$jobs): void {
     $dir = opendir($source);
 
-    // Copied by copyAssets() instead.
+    // Sphinx build files, and the images copied by copyAssets().
     $skipAssets = ['_static', 'images', '.nojekyll', 'conf.py', 'assets'];
 
     while (($file = readdir($dir)) !== false) {
