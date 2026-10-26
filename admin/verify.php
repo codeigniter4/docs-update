@@ -323,7 +323,7 @@ function parse_markdown(string $path): array {
         $result['prose'][$no + 1] = $line;
 
         if (preg_match('/^#{1,6}\s+(.+?)\s*$/', $line, $matches)) {
-            $result['headings'][] = ['line' => $no + 1, 'text' => normalise_signature($matches[1])];
+            $result['headings'][] = ['line' => $no + 1, 'text' => normalise_signature(html_entity_decode($matches[1], ENT_QUOTES | ENT_HTML5))];
         }
 
         if (preg_match('/^(\s*)!!!\s+\w+(.*)$/', $line, $matches)) {

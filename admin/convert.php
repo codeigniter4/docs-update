@@ -106,6 +106,7 @@ define('AFTER_FILTERS', [
     'alerts',
     'dollar_sign',
     'line_breaks',
+    'escapes',
     'class_reference',
     'list_indentation',
     'toctree',

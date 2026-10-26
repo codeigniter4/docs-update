@@ -31,6 +31,7 @@ all before filters on every page, then pandoc on every page, then all after filt
 | `alerts` | | Converts `> [!NOTE]` alerts and unwraps the blockquotes left by indented RST text |
 | `dollar_sign` | | Unescapes `\$` |
 | `line_breaks` | | Turns the backslash line breaks written by pandoc into the two trailing spaces that Python-Markdown reads as a line break |
+| `escapes` | | Rewrites the `\<`, `\&` and `\|` escapes that Python-Markdown does not honour, and restores `**strong**` after a quote mark |
 | `toctree` | Replaces each `toctree` with a `TocTreePlaceholder<n>` line holding its nested link list, and drops hidden ones | Replaces each placeholder with its list |
 | `contents` | | Removes `contents` directives, since the sidebar shows the page contents |
 | `admonitions` | | Converts note, warning, version and other admonitions into `!!!` blocks, nested ones included |
