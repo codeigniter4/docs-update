@@ -55,7 +55,7 @@ function before_filter_classReference(string $data, string $folder): ?string {
         }
 
         if (str_starts_with($line, $stringMethod)) {
-            $line = str_replace($stringMethod, '####', $line);
+            $line = str_replace([$stringMethod, '\\'], ['####', '\\\\'], $line) . PHP_EOL;
         }
 
         if ($insideBlock) {
