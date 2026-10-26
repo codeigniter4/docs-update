@@ -116,6 +116,8 @@ function proseTokens(string $text, bool $markdown): array {
     if ($markdown) {
         $text = preg_replace('/\]\([^)]*\)/', ']', $text);
     } else {
+        // pandoc titles a text-less :doc: link after the target page, so its path never reaches the output.
+        $text = preg_replace('/:doc:`[^`<]*`/', '', $text);
         $text = preg_replace('/:[a-z:]+:`/', '`', $text);
         $text = preg_replace('/\s*<[^<>`]*>`/', '`', $text);
     }
@@ -129,8 +131,20 @@ function proseTokens(string $text, bool $markdown): array {
  * @param list<string> $haystack
  * @param list<string> $needle
  */
-function containsSequence(array $haystack, array $needle): bool {
-    return str_contains(' ' . implode(' ', $haystack) . ' ', ' ' . implode(' ', $needle) . ' ');
+function containsInOrder(array $haystack, array $needle): bool {
+    $position = 0;
+
+    foreach ($needle as $token) {
+        $found = array_search($token, array_slice($haystack, $position), true);
+
+        if ($found === false) {
+            return false;
+        }
+
+        $position += $found + 1;
+    }
+
+    return true;
 }
 
 /**
@@ -259,7 +273,7 @@ function parseRst(string $path, string $sourceRoot): array {
             $end  = blockEnd($lines, $no, strlen($matches[1]));
             $body = array_slice($lines, $no + 1, $end - $no - 1);
 
-            $prose  = array_filter($body, fn (string $bodyLine): bool => ! preg_match('/^\s*(\.\.\s+\S+::|:[a-z-]+:)/', $bodyLine));
+            $prose  = array_filter($body, fn (string $bodyLine): bool => ! preg_match('/^\s*(\.\.\s+\S+::|:[a-z-]+:(\s|$))/', $bodyLine));
             $tokens = proseTokens($matches[3] . "\n" . implode("\n", $prose), false);
 
             $result['admonitions'][] = [
@@ -404,7 +418,7 @@ function checkAdmonitions(array &$admonitions, array &$notesSamples, array $sour
         $match = null;
 
         for ($j = $pointer; $j < min(count($output), $pointer + ALIGNMENT_WINDOW); $j++) {
-            if (containsSequence($output[$j]['tokens'], $admonition['tail'])) {
+            if (containsInOrder($output[$j]['tokens'], $admonition['tail'])) {
                 $match   = $output[$j];
                 $pointer = $j + 1;
 
