@@ -10,8 +10,6 @@
 
     --md-accent-fg-color--transparent: #ECB7B7;
 
-    --md-code-bg-color: #f8f9fa;
-
     /* Enhanced heading styles for better visibility */
     .md-typeset h1 {
         font-weight: 700;
@@ -68,8 +66,6 @@
     /* Code blocks should keep default styling */
     .md-typeset pre code {
         border: none;
-        color: inherit; /* Use default code block colors */
-        background-color: #d3e3e3;
     }
 
     .md-typeset .admonition.important,

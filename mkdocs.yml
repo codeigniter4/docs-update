@@ -84,6 +84,8 @@ extra_css:
   - assets/css/codeigniter.css
   - assets/css/codeigniter_dark_mode.css
   - assets/css/layout.css
+  - assets/css/code.css
 
 extra_javascript:
   - assets/js/shortcuts.js
+  - assets/js/code.js

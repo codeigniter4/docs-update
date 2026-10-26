@@ -10,8 +10,6 @@
 
     --md-accent-fg-color--transparent: #625151;
 
-    --md-code-bg-color: #282b2d;
-
     /* Enhanced heading styles for better visibility in dark mode */
     .md-typeset h1 {
         font-weight: 700;
@@ -50,15 +48,6 @@
         color: #e9ecef;
     }
 
-    --md-code-hl-function-color: #c9a69b;
-    --md-code-hl-string-color:   #a3b4c7;
-    --md-code-hl-number-color:   #c1b79f;
-    --md-code-hl-constant-color: #c1b79f;
-    --md-code-hl-variable-color: #c1b79f;
-    --md-code-hl-operator-color: #c1b79f;
-    --md-code-hl-keyword-color:  #c97100;
-    --md-code-hl-special-color:  #ddba52;
-
     /* Inline code styling - orange color like links */
     .md-typeset p code,
     .md-typeset li code,
@@ -71,7 +60,6 @@
     /* Code blocks should keep default styling */
     .md-typeset pre code {
         border: none;
-        color: inherit; /* Use default code block colors */
     }
 
     .md-typeset .admonition.note,
