@@ -83,7 +83,6 @@ define('BEFORE_FILTERS', [
 define('AFTER_FILTERS', [
     'images',
     'alerts',
-    'includes',
     'dollarSign',
     'versionAdded',
     'versionDeprecated',
@@ -93,6 +92,7 @@ define('AFTER_FILTERS', [
     'contents',
     'docLink',
     'codeBlocks',
+    'includes',
 ]);
 
 function loadFilters(): void {
@@ -384,7 +384,7 @@ function runPandoc(array $jobs, array $copies): array {
 }
 
 /**
- * Mirrors `$source` into `$target`, copying every file except the RST pages, which it appends to `$jobs`.
+ * Mirrors `$source` into `$target`, appending the RST pages to `$jobs` and skipping the PHP samples, which the includes filter inlines.
  *
  * @param list<array{source: string, target: string}> $jobs Accumulated RST conversion jobs
  */
@@ -414,7 +414,7 @@ function convert(string $source, string $target, array &$jobs): void {
             convert($sourceFile, $targetFile, $jobs);
         } else if (preg_match('/\.rst$/', $file)) {
             $jobs[] = ['source' => $sourceFile, 'target' => preg_replace('/\.rst$/', '.md', $targetFile)];
-        } else {
+        } elseif (! str_ends_with($file, '.php')) {
             echo "Copying $sourceFile\n";
             copy($sourceFile, $targetFile);
         }

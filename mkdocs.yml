@@ -61,9 +61,6 @@ copyright: Copyright &copy; 2023 CodeIgniter Foundation.
 
 markdown_extensions:
   - admonition
-  - pymdownx.snippets:
-      base_path: ["docs"]
-      check_paths: false
   - pymdownx.superfences
   - pymdownx.highlight:
       use_pygments: false

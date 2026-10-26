@@ -49,7 +49,7 @@ Generation of the final documentation uses [MkDocs](https://www.mkdocs.org/) wit
 ## Next Steps:
 
 - [x] Build converter script to convert all files from rst to md
-- [ ] Modify converter to insert code samples and remove unnecessary files.
+- [x] Modify converter to insert code samples and remove unnecessary files.
 - [ ] Review and clean up converted files
 - [ ] Review and clean up overall structure of documentation
 - [ ] Standardize how pages are written to include cohesive structure and examples
