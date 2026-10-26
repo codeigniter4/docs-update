@@ -40,6 +40,8 @@ of the documentation revisited for consistency, clarity, and ease of understandi
 - PHP 8.1 or newer.
 - pandoc 3.12.1. The converter warns when another version is installed.
   To install it, see <https://github.com/jgm/pandoc/releases/tag/3.12.1>.
+- Python 3, to build the site.
+- `make`, optionally, for the shortcuts below.
 
 Generation of the final documentation uses [MkDocs](https://www.mkdocs.org/) with the
 [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) theme.
@@ -55,11 +57,15 @@ See [How to Build Docs](./admin/how_to_build_docs.md) for more details.
 
 ## Commands:
 
+The `Makefile` wraps each command below. Run `make` to list the targets.
+
 ### Converting all files
 
 To convert all files from rst to md:
 
 ```bash
+make convert
+# or
 php ./admin/convert.php
 ```
 
@@ -72,6 +78,8 @@ It exits non-zero when pandoc fails on any page.
 You can also convert a single page, given by its path relative to the source folder, without the extension:
 
 ```bash
+make convert PAGE=models/model
+# or
 php ./admin/convert.php models/model
 ```
 
@@ -80,8 +88,12 @@ php ./admin/convert.php models/model
 To compare the converted files with their RST source:
 
 ```bash
+make verify
+# or
 php ./admin/verify.php --source /path/to/CodeIgniter4/user_guide_src/source --output ./docs
 ```
+
+`make verify` reads the source path from `DOCS_PROJECT_PATH`.
 
 It prints a table of checks, lists the first failures of each, and exits non-zero when any check fails.
 `--summary <file>` also appends the results as Markdown to that file.
