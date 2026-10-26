@@ -107,7 +107,6 @@ define('AFTER_FILTERS', [
     'toctree',
     'contents',
     'docLink',
-    'codeBlocks',
     'admonitions',
     'includes',
 ]);
