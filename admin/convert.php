@@ -383,7 +383,7 @@ function runPandoc(array $jobs, array $copies): array {
 }
 
 /**
- * Mirrors `$source` into `$target`, appending the RST pages to `$jobs` and skipping the PHP samples, which the includes filter inlines.
+ * Mirrors `$source` into `$target`, appending the RST pages to `$jobs` and skipping the PHP samples, which the includes filter inlines, and any `.rst_` copies left by an interrupted run.
  *
  * @param list<array{source: string, target: string}> $jobs Accumulated RST conversion jobs
  */
@@ -413,7 +413,7 @@ function convert(string $source, string $target, array &$jobs): void {
             convert($sourceFile, $targetFile, $jobs);
         } else if (preg_match('/\.rst$/', $file)) {
             $jobs[] = ['source' => $sourceFile, 'target' => preg_replace('/\.rst$/', '.md', $targetFile)];
-        } elseif (! str_ends_with($file, '.php')) {
+        } elseif (! str_ends_with($file, '.php') && ! str_ends_with($file, '.rst_')) {
             echo "Copying $sourceFile\n";
             copy($sourceFile, $targetFile);
         }
