@@ -14,7 +14,7 @@ function &includedSamples(): array {
 }
 
 /**
- * Replaces each `literalinclude` with a `CI4SAMPLE<n>` marker line at the directive's indentation.
+ * Replaces each `literalinclude` and `code-block` with a `CI4SAMPLE<n>` marker line at the directive's indentation.
  */
 function before_filter_includes(string $data, string $folder): ?string {
     $samples = &includedSamples();
@@ -22,7 +22,7 @@ function before_filter_includes(string $data, string $folder): ?string {
     $result  = [];
 
     for ($i = 0; $i < count($lines); $i++) {
-        if (! preg_match('/^(\s*)\.\.\s+literalinclude::\s*(\S+)\s*$/', $lines[$i], $matches)) {
+        if (! preg_match('/^(\s*)\.\.\s+(literalinclude|code-block)::\s*(\S*)\s*$/', $lines[$i], $matches)) {
             $result[] = $lines[$i];
 
             continue;
@@ -37,10 +37,23 @@ function before_filter_includes(string $data, string $folder): ?string {
             $directive[]         = $lines[++$i];
         }
 
-        $file = str_starts_with($matches[2], '/') ? rtrim(SOURCE_DIR, '/') . $matches[2] : $folder . '/' . $matches[2];
+        if ($matches[2] === 'code-block') {
+            $body = [];
+
+            while (isset($lines[$i + 1]) && (trim($lines[$i + 1]) === '' || strlen($lines[$i + 1]) - strlen(ltrim($lines[$i + 1])) > strlen($indent))) {
+                $body[] = $lines[++$i];
+            }
+
+            array_push($result, $indent . 'CI4SAMPLE' . count($samples), '');
+            $samples[] = ['language' => $matches[3], 'lines' => dedentLines(trimBlankLines($body))];
+
+            continue;
+        }
+
+        $file = str_starts_with($matches[3], '/') ? rtrim(SOURCE_DIR, '/') . $matches[3] : $folder . '/' . $matches[3];
 
         if (! is_file($file)) {
-            fwrite(STDERR, "Warning: sample {$matches[2]} not found for literalinclude in {$folder}\n");
+            fwrite(STDERR, "Warning: sample {$matches[3]} not found for literalinclude in {$folder}\n");
             array_push($result, ...$directive);
 
             continue;
@@ -111,6 +124,21 @@ function selectSampleLines(array $lines, string $spec): array {
     }
 
     return $selected;
+}
+
+/**
+ * @param list<string> $lines
+ *
+ * @return list<string>
+ */
+function dedentLines(array $lines): array {
+    $indents = array_map(
+        fn (string $line): int => strlen($line) - strlen(ltrim($line)),
+        array_filter($lines, fn (string $line): bool => trim($line) !== ''),
+    );
+    $indent = $indents === [] ? 0 : min($indents);
+
+    return array_map(fn (string $line): string => substr($line, $indent), $lines);
 }
 
 /**
