@@ -213,8 +213,7 @@ function getSubdirectoryToctree(string $subdirPath, string $folder): ?array {
 function getFirstHeaderFromFile(string $filename, string $folder): ?string {
     $targetFile = '';
 
-    $docsRstPath = realpath($folder);
-    $docsPath = str_replace('/docs-rst/', '/docs/', $docsRstPath . '/');
+    $docsPath = realpath($folder) . '/';
 
     if (strpos($filename, '../') === 0) {
         $relativePath = substr($filename, 3);

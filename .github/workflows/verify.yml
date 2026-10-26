@@ -60,7 +60,6 @@ jobs:
 
       - name: Convert
         env:
-          DOCS_SOURCE_TYPE: project
           DOCS_PROJECT_PATH: ${{ github.workspace }}/ci4/user_guide_src/source/
         run: php admin/convert.php > convert.log 2>&1
 

@@ -1,50 +1,38 @@
 # CodeIgniter Documentation Project
 
-The aim of this project is to convert the CodeIgniter User Guide from the existing reStructuredText format to Markdown format,
-making it easier to maintain and contribute to, as well as allowing all of our projects to share a common documentation format.
+The aim of this project is to convert the CodeIgniter User Guide from the existing reStructuredText format
+to Markdown format, making it easier to maintain and contribute to, as well as allowing all of our projects
+to share a common documentation format.
 
 ## Configuration
 
-The converter can work with two different source types:
-
-1. **Local docs-rst folder** (default) - Uses the `docs-rst` folder in this project
-2. **CodeIgniter4 project** - Points to a CodeIgniter4 project's `user_guide_src/source` folder for latest docs
-
-To configure, copy `.env.dist` to `.env` and modify as needed:
+The converter reads the user guide from the `user_guide_src/source` folder of a CodeIgniter4 checkout.
+To configure it, copy `.env.dist` to `.env` and set the path:
 
 ```bash
 cp .env.dist .env
-```
 
-Example configurations:
-
-**For local docs-rst (default):**
-```bash
-DOCS_SOURCE_TYPE=local
-DOCS_PROJECT_PATH=
-```
-
-**For CodeIgniter4 project:**
-```bash
-DOCS_SOURCE_TYPE=project
 DOCS_PROJECT_PATH=/path/to/CodeIgniter4/user_guide_src/source/
 ```
 
-Environment variables of the same names take precedence over `.env`.
+An environment variable of the same name takes precedence over `.env`.
 
 ## The Conversion Process
 
 The conversion process is being done using pandoc to do the initial conversion.
 From there, each section and file will be manually reviewed and cleaned up as needed.
 
-Once the conversion is complete, we will start taking a look at the overall structure of the documentation and see what changes need
-to be made for consistency, clarity, and ease of understanding.
+Once the conversion is complete, we will start taking a look at the overall structure of the documentation
+and see what changes need to be made for consistency, clarity, and ease of understanding.
 
 ## Requirements
 
-To convert, pandoc 3.12.1 is required. The converter warns when another version is installed. To install it, see <https://github.com/jgm/pandoc/releases/tag/3.12.1>.
+To convert, pandoc 3.12.1 is required. The converter warns when another version is installed.
+To install it, see <https://github.com/jgm/pandoc/releases/tag/3.12.1>.
 
-Generation of the final documentation uses [MkDocs](https://www.mkdocs.org/) with the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) theme. See [How to Build Docs](./admin/how_to_build_docs.md) for more details.
+Generation of the final documentation uses [MkDocs](https://www.mkdocs.org/) with the
+[Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) theme.
+See [How to Build Docs](./admin/how_to_build_docs.md) for more details.
 
 ## Next Steps:
 
@@ -90,4 +78,5 @@ The [Verify conversion](./.github/workflows/verify.yml) workflow runs both again
 
 ### Previewing the converted files
 
-See the [How to Build Docs](./admin/how_to_build_docs.md) document for instructions on building and previewing the converted files.
+See the [How to Build Docs](./admin/how_to_build_docs.md) document for instructions on building
+and previewing the converted files.

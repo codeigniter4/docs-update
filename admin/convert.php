@@ -8,8 +8,7 @@ declare(strict_types=1);
 function loadEnvConfig(): array {
     $envFile = __DIR__ . '/../.env';
     $config = [
-        'DOCS_SOURCE_TYPE' => 'local',
-        'DOCS_PROJECT_PATH' => ''
+        'DOCS_PROJECT_PATH' => '',
     ];
 
     if (file_exists($envFile)) {
@@ -52,19 +51,22 @@ function writeLine(string $message, string $style = '', $stream = STDOUT): void 
 }
 
 function getSourceDirectory(): string {
-    $config = loadEnvConfig();
+    $projectPath = loadEnvConfig()['DOCS_PROJECT_PATH'];
 
-    if ($config['DOCS_SOURCE_TYPE'] === 'project' && !empty($config['DOCS_PROJECT_PATH'])) {
-        $projectPath = rtrim($config['DOCS_PROJECT_PATH'], '/') . '/';
-        if (!is_dir($projectPath)) {
-            writeLine(sprintf('Error: Project path does not exist: %s', $projectPath), STYLE_ERROR, STDERR);
-            writeLine('Please check your .env file configuration.', '', STDERR);
-            exit(1);
-        }
-        return $projectPath;
+    if ($projectPath === '') {
+        writeLine('Error: DOCS_PROJECT_PATH is not set.', STYLE_ERROR, STDERR);
+        writeLine('Set it in the environment or in .env to the user_guide_src/source folder of a CodeIgniter4 checkout.', '', STDERR);
+        exit(1);
     }
 
-    return __DIR__ . '/../docs-rst/';
+    $projectPath = rtrim($projectPath, '/') . '/';
+
+    if (!is_dir($projectPath)) {
+        writeLine(sprintf('Error: DOCS_PROJECT_PATH does not exist: %s', $projectPath), STYLE_ERROR, STDERR);
+        exit(1);
+    }
+
+    return $projectPath;
 }
 
 function checkPandocVersion(): void {
