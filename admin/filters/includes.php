@@ -22,6 +22,27 @@ function before_filter_includes(string $data, string $folder): ?string {
     $result  = [];
 
     for ($i = 0; $i < count($lines); $i++) {
+        if (preg_match('/^(\s*)(?!\.\.\s)(.*)::\s*$/', $lines[$i], $literal) && literalBlockFollows($lines, $i, strlen($literal[1]))) {
+            // Sphinx shows "text::" as "text:", "text ::" as "text", and drops a lone "::".
+            if (trim($literal[2]) !== '') {
+                array_push($result, $literal[1] . rtrim($literal[2]) . (str_ends_with($literal[2], ' ') ? '' : ':'), '');
+            }
+
+            $body = [];
+
+            while (isset($lines[$i + 1]) && (trim($lines[$i + 1]) === '' || indentWidth($lines[$i + 1]) > strlen($literal[1]))) {
+                $body[] = $lines[++$i];
+            }
+
+            $body   = trimBlankLines($body);
+            $indent = str_repeat(' ', min(array_map(indentWidth(...), array_filter($body, fn (string $line): bool => trim($line) !== ''))));
+
+            array_push($result, sprintf('%sCodeBlockPlaceholder%d', $indent, count($samples)), '');
+            $samples[] = ['language' => '', 'lines' => dedentLines($body)];
+
+            continue;
+        }
+
         if (! preg_match('/^(\s*)\.\.\s+(literalinclude|code-block)::\s*(\S*)\s*$/', $lines[$i], $matches)) {
             $result[] = $lines[$i];
 
@@ -40,7 +61,7 @@ function before_filter_includes(string $data, string $folder): ?string {
         if ($matches[2] === 'code-block') {
             $body = [];
 
-            while (isset($lines[$i + 1]) && (trim($lines[$i + 1]) === '' || strlen($lines[$i + 1]) - strlen(ltrim($lines[$i + 1])) > strlen($indent))) {
+            while (isset($lines[$i + 1]) && (trim($lines[$i + 1]) === '' || indentWidth($lines[$i + 1]) > strlen($indent))) {
                 $body[] = $lines[++$i];
             }
 
@@ -125,16 +146,32 @@ function selectSampleLines(array $lines, string $spec): array {
     return $selected;
 }
 
+function indentWidth(string $line): int {
+    return strlen($line) - strlen(ltrim($line));
+}
+
+/**
+ * Whether the next non-blank line after `$start` is indented deeper than `$indent`, which makes it a literal block body.
+ *
+ * @param list<string> $lines
+ */
+function literalBlockFollows(array $lines, int $start, int $indent): bool {
+    for ($i = $start + 1; $i < count($lines); $i++) {
+        if (trim($lines[$i]) !== '') {
+            return indentWidth($lines[$i]) > $indent;
+        }
+    }
+
+    return false;
+}
+
 /**
  * @param list<string> $lines
  *
  * @return list<string>
  */
 function dedentLines(array $lines): array {
-    $indents = array_map(
-        fn (string $line): int => strlen($line) - strlen(ltrim($line)),
-        array_filter($lines, fn (string $line): bool => trim($line) !== ''),
-    );
+    $indents = array_map(indentWidth(...), array_filter($lines, fn (string $line): bool => trim($line) !== ''));
     $indent = $indents === [] ? 0 : min($indents);
 
     return array_map(fn (string $line): string => substr($line, $indent), $lines);
