@@ -1,3 +1,0 @@
-<?php
-
-Events::simulate(true);
