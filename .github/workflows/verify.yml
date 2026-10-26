@@ -66,6 +66,14 @@ jobs:
       - name: Verify
         run: php admin/verify.php --source ci4/user_guide_src/source --output docs --summary "$GITHUB_STEP_SUMMARY"
 
+      - name: Build
+        env:
+          MKDOCS_MATERIAL_VERSION: 9.7.7
+        run: |
+          python3 -m venv venv
+          venv/bin/pip install --quiet "mkdocs-material==${MKDOCS_MATERIAL_VERSION}"
+          venv/bin/mkdocs build --strict
+
       - name: Upload converted docs
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

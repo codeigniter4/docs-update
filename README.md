@@ -85,8 +85,8 @@ php ./admin/verify.php --source /path/to/CodeIgniter4/user_guide_src/source --ou
 
 It prints a table of checks, lists the first failures of each, and exits non-zero when any check fails.
 `--summary <file>` also appends the results as Markdown to that file.
-The [Verify conversion](./.github/workflows/verify.yml) workflow converts and verifies the `develop` and `4.8`
-branches of CodeIgniter4 on every push, on every pull request, and nightly.
+The [Verify conversion](./.github/workflows/verify.yml) workflow converts, verifies and builds with `mkdocs build --strict`
+the `develop` and `4.8` branches of CodeIgniter4 on every push, on every pull request, and nightly.
 
 ### Previewing the converted files
 

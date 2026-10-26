@@ -23,8 +23,10 @@ pip install mkdocs-material
 Convert the user guide first (see the [README](../README.md)), then build it:
 
 ```console
-mkdocs build
+mkdocs build --strict
 ```
+
+`--strict` fails the build on a broken link or a nav entry without a page.
 
 ## See the Docs
 
