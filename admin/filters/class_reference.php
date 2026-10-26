@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-function before_filter_classReference(string $data, string $folder): string {
+function before_filter_class_reference(string $data, string $folder): string {
     // Sphinx renders static methods, functions and attributes the same way as methods.
     $data = str_replace(
         ['.. php:staticmethod::', '.. php:function::', '..  php:function::', '.. php:attr::', '.. attribute::'],
@@ -12,7 +12,7 @@ function before_filter_classReference(string $data, string $folder): string {
 
     $indent = '    .. php:method::';
     if (str_contains($data, $indent)) {
-        $data = removeIndentLevel($data, $indent);
+        $data = remove_indent_level($data, $indent);
     }
 
     $stringNamespace  = '.. php:namespace::';
@@ -107,12 +107,12 @@ function before_filter_classReference(string $data, string $folder): string {
     return implode(PHP_EOL, $lines);
 }
 
-function after_filter_classReference(string $data, string $folder): string {
+function after_filter_class_reference(string $data, string $folder): string {
     // Python-Markdown nests list items by four spaces, not two.
     return str_replace(['\#', '  -'], ['#', '    -'], $data);
 }
 
-function removeIndentLevel(string $data, string $indent): string {
+function remove_indent_level(string $data, string $indent): string {
     $lines = explode(PHP_EOL, $data);
 
     $insideBlock = false;

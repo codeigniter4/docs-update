@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * Outdents RST list items indented by seven or more spaces to two.
  */
-function before_filter_listIndentation(string $data, string $folder): ?string {
+function before_filter_list_indentation(string $data, string $folder): ?string {
     $pattern = '/^(\s{7,})(-\s+)/m';
 
     $data = preg_replace($pattern, '  $2', $data);
@@ -16,7 +16,7 @@ function before_filter_listIndentation(string $data, string $folder): ?string {
 /**
  * Outdents Markdown list items indented by four or more spaces and puts a blank line before each list.
  */
-function after_filter_listIndentation(string $data, string $folder): ?string {
+function after_filter_list_indentation(string $data, string $folder): ?string {
     $pattern = '/^(\s{4,})(-\s+)/m';
 
     $data = preg_replace($pattern, '$2', $data);

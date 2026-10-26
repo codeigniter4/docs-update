@@ -33,7 +33,7 @@ function styled(string $text, string $style): string {
  * @param list<list<array{string, string}>>  $rows         Cells as `[text, style]` pairs
  * @param list<int>                          $rightAligned Column indexes
  */
-function renderTable(array $headers, array $rows, array $rightAligned): string {
+function render_table(array $headers, array $rows, array $rightAligned): string {
     $widths = array_map(strlen(...), $headers);
 
     foreach ($rows as $row) {
@@ -71,22 +71,22 @@ function usage(): never {
 /**
  * @return list<string>
  */
-function readLines(string $path): array {
+function read_lines(string $path): array {
     return preg_split('/\r\n|\n|\r/', file_get_contents($path));
 }
 
-function indentOf(string $line): int {
+function indent_of(string $line): int {
     return strlen($line) - strlen(ltrim($line, ' '));
 }
 
-function isBlank(string $line): bool {
+function is_blank(string $line): bool {
     return trim($line) === '';
 }
 
 /**
  * @param list<string> $lines
  */
-function normaliseCode(array $lines): string {
+function normalise_code(array $lines): string {
     $lines = array_map(rtrim(...), $lines);
 
     while ($lines !== [] && $lines[0] === '') {
@@ -97,13 +97,13 @@ function normaliseCode(array $lines): string {
         array_pop($lines);
     }
 
-    $indents = array_map(indentOf(...),array_filter($lines, fn (string $line): bool => $line !== ''));
+    $indents = array_map(indent_of(...),array_filter($lines, fn (string $line): bool => $line !== ''));
     $indent  = $indents === [] ? 0 : min($indents);
 
     return implode("\n", array_map(fn (string $line): string => substr($line, $indent), $lines));
 }
 
-function normaliseSignature(string $signature): string {
+function normalise_signature(string $signature): string {
     $signature = preg_replace('/\\\\([!-\/:-@\[-`{-~])/', '$1', $signature);
 
     return preg_replace('/\s+/', ' ', trim($signature));
@@ -112,7 +112,7 @@ function normaliseSignature(string $signature): string {
 /**
  * @return list<string>
  */
-function proseTokens(string $text, bool $markdown): array {
+function prose_tokens(string $text, bool $markdown): array {
     if ($markdown) {
         $text = preg_replace('/\]\([^)]*\)/', ']', $text);
     } else {
@@ -131,7 +131,7 @@ function proseTokens(string $text, bool $markdown): array {
  * @param list<string> $haystack
  * @param list<string> $needle
  */
-function containsInOrder(array $haystack, array $needle): bool {
+function contains_in_order(array $haystack, array $needle): bool {
     $position = 0;
 
     foreach ($needle as $token) {
@@ -152,12 +152,12 @@ function containsInOrder(array $haystack, array $needle): bool {
  *
  * @param list<string> $lines
  */
-function blockEnd(array $lines, int $start, int $indent): int {
+function block_end(array $lines, int $start, int $indent): int {
     $end = $start + 1;
 
     for ($i = $start + 1; $i < count($lines); $i++) {
-        if (! isBlank($lines[$i])) {
-            if (indentOf($lines[$i]) <= $indent) {
+        if (! is_blank($lines[$i])) {
+            if (indent_of($lines[$i]) <= $indent) {
                 break;
             }
 
@@ -173,7 +173,7 @@ function blockEnd(array $lines, int $start, int $indent): int {
  *
  * @return array{array<string, string>, int}
  */
-function directiveOptions(array $lines, int $start, int $indent): array {
+function directive_options(array $lines, int $start, int $indent): array {
     $options = [];
 
     for ($i = $start + 1; $i < count($lines); $i++) {
@@ -192,7 +192,7 @@ function directiveOptions(array $lines, int $start, int $indent): array {
  *
  * @return list<string>
  */
-function selectLines(array $lines, string $spec): array {
+function select_lines(array $lines, string $spec): array {
     $selected = [];
 
     foreach (explode(',', $spec) as $part) {
@@ -220,19 +220,19 @@ function selectLines(array $lines, string $spec): array {
  *     admonitions: list<array{line: int, type: string, tail: list<string>, samples: int}>,
  * }
  */
-function parseRst(string $path, string $sourceRoot): array {
-    $lines  = readLines($path);
+function parse_rst(string $path, string $sourceRoot): array {
+    $lines  = read_lines($path);
     $result = ['signatures' => [], 'samples' => [], 'admonitions' => []];
 
     foreach ($lines as $no => $line) {
         if (preg_match('/^\s*\.\.\s+php:(?:method|function|staticmethod)::\s*(.+)$/', $line, $matches)) {
-            $result['signatures'][] = ['line' => $no + 1, 'text' => normaliseSignature($matches[1])];
+            $result['signatures'][] = ['line' => $no + 1, 'text' => normalise_signature($matches[1])];
 
             continue;
         }
 
         if (preg_match('/^(\s*)\.\.\s+literalinclude::\s*(\S+)/', $line, $matches)) {
-            [$options] = directiveOptions($lines, $no, strlen($matches[1]));
+            [$options] = directive_options($lines, $no, strlen($matches[1]));
 
             $file = str_starts_with($matches[2], '/')
                 ? $sourceRoot . $matches[2]
@@ -244,10 +244,10 @@ function parseRst(string $path, string $sourceRoot): array {
                 $fileLines = explode("\n", file_get_contents($file));
 
                 if (isset($options['lines'])) {
-                    $fileLines = selectLines($fileLines, $options['lines']);
+                    $fileLines = select_lines($fileLines, $options['lines']);
                 }
 
-                $body = normaliseCode($fileLines);
+                $body = normalise_code($fileLines);
             }
 
             $result['samples'][] = ['line' => $no + 1, 'label' => $matches[2], 'body' => $body];
@@ -257,24 +257,24 @@ function parseRst(string $path, string $sourceRoot): array {
 
         if (preg_match('/^(\s*)\.\.\s+code-block::\s*(\S*)/', $line, $matches)) {
             $indent        = strlen($matches[1]);
-            [, $bodyStart] = directiveOptions($lines, $no, $indent);
-            $end           = blockEnd($lines, $no, $indent);
+            [, $bodyStart] = directive_options($lines, $no, $indent);
+            $end           = block_end($lines, $no, $indent);
 
             $result['samples'][] = [
                 'line'  => $no + 1,
                 'label' => 'code-block ' . ($matches[2] === '' ? '(no language)' : $matches[2]),
-                'body'  => normaliseCode(array_slice($lines, $bodyStart, max(0, $end - $bodyStart))),
+                'body'  => normalise_code(array_slice($lines, $bodyStart, max(0, $end - $bodyStart))),
             ];
 
             continue;
         }
 
         if (preg_match('/^(\s*)\.\.\s+([a-z]+)::(.*)$/', $line, $matches) && in_array($matches[2], ADMONITIONS, true)) {
-            $end  = blockEnd($lines, $no, strlen($matches[1]));
+            $end  = block_end($lines, $no, strlen($matches[1]));
             $body = array_slice($lines, $no + 1, $end - $no - 1);
 
             $prose  = array_filter($body, fn (string $bodyLine): bool => ! preg_match('/^\s*(\.\.\s+\S+::|:[a-z-]+:(\s|$))/', $bodyLine));
-            $tokens = proseTokens($matches[3] . "\n" . implode("\n", $prose), false);
+            $tokens = prose_tokens($matches[3] . "\n" . implode("\n", $prose), false);
 
             $result['admonitions'][] = [
                 'line'    => $no + 1,
@@ -297,15 +297,15 @@ function parseRst(string $path, string $sourceRoot): array {
  *     prose: array<int, string>,
  * }
  */
-function parseMarkdown(string $path): array {
-    $lines  = readLines($path);
+function parse_markdown(string $path): array {
+    $lines  = read_lines($path);
     $result = ['lines' => $lines, 'headings' => [], 'fences' => [], 'admonitions' => [], 'prose' => []];
     $fence  = null;
 
     foreach ($lines as $no => $line) {
         if ($fence !== null) {
             if (preg_match('/^\s*' . preg_quote($fence['marker'][0], '/') . '{' . strlen($fence['marker']) . ',}\s*$/', $line)) {
-                $result['fences'][] = ['line' => $fence['line'], 'body' => normaliseCode($fence['body'])];
+                $result['fences'][] = ['line' => $fence['line'], 'body' => normalise_code($fence['body'])];
                 $fence              = null;
             } else {
                 $fence['body'][] = $line;
@@ -323,22 +323,22 @@ function parseMarkdown(string $path): array {
         $result['prose'][$no + 1] = $line;
 
         if (preg_match('/^#{1,6}\s+(.+?)\s*$/', $line, $matches)) {
-            $result['headings'][] = ['line' => $no + 1, 'text' => normaliseSignature($matches[1])];
+            $result['headings'][] = ['line' => $no + 1, 'text' => normalise_signature($matches[1])];
         }
 
         if (preg_match('/^(\s*)!!!\s+\w+(.*)$/', $line, $matches)) {
-            $end = blockEnd($lines, $no, strlen($matches[1]));
+            $end = block_end($lines, $no, strlen($matches[1]));
 
             $result['admonitions'][] = [
                 'line'   => $no + 1,
                 'end'    => $end,
-                'tokens' => proseTokens($matches[2] . "\n" . implode("\n", array_slice($lines, $no + 1, $end - $no - 1)), true),
+                'tokens' => prose_tokens($matches[2] . "\n" . implode("\n", array_slice($lines, $no + 1, $end - $no - 1)), true),
             ];
         }
     }
 
     if ($fence !== null) {
-        $result['fences'][] = ['line' => $fence['line'], 'body' => normaliseCode($fence['body'])];
+        $result['fences'][] = ['line' => $fence['line'], 'body' => normalise_code($fence['body'])];
     }
 
     foreach ($result['admonitions'] as &$admonition) {
@@ -354,7 +354,7 @@ function parseMarkdown(string $path): array {
 /**
  * @return list<string>
  */
-function sourcePages(string $root, string $relative = ''): array {
+function source_pages(string $root, string $relative = ''): array {
     $pages = [];
 
     foreach (scandir($root . '/' . $relative) as $entry) {
@@ -365,7 +365,7 @@ function sourcePages(string $root, string $relative = ''): array {
         $path = ltrim($relative . '/' . $entry, '/');
 
         if (is_dir($root . '/' . $path)) {
-            $pages = array_merge($pages, sourcePages($root, $path));
+            $pages = array_merge($pages, source_pages($root, $path));
         } elseif (str_ends_with($entry, '.rst')) {
             $pages[] = substr($path, 0, -4);
         }
@@ -377,7 +377,7 @@ function sourcePages(string $root, string $relative = ''): array {
 /**
  * @return array{expected: int, actual: int, failures: list<string>}
  */
-function newCheck(): array {
+function new_check(): array {
     return ['expected' => 0, 'actual' => 0, 'failures' => []];
 }
 
@@ -387,7 +387,7 @@ function newCheck(): array {
  * @param list<array<string, mixed>>                                 $available
  * @param callable(array<string, mixed>): string                     $describe
  */
-function matchMultiset(array &$check, array $wanted, array $available, string $key, string $sourceFile, callable $describe): void {
+function match_multiset(array &$check, array $wanted, array $available, string $key, string $sourceFile, callable $describe): void {
     $pool = array_count_values(array_filter(array_column($available, $key), is_string(...)));
 
     foreach ($wanted as $item) {
@@ -408,7 +408,7 @@ function matchMultiset(array &$check, array $wanted, array $available, string $k
  * @param list<array{line: int, type: string, tail: list<string>, samples: int}>    $source
  * @param list<array{line: int, end: int, tokens: list<string>, fences: int}>       $output
  */
-function checkAdmonitions(array &$admonitions, array &$notesSamples, array $source, array $output, string $sourceFile, string $outputFile): void {
+function check_admonitions(array &$admonitions, array &$notesSamples, array $source, array $output, string $sourceFile, string $outputFile): void {
     $pointer = 0;
 
     foreach ($source as $admonition) {
@@ -418,7 +418,7 @@ function checkAdmonitions(array &$admonitions, array &$notesSamples, array $sour
         $match = null;
 
         for ($j = $pointer; $j < min(count($output), $pointer + ALIGNMENT_WINDOW); $j++) {
-            if (containsInOrder($output[$j]['tokens'], $admonition['tail'])) {
+            if (contains_in_order($output[$j]['tokens'], $admonition['tail'])) {
                 $match   = $output[$j];
                 $pointer = $j + 1;
 
@@ -463,7 +463,7 @@ function checkAdmonitions(array &$admonitions, array &$notesSamples, array $sour
  * @param array<string, array{expected: int, actual: int, failures: list<string>}> $checks
  * @param array{lines: list<string>, prose: array<int, string>}                     $markdown
  */
-function checkLeftovers(array &$checks, array $markdown, string $outputFile): void {
+function check_leftovers(array &$checks, array $markdown, string $outputFile): void {
     $patterns = [
         'leftover-div'        => '/<div\b/i',
         'leftover-table'      => '/<table\b/i',
@@ -514,7 +514,7 @@ function report(array $checks, ?string $summaryFile): void {
         }
     }
 
-    echo renderTable(['Check', 'Expected', 'Actual', 'Result'], $rows, [1, 2]);
+    echo render_table(['Check', 'Expected', 'Actual', 'Result'], $rows, [1, 2]);
 
     foreach ($checks as $name => $check) {
         if ($check['failures'] !== []) {
@@ -541,9 +541,9 @@ $sourceRoot = rtrim(realpath($options['source']), '/');
 $outputRoot = rtrim(realpath($options['output']), '/');
 
 $names  = ['pages', 'signatures', 'samples', 'admonitions', 'notes-samples', 'leftover-snippets', 'leftover-table', 'leftover-div', 'leftover-span', 'leftover-a', 'leftover-directives', 'leftover-roles'];
-$checks = array_fill_keys($names, newCheck());
+$checks = array_fill_keys($names, new_check());
 
-foreach (sourcePages($sourceRoot) as $page) {
+foreach (source_pages($sourceRoot) as $page) {
     $sourceFile = $page . '.rst';
     $outputFile = $page . '.md';
 
@@ -563,13 +563,13 @@ foreach (sourcePages($sourceRoot) as $page) {
 
     $checks['pages']['actual']++;
 
-    $rst      = parseRst($sourceRoot . '/' . $sourceFile, $sourceRoot);
-    $markdown = parseMarkdown($outputRoot . '/' . $outputFile);
+    $rst      = parse_rst($sourceRoot . '/' . $sourceFile, $sourceRoot);
+    $markdown = parse_markdown($outputRoot . '/' . $outputFile);
 
-    matchMultiset($checks['signatures'], $rst['signatures'], $markdown['headings'], 'text', $sourceFile, fn (array $item): string => $item['text']);
-    matchMultiset($checks['samples'], $rst['samples'], $markdown['fences'], 'body', $sourceFile, fn (array $item): string => $item['body'] === null ? $item['label'] . ' (file not found)' : $item['label']);
-    checkAdmonitions($checks['admonitions'], $checks['notes-samples'], $rst['admonitions'], $markdown['admonitions'], $sourceFile, $outputFile);
-    checkLeftovers($checks, $markdown, $outputFile);
+    match_multiset($checks['signatures'], $rst['signatures'], $markdown['headings'], 'text', $sourceFile, fn (array $item): string => $item['text']);
+    match_multiset($checks['samples'], $rst['samples'], $markdown['fences'], 'body', $sourceFile, fn (array $item): string => $item['body'] === null ? $item['label'] . ' (file not found)' : $item['label']);
+    check_admonitions($checks['admonitions'], $checks['notes-samples'], $rst['admonitions'], $markdown['admonitions'], $sourceFile, $outputFile);
+    check_leftovers($checks, $markdown, $outputFile);
 }
 
 report($checks, $options['summary'] ?? null);

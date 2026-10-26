@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * @return array<string, string>
  */
-function loadEnvConfig(): array {
+function load_env_config(): array {
     $envFile = __DIR__ . '/../.env';
     $config = [
         'DOCS_PROJECT_PATH' => '',
@@ -42,7 +42,7 @@ function loadEnvConfig(): array {
  *
  * @param resource $stream
  */
-function writeLine(string $message, string $style = '', $stream = STDOUT): void {
+function write_line(string $message, string $style = '', $stream = STDOUT): void {
     if ($style !== '' && (string) getenv('NO_COLOR') === '' && stream_isatty($stream)) {
         $message = sprintf("\033[%sm%s\033[0m", $style, $message);
     }
@@ -50,37 +50,37 @@ function writeLine(string $message, string $style = '', $stream = STDOUT): void 
     fwrite($stream, $message . "\n");
 }
 
-function getSourceDirectory(): string {
-    $projectPath = loadEnvConfig()['DOCS_PROJECT_PATH'];
+function get_source_directory(): string {
+    $projectPath = load_env_config()['DOCS_PROJECT_PATH'];
 
     if ($projectPath === '') {
-        writeLine('Error: DOCS_PROJECT_PATH is not set.', STYLE_ERROR, STDERR);
-        writeLine('Set it in the environment or in .env to the user_guide_src/source folder of a CodeIgniter4 checkout.', '', STDERR);
+        write_line('Error: DOCS_PROJECT_PATH is not set.', STYLE_ERROR, STDERR);
+        write_line('Set it in the environment or in .env to the user_guide_src/source folder of a CodeIgniter4 checkout.', '', STDERR);
         exit(1);
     }
 
     $projectPath = rtrim($projectPath, '/') . '/';
 
     if (!is_dir($projectPath)) {
-        writeLine(sprintf('Error: DOCS_PROJECT_PATH does not exist: %s', $projectPath), STYLE_ERROR, STDERR);
+        write_line(sprintf('Error: DOCS_PROJECT_PATH does not exist: %s', $projectPath), STYLE_ERROR, STDERR);
         exit(1);
     }
 
     return $projectPath;
 }
 
-function checkPandocVersion(): void {
+function check_pandoc_version(): void {
     exec('pandoc --version', $output, $exitCode);
 
     if ($exitCode !== 0) {
-        writeLine(sprintf('Error: pandoc is not installed. Install pandoc %s.', PANDOC_VERSION), STYLE_ERROR, STDERR);
+        write_line(sprintf('Error: pandoc is not installed. Install pandoc %s.', PANDOC_VERSION), STYLE_ERROR, STDERR);
         exit(1);
     }
 
     $installed = trim(str_replace('pandoc', '', $output[0]));
 
     if ($installed !== PANDOC_VERSION) {
-        writeLine(sprintf('Warning: pandoc %s is installed, but the conversion is verified against pandoc %s.', $installed, PANDOC_VERSION), STYLE_WARNING, STDERR);
+        write_line(sprintf('Warning: pandoc %s is installed, but the conversion is verified against pandoc %s.', $installed, PANDOC_VERSION), STYLE_WARNING, STDERR);
     }
 }
 
@@ -91,30 +91,30 @@ const STYLE_STEP    = '1';
 
 define('PANDOC_VERSION', '3.12.1');
 define('PANDOC_WORKERS', 8);
-define('SOURCE_DIR', getSourceDirectory());
+define('SOURCE_DIR', get_source_directory());
 define('TARGET_DIR', __DIR__ . '/../docs/');
 
 define('BEFORE_FILTERS', [
     'toctree',
     'includes',
-    'docLink',
-    'classReference',
-    'listIndentation',
+    'doc_link',
+    'class_reference',
+    'list_indentation',
 ]);
 define('AFTER_FILTERS', [
     'images',
     'alerts',
-    'dollarSign',
-    'classReference',
-    'listIndentation',
+    'dollar_sign',
+    'class_reference',
+    'list_indentation',
     'toctree',
     'contents',
-    'docLink',
+    'doc_link',
     'admonitions',
     'includes',
 ]);
 
-function loadFilters(): void {
+function load_filters(): void {
     $filters = array_unique(array_merge(BEFORE_FILTERS, AFTER_FILTERS));
     foreach ($filters as $filter) {
         include_once(__DIR__ . '/filters/' . $filter . '.php');
@@ -122,9 +122,9 @@ function loadFilters(): void {
 }
 
 /**
- * Filtered copy of `$path`, saved next to it as `$path_` until applyAfterFilters() deletes it.
+ * Filtered copy of `$path`, saved next to it as `$path_` until apply_after_filters() deletes it.
  */
-function applyBeforeFilters(string $path): string {
+function apply_before_filters(string $path): string {
     $file = [
         'path'   => $path . '_',
         'folder' => dirname($path),
@@ -136,14 +136,14 @@ function applyBeforeFilters(string $path): string {
         $function = 'before_filter_' . $action;
 
         if (function_exists($function)) {
-            updateFile($file, $function);
+            update_file($file, $function);
         }
     }
 
     return $file['path'];
 }
 
-function applyAfterFilters(string $path, string $sourceCopy): void {
+function apply_after_filters(string $path, string $sourceCopy): void {
     if (file_exists($sourceCopy)) {
         unlink($sourceCopy);
     }
@@ -156,7 +156,7 @@ function applyAfterFilters(string $path, string $sourceCopy): void {
         $function = 'after_filter_' . $action;
 
         if (function_exists($function)) {
-            updateFile($file, $function);
+            update_file($file, $function);
         }
     }
 }
@@ -165,12 +165,12 @@ function applyAfterFilters(string $path, string $sourceCopy): void {
  * @param array{path: string, folder: string} $file
  * @param callable-string                     $function
  */
-function updateFile(array $file, string $function): void {
+function update_file(array $file, string $function): void {
     $data = file_get_contents($file['path']);
     $result = $function($data, $file['folder'], $file['path']);
 
     if ($result === null) {
-        writeLine(sprintf('Error: %s failed on %s (%s), leaving the file unfiltered', $function, $file['path'], preg_last_error_msg()), STYLE_ERROR, STDERR);
+        write_line(sprintf('Error: %s failed on %s (%s), leaving the file unfiltered', $function, $file['path'], preg_last_error_msg()), STYLE_ERROR, STDERR);
         return;
     }
 
@@ -180,7 +180,7 @@ function updateFile(array $file, string $function): void {
 /**
  * `$path` relative to the source folder, or `$path` itself when it lies outside it.
  */
-function sourceRelative(string $path): string {
+function source_relative(string $path): string {
     foreach ([realpath(SOURCE_DIR), rtrim(SOURCE_DIR, '/')] as $root) {
         if ($path === $root || str_starts_with($path, $root . '/')) {
             return ltrim(substr($path, strlen($root)), '/');
@@ -193,7 +193,7 @@ function sourceRelative(string $path): string {
 /**
  * Markdown link from a page in `$directory` to the page `$page`, both relative to the docs root.
  */
-function relativeLink(string $directory, string $page): string {
+function relative_link(string $directory, string $page): string {
     $from = $directory === '' ? [] : explode('/', $directory);
     $to   = explode('/', $page);
 
@@ -230,7 +230,7 @@ function clean(string $target): void {
     closedir($dir);
 }
 
-function copyDirectory(string $source, string $target): bool {
+function copy_directory(string $source, string $target): bool {
     if (!is_dir($source)) {
         return false;
     }
@@ -249,7 +249,7 @@ function copyDirectory(string $source, string $target): bool {
         $targetFile = $target . '/' . $file;
 
         if (is_dir($sourceFile)) {
-            copyDirectory($sourceFile, $targetFile);
+            copy_directory($sourceFile, $targetFile);
         } else {
             echo "Copying asset: $sourceFile\n";
             copy($sourceFile, $targetFile);
@@ -259,19 +259,19 @@ function copyDirectory(string $source, string $target): bool {
     return true;
 }
 
-function copyAssets(): void {
+function copy_assets(): void {
     printf("Copying directory: %simages to %simages\n", SOURCE_DIR, TARGET_DIR);
-    copyDirectory(SOURCE_DIR . 'images', TARGET_DIR . 'images');
+    copy_directory(SOURCE_DIR . 'images', TARGET_DIR . 'images');
 
-    createMkDocsAssets();
+    create_mkdocs_assets();
 }
 
-function createMkDocsAssets(): void {
+function create_mkdocs_assets(): void {
     $staticDir = SOURCE_DIR . '_static/';
     $assetsDir = TARGET_DIR . 'assets/';
 
     if (!is_dir($staticDir)) {
-        writeLine('Warning: _static directory not found, skipping MkDocs assets creation', STYLE_WARNING);
+        write_line('Warning: _static directory not found, skipping MkDocs assets creation', STYLE_WARNING);
         return;
     }
 
@@ -294,13 +294,13 @@ function createMkDocsAssets(): void {
         }
     }
 
-    createMkDocsThemeCSS();
+    create_mkdocs_theme_css();
 }
 
 /**
  * Copies the theme CSS and JavaScript from `admin/assets`.
  */
-function createMkDocsThemeCSS(): void {
+function create_mkdocs_theme_css(): void {
     $assetsDir = TARGET_DIR . 'assets/';
     $assetsCssDir = $assetsDir . 'css/';
     $assetsJsDir = $assetsDir . 'js/';
@@ -327,7 +327,7 @@ function createMkDocsThemeCSS(): void {
             echo "Copying MkDocs theme CSS: $sourcePath to $targetPath\n";
             copy($sourcePath, $targetPath);
         } else {
-            writeLine(sprintf('Warning: CSS file not found: %s', $sourcePath), STYLE_WARNING);
+            write_line(sprintf('Warning: CSS file not found: %s', $sourcePath), STYLE_WARNING);
         }
     }
 
@@ -343,7 +343,7 @@ function createMkDocsThemeCSS(): void {
             echo "Copying MkDocs theme JS: $sourcePath to $targetPath\n";
             copy($sourcePath, $targetPath);
         } else {
-            writeLine(sprintf('Warning: JS file not found: %s', $sourcePath), STYLE_WARNING);
+            write_line(sprintf('Warning: JS file not found: %s', $sourcePath), STYLE_WARNING);
         }
     }
 }
@@ -355,22 +355,22 @@ function createMkDocsThemeCSS(): void {
  *
  * @return int Number of files that pandoc failed on
  */
-function convertRstToMd(array $jobs): int {
+function convert_rst_to_md(array $jobs): int {
     $copies = [];
 
     foreach ($jobs as $i => $job) {
         echo "Converting {$job['source']} to {$job['target']}\n";
-        $copies[$i] = applyBeforeFilters($job['source']);
+        $copies[$i] = apply_before_filters($job['source']);
     }
 
-    $exitCodes = runPandoc($jobs, $copies);
+    $exitCodes = run_pandoc($jobs, $copies);
     $failures  = 0;
 
     foreach ($jobs as $i => $job) {
-        applyAfterFilters($job['target'], $copies[$i]);
+        apply_after_filters($job['target'], $copies[$i]);
 
         if ($exitCodes[$i] !== 0) {
-            writeLine(sprintf('Error: pandoc failed with exit code %d on %s', $exitCodes[$i], $job['source']), STYLE_ERROR, STDERR);
+            write_line(sprintf('Error: pandoc failed with exit code %d on %s', $exitCodes[$i], $job['source']), STYLE_ERROR, STDERR);
             $failures++;
         }
     }
@@ -384,7 +384,7 @@ function convertRstToMd(array $jobs): int {
  *
  * @return array<int, int> Exit codes keyed like `$jobs`
  */
-function runPandoc(array $jobs, array $copies): array {
+function run_pandoc(array $jobs, array $copies): array {
     $exitCodes = [];
     $running   = [];
     $next      = 0;
@@ -409,7 +409,7 @@ function runPandoc(array $jobs, array $copies): array {
                 $exitCodes[$i]    = $status['exitcode'];
 
                 foreach (array_filter(explode("\n", $job['messages']), fn (string $line): bool => trim($line) !== '') as $message) {
-                    writeLine($message, STYLE_WARNING, STDERR);
+                    write_line($message, STYLE_WARNING, STDERR);
                 }
 
                 fclose($job['stderr']);
@@ -426,7 +426,7 @@ function runPandoc(array $jobs, array $copies): array {
     return $exitCodes;
 }
 
-function ensureDirectory(string $directory): void {
+function ensure_directory(string $directory): void {
     if (! is_dir($directory)) {
         mkdir($directory, 0755, true);
     }
@@ -440,7 +440,7 @@ function ensureDirectory(string $directory): void {
 function convert(string $source, string $target, array &$jobs): void {
     $dir = opendir($source);
 
-    // Sphinx build files, and the images copied by copyAssets().
+    // Sphinx build files, and the images copied by copy_assets().
     $skipAssets = ['_static', 'images', '.nojekyll', 'conf.py', 'assets'];
 
     while (($file = readdir($dir)) !== false) {
@@ -458,10 +458,10 @@ function convert(string $source, string $target, array &$jobs): void {
         if (is_dir($sourceFile)) {
             convert($sourceFile, $targetFile, $jobs);
         } elseif (preg_match('/\.rst$/', $file)) {
-            ensureDirectory($target);
+            ensure_directory($target);
             $jobs[] = ['source' => $sourceFile, 'target' => preg_replace('/\.rst$/', '.md', $targetFile)];
         } elseif (! str_ends_with($file, '.php') && ! str_ends_with($file, '.rst_')) {
-            ensureDirectory($target);
+            ensure_directory($target);
             echo "Copying $sourceFile\n";
             copy($sourceFile, $targetFile);
         }
@@ -472,13 +472,13 @@ function convert(string $source, string $target, array &$jobs): void {
 /**
  * Writes the MkDocs nav, built from the toctrees under the root page, to `docs/.nav.yml` for `mkdocs.yml` to inherit.
  */
-function writeMkDocsNav(): void {
+function write_mkdocs_nav(): void {
     $seen  = ['index'];
     $lines = ['nav:', '  - Home: index.md'];
 
-    foreach (pageToctrees('index') as $toctree) {
+    foreach (page_toctrees('index') as $toctree) {
         foreach ($toctree['entries'] as $entry) {
-            array_push($lines, ...navItem($entry, 0, $seen));
+            array_push($lines, ...nav_item($entry, 0, $seen));
         }
     }
 
@@ -493,7 +493,7 @@ function writeMkDocsNav(): void {
  *
  * @return list<string>
  */
-function navItem(array $entry, int $depth, array &$seen): array {
+function nav_item(array $entry, int $depth, array &$seen): array {
     if (in_array($entry['page'], $seen, true)) {
         return [];
     }
@@ -504,9 +504,9 @@ function navItem(array $entry, int $depth, array &$seen): array {
     $title    = fn (string $title): string => json_encode($title, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     $children = [];
 
-    foreach (pageToctrees($entry['page']) as $toctree) {
+    foreach (page_toctrees($entry['page']) as $toctree) {
         foreach ($toctree['entries'] as $child) {
-            array_push($children, ...navItem($child, $depth + 1, $seen));
+            array_push($children, ...nav_item($child, $depth + 1, $seen));
         }
     }
 
@@ -515,14 +515,14 @@ function navItem(array $entry, int $depth, array &$seen): array {
     }
 
     return [
-        sprintf('%s%s:', $prefix, $title($entry['title'] ?? pageTitle($entry['page']))),
+        sprintf('%s%s:', $prefix, $title($entry['title'] ?? page_title($entry['page']))),
         sprintf('%s  - %s', str_repeat('    ', $depth + 1), $file),
         ...$children,
     ];
 }
 
-function convertSingleFile(string $filename): bool {
-    loadFilters();
+function convert_single_file(string $filename): bool {
+    load_filters();
 
     $filename = preg_replace('/\.rst$/', '', $filename);
 
@@ -530,7 +530,7 @@ function convertSingleFile(string $filename): bool {
     $targetFile = TARGET_DIR . $filename . '.md';
 
     if ($sourceFile === false) {
-        writeLine(sprintf("Error: File '%s.rst' not found in %s", $filename, SOURCE_DIR), STYLE_ERROR, STDERR);
+        write_line(sprintf("Error: File '%s.rst' not found in %s", $filename, SOURCE_DIR), STYLE_ERROR, STDERR);
         return false;
     }
 
@@ -539,48 +539,48 @@ function convertSingleFile(string $filename): bool {
         mkdir($targetDir, 0755, true);
     }
 
-    if (convertRstToMd([['source' => $sourceFile, 'target' => $targetFile]]) > 0) {
+    if (convert_rst_to_md([['source' => $sourceFile, 'target' => $targetFile]]) > 0) {
         return false;
     }
 
-    writeLine('Conversion completed successfully!', STYLE_SUCCESS);
+    write_line('Conversion completed successfully!', STYLE_SUCCESS);
     return true;
 }
 
-checkPandocVersion();
+check_pandoc_version();
 
 if (isset($argv[1])) {
     $filename = $argv[1];
-    exit(convertSingleFile($filename) ? 0 : 1);
+    exit(convert_single_file($filename) ? 0 : 1);
 } else {
-    writeLine('Starting full conversion...', STYLE_STEP);
+    write_line('Starting full conversion...', STYLE_STEP);
 
     if (!is_dir(TARGET_DIR)) {
-        writeLine('Creating target directory...', STYLE_STEP);
+        write_line('Creating target directory...', STYLE_STEP);
         mkdir(TARGET_DIR, 0755, true);
     }
 
-    writeLine('Cleaning target directory...', STYLE_STEP);
+    write_line('Cleaning target directory...', STYLE_STEP);
     clean(TARGET_DIR);
 
-    writeLine('Copying essential assets...', STYLE_STEP);
-    copyAssets();
+    write_line('Copying essential assets...', STYLE_STEP);
+    copy_assets();
 
-    writeLine('Loading filters...', STYLE_STEP);
-    loadFilters();
+    write_line('Loading filters...', STYLE_STEP);
+    load_filters();
 
-    writeLine('Converting RST files to Markdown...', STYLE_STEP);
+    write_line('Converting RST files to Markdown...', STYLE_STEP);
     $jobs = [];
     convert(SOURCE_DIR, TARGET_DIR, $jobs);
-    $failures = convertRstToMd($jobs);
+    $failures = convert_rst_to_md($jobs);
 
     if ($failures > 0) {
-        writeLine(sprintf('Conversion failed for %d file(s).', $failures), STYLE_ERROR, STDERR);
+        write_line(sprintf('Conversion failed for %d file(s).', $failures), STYLE_ERROR, STDERR);
         exit(1);
     }
 
-    writeLine('Writing the MkDocs nav...', STYLE_STEP);
-    writeMkDocsNav();
+    write_line('Writing the MkDocs nav...', STYLE_STEP);
+    write_mkdocs_nav();
 
-    writeLine('Conversion completed successfully!', STYLE_SUCCESS);
+    write_line('Conversion completed successfully!', STYLE_SUCCESS);
 }

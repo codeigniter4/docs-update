@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-function before_filter_docLink(string $data, string $folder, string $path): ?string {
-    $directory = sourceRelative($folder);
-    $page      = sourceRelative(preg_replace('/\.rst_?$/', '', $path));
+function before_filter_doc_link(string $data, string $folder, string $path): ?string {
+    $directory = source_relative($folder);
+    $page      = source_relative(preg_replace('/\.rst_?$/', '', $path));
 
     $data = preg_replace_callback('/:ref:`([^`]*?)(?:\s*<([^`<>]+)>)?`/', function (array $matches) use ($directory, $page): string {
-        $target = rstAnchors()['labels'][strtolower($matches[2] ?? $matches[1])] ?? null;
+        $target = rst_anchors()['labels'][strtolower($matches[2] ?? $matches[1])] ?? null;
 
         if ($target === null) {
             return $matches[0];
@@ -16,13 +16,13 @@ function before_filter_docLink(string $data, string $folder, string $path): ?str
         return sprintf(
             '[%s](%s#%s)',
             isset($matches[2]) ? $matches[1] : $target['title'],
-            $target['page'] === $page ? '' : relativeLink($directory, $target['page']),
+            $target['page'] === $page ? '' : relative_link($directory, $target['page']),
             $target['anchor'],
         );
     }, $data);
 
     $data = preg_replace_callback('/(?<![`:\w])`([^`<>]+)`_(?!_)/', function (array $matches) use ($page): string {
-        $anchor = rstAnchors()['sections'][$page][referenceName($matches[1])] ?? null;
+        $anchor = rst_anchors()['sections'][$page][reference_name($matches[1])] ?? null;
 
         return $anchor === null ? $matches[0] : sprintf('[%s](#%s)', $matches[1], $anchor);
     }, $data);
@@ -32,10 +32,10 @@ function before_filter_docLink(string $data, string $folder, string $path): ?str
         return sprintf('``%s``', str_replace('\\\\', '\\', $matches[1]));
     }, $data);
 
-    $data = preg_replace_callback('/\|(version|release)\|/', fn (array $matches): string => sphinxSetting($matches[1]), $data);
+    $data = preg_replace_callback('/\|(version|release)\|/', fn (array $matches): string => sphinx_setting($matches[1]), $data);
 
     // Runs before the generic `Text <target>` pattern below, which also matches :doc:`Text <path>`.
-    $data = preg_replace_callback('/:doc:`([^`]*?)\s*<([^`>]*)>`/', fn (array $matches): string => sprintf('[%s](%s)', $matches[1], docTarget($matches[2], $directory)), $data);
+    $data = preg_replace_callback('/:doc:`([^`]*?)\s*<([^`>]*)>`/', fn (array $matches): string => sprintf('[%s](%s)', $matches[1], doc_target($matches[2], $directory)), $data);
 
     $data = preg_replace_callback('/(?<!`)`(?!`)([^`]+?) <([^>]+?)>`(?!`)_?/', function (array $matches) use ($directory, $page): string {
         $text = $matches[1];
@@ -47,12 +47,12 @@ function before_filter_docLink(string $data, string $folder, string $path): ?str
         }
 
         if (preg_match('/^(?:(.+)\.html)?#(.+)$/', $reference, $url) === 1) {
-            $targetPage = $url[1] === '' ? $page : normalizePath($directory . '/' . $url[1]);
+            $targetPage = $url[1] === '' ? $page : normalize_path($directory . '/' . $url[1]);
 
-            return sprintf('[%s](%s#%s)', $text, $url[1] === '' ? '' : $url[1] . '.md', phpObjectAnchor($targetPage, $url[2]) ?? $url[2]);
+            return sprintf('[%s](%s#%s)', $text, $url[1] === '' ? '' : $url[1] . '.md', php_object_anchor($targetPage, $url[2]) ?? $url[2]);
         }
 
-        $targetFile = findMatchingFile($reference);
+        $targetFile = find_matching_file($reference);
 
         if ($targetFile) {
             return sprintf('[%s](%s)', $text, $targetFile);
@@ -68,16 +68,16 @@ function before_filter_docLink(string $data, string $folder, string $path): ?str
     return preg_replace_callback('/:doc:`(.*?)`/', function (array $matches) use ($directory): string {
         $text = ucwords(str_replace('_', ' ', basename($matches[1])));
 
-        return sprintf('[%s](%s)', $text, docTarget($matches[1], $directory));
+        return sprintf('[%s](%s)', $text, doc_target($matches[1], $directory));
     }, $data);
 }
 
 /**
  * Markdown link target of the `:doc:` path `$target`, written in the source directory `$directory`.
  */
-function docTarget(string $target, string $directory): string {
+function doc_target(string $target, string $directory): string {
     if (str_starts_with($target, '/')) {
-        return relativeLink($directory, normalizePath($target));
+        return relative_link($directory, normalize_path($target));
     }
 
     return (str_starts_with($target, './') ? substr($target, 2) : $target) . '.md';
@@ -88,7 +88,7 @@ function docTarget(string $target, string $directory): string {
  *
  * @return array{labels: array<string, array{page: string, title: string, anchor: string}>, sections: array<string, array<string, string>>}
  */
-function rstAnchors(): array {
+function rst_anchors(): array {
     static $targets = null;
 
     if ($targets !== null) {
@@ -102,7 +102,7 @@ function rstAnchors(): array {
             continue;
         }
 
-        $page    = sourceRelative(substr($file->getPathname(), 0, -4));
+        $page    = source_relative(substr($file->getPathname(), 0, -4));
         $lines   = file($file->getPathname(), FILE_IGNORE_NEW_LINES);
         $labels  = [];
         $anchors = [];
@@ -110,11 +110,11 @@ function rstAnchors(): array {
         foreach ($lines as $i => $line) {
             if (preg_match('/^\s*\.\. _([^:`]+):\s*$/', $line, $matches) === 1) {
                 $labels[] = strtolower($matches[1]);
-            } elseif (isRstHeading($lines, $i)) {
+            } elseif (is_rst_heading($lines, $i)) {
                 $text   = preg_replace(['/:[\w:.+-]+:(?=`)/', '/\s*<[^`<>]*>(?=`)/'], '', $line);
-                $anchor = uniqueAnchor(markdownSlug($text), $anchors);
+                $anchor = unique_anchor(markdown_slug($text), $anchors);
 
-                $targets['sections'][$page][referenceName(str_replace(['`', '*', '\\'], '', $text))] ??= $anchor;
+                $targets['sections'][$page][reference_name(str_replace(['`', '*', '\\'], '', $text))] ??= $anchor;
 
                 foreach ($labels as $label) {
                     $targets['labels'][$label] = ['page' => $page, 'title' => trim($line), 'anchor' => $anchor];
@@ -131,21 +131,21 @@ function rstAnchors(): array {
 /**
  * RST reference name of the link text or section title `$text`, compared case-insensitively with its whitespace collapsed.
  */
-function referenceName(string $text): string {
+function reference_name(string $text): string {
     return strtolower(preg_replace('/\s+/', ' ', trim($text)));
 }
 
 /**
  * MkDocs anchor of the signature heading for the PHP function or method `$name` in the source page `$page`, which Sphinx anchors as `#$name`.
  */
-function phpObjectAnchor(string $page, string $name): ?string {
+function php_object_anchor(string $page, string $name): ?string {
     $rst = (string) @file_get_contents(SOURCE_DIR . $page . '.rst');
 
     if (preg_match(sprintf('/^\s*\.\. php:(?:method|staticmethod|function)::\s*(%s\s*\(.*)$/m', preg_quote($name, '/')), $rst, $matches) !== 1) {
         return null;
     }
 
-    return markdownSlug($matches[1]);
+    return markdown_slug($matches[1]);
 }
 
 /**
@@ -153,7 +153,7 @@ function phpObjectAnchor(string $page, string $name): ?string {
  *
  * @param list<string> $lines
  */
-function isRstHeading(array $lines, int $i): bool {
+function is_rst_heading(array $lines, int $i): bool {
     $title = rtrim($lines[$i]);
     $under = rtrim($lines[$i + 1] ?? '');
 
@@ -168,7 +168,7 @@ function isRstHeading(array $lines, int $i): bool {
 /**
  * Python-Markdown's default `toc` slug of the heading text `$text`.
  */
-function markdownSlug(string $text): string {
+function markdown_slug(string $text): string {
     $text = preg_replace('/[^\x00-\x7F]/', '', Normalizer::normalize($text, Normalizer::FORM_KD));
     $text = strtolower(trim(preg_replace('/[^\w\s-]/', '', $text)));
 
@@ -180,7 +180,7 @@ function markdownSlug(string $text): string {
  *
  * @param array<string, true> $used
  */
-function uniqueAnchor(string $id, array &$used): string {
+function unique_anchor(string $id, array &$used): string {
     while ($id === '' || isset($used[$id])) {
         $id = preg_match('/^(.*)_(\d+)$/', $id, $matches) === 1 ? sprintf('%s_%d', $matches[1], (int) $matches[2] + 1) : $id . '_1';
     }
@@ -193,7 +193,7 @@ function uniqueAnchor(string $id, array &$used): string {
 /**
  * A string setting such as `version` from the source's Sphinx `conf.py`, which Sphinx substitutes for `|version|`.
  */
-function sphinxSetting(string $name): string {
+function sphinx_setting(string $name): string {
     static $config = null;
 
     $config ??= (string) @file_get_contents(SOURCE_DIR . 'conf.py');
@@ -204,7 +204,7 @@ function sphinxSetting(string $name): string {
 /**
  * Link to the page holding the `$reference` label, or null when no page is known.
  */
-function findMatchingFile(string $reference): ?string {
+function find_matching_file(string $reference): ?string {
     // Labels whose page cannot be guessed from the label itself.
     $patterns = [
         'urls-remove-index-php' => 'general/urls.md#removing-indexphp',
@@ -237,7 +237,7 @@ function findMatchingFile(string $reference): ?string {
     return null;
 }
 
-function after_filter_docLink(string $data, string $folder): ?string {
+function after_filter_doc_link(string $data, string $folder): ?string {
     // pandoc escapes brackets and parentheses that it reads as plain text.
     $data = str_replace('\\]', ']', $data);
     $data = str_replace('\\(', '(', $data);

@@ -14,7 +14,7 @@ const VERSION_ADMONITIONS = [
 ];
 
 function after_filter_admonitions(string $data, string $folder): string {
-    return implode("\n", convertAdmonitions(explode("\n", $data)));
+    return implode("\n", convert_admonitions(explode("\n", $data)));
 }
 
 /**
@@ -22,13 +22,13 @@ function after_filter_admonitions(string $data, string $folder): string {
  *
  * @return list<string>
  */
-function convertAdmonitions(array $lines): array {
+function convert_admonitions(array $lines): array {
     $result = [];
 
     for ($i = 0; $i < count($lines); $i++) {
         // pandoc wraps a paragraph that follows an RST label in a div carrying the label as its id.
-        if (preg_match('/^\s*<div id="[^"]*">\s*$/', $lines[$i]) && ($end = closingDivLine($lines, $i)) !== null) {
-            array_push($result, ...convertAdmonitions(array_slice($lines, $i + 1, $end - $i - 1)));
+        if (preg_match('/^\s*<div id="[^"]*">\s*$/', $lines[$i]) && ($end = closing_div_line($lines, $i)) !== null) {
+            array_push($result, ...convert_admonitions(array_slice($lines, $i + 1, $end - $i - 1)));
             $i = $end;
 
             continue;
@@ -37,7 +37,7 @@ function convertAdmonitions(array $lines): array {
         if (
             ! preg_match('/^(\s*)<div class="([a-z]+)"[^>]*>\s*$/', $lines[$i], $matches)
             || ! (in_array($matches[2], ADMONITION_CLASSES, true) || isset(VERSION_ADMONITIONS[$matches[2]]))
-            || ($end = closingDivLine($lines, $i)) === null
+            || ($end = closing_div_line($lines, $i)) === null
         ) {
             $result[] = $lines[$i];
 
@@ -50,11 +50,11 @@ function convertAdmonitions(array $lines): array {
             array_slice($lines, $i + 1, $end - $i - 1),
         );
 
-        [$type, $title, $body] = admonitionHeader($matches[2], $body);
+        [$type, $title, $body] = admonition_header($matches[2], $body);
 
         $result[] = sprintf('%s!!! %s "%s"', $indent, $type, $title);
 
-        foreach (trimBlankLines(convertAdmonitions($body)) as $line) {
+        foreach (trim_blank_lines(convert_admonitions($body)) as $line) {
             $result[] = trim($line) === '' ? '' : $indent . '    ' . $line;
         }
 
@@ -67,7 +67,7 @@ function convertAdmonitions(array $lines): array {
 /**
  * @param list<string> $lines
  */
-function closingDivLine(array $lines, int $start): ?int {
+function closing_div_line(array $lines, int $start): ?int {
     $depth = 0;
 
     for ($i = $start; $i < count($lines); $i++) {
@@ -88,7 +88,7 @@ function closingDivLine(array $lines, int $start): ?int {
  *
  * @return array{string, string, list<string>}
  */
-function admonitionHeader(string $class, array $body): array {
+function admonition_header(string $class, array $body): array {
     $first = array_key_first(array_filter($body, fn (string $line): bool => trim($line) !== ''));
 
     if (isset(VERSION_ADMONITIONS[$class])) {
@@ -103,7 +103,7 @@ function admonitionHeader(string $class, array $body): array {
         return [$type, sprintf($title, '?'), $body];
     }
 
-    if ($first !== null && preg_match('/^<div class="title">\s*$/', trim($body[$first])) && ($end = closingDivLine($body, $first)) !== null) {
+    if ($first !== null && preg_match('/^<div class="title">\s*$/', trim($body[$first])) && ($end = closing_div_line($body, $first)) !== null) {
         $title = trim(implode(' ', array_map(trim(...),array_slice($body, $first + 1, $end - $first - 1))));
 
         return [$class, $title, array_values(array_slice($body, $end + 1))];
