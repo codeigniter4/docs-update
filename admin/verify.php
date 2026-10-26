@@ -52,7 +52,7 @@ function normaliseCode(array $lines): string {
 }
 
 function normaliseSignature(string $signature): string {
-    $signature = preg_replace('/\\\\(\p{P})/u', '$1', $signature);
+    $signature = preg_replace('/\\\\([!-\/:-@\[-`{-~])/', '$1', $signature);
 
     return preg_replace('/\s+/', ' ', trim($signature));
 }
