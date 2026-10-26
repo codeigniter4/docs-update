@@ -3,8 +3,7 @@
 declare(strict_types=1);
 
 function before_filter_docLink(string $data, string $folder): ?string {
-    $folder = explode('/', trim($folder,  '/'));
-    $folder = array_pop($folder);
+    $directory = sourceRelative($folder);
 
     // Sphinx shows only a PHP role's display text, with RST's escaped backslashes collapsed.
     $data = preg_replace_callback('/:php:[a-z]+:`([^`]+?)(?:\s*<[^>`]+>)?`/', function (array $matches): string {
@@ -14,31 +13,7 @@ function before_filter_docLink(string $data, string $folder): ?string {
     $data = preg_replace_callback('/\|(version|release)\|/', fn (array $matches): string => sphinxSetting($matches[1]), $data);
 
     // Runs before the generic `Text <target>` pattern below, which also matches :doc:`Text <path>`.
-    $data = preg_replace_callback('/:doc:`(.*?) <(.*?)>`/', function (array $matches) use ($folder): string {
-        $text = $matches[1];
-        $url  = $matches[2];
-
-        if (identifyRelativePath($url) === '../') {
-            return sprintf('[%s](%s.md)', $text, $url);
-        }
-
-        if (identifyRelativePath($url) === './') {
-            $url = str_replace('./', '', $url);
-            return sprintf('[%s](%s.md)', $text, $url);
-        }
-
-        if (identifyRelativePath($url) === '/') {
-            if (str_contains($url, $folder)) {
-                $url = explode('/', $url);
-                $url = array_pop($url);
-            } else {
-                $url = '..' . $url;
-            }
-            return sprintf('[%s](%s.md)', $text, $url);
-        }
-
-        return sprintf('[%s](%s.md)', $text, $url);
-    }, $data);
+    $data = preg_replace_callback('/:doc:`([^`]*?)\s*<([^`>]*)>`/', fn (array $matches): string => sprintf('[%s](%s)', $matches[1], docTarget($matches[2], $directory)), $data);
 
     $data = preg_replace_callback('/(?<!`)`(?!`)([^`]+?) <([^>]+?)>`(?!`)_?/', function (array $matches): string {
         $text = $matches[1];
@@ -62,32 +37,22 @@ function before_filter_docLink(string $data, string $folder): ?string {
         return sprintf('[%s](#%s)', $text, $reference);
     }, $data);
 
-    return preg_replace_callback('/:doc:`(.*?)`/', function (array $matches) use ($folder): string {
-        $url  = $matches[1];
-        $text = explode('/', $url);
-        $text = ucwords(str_replace('_', ' ', array_pop($text)));
+    return preg_replace_callback('/:doc:`(.*?)`/', function (array $matches) use ($directory): string {
+        $text = ucwords(str_replace('_', ' ', basename($matches[1])));
 
-        if (identifyRelativePath($url) === '../') {
-            return sprintf('[%s](%s.md)', $text, $url);
-        }
-
-        if (identifyRelativePath($url) === './') {
-            $url = str_replace('./', '', $url);
-            return sprintf('[%s](%s.md)', $text, $url);
-        }
-
-        if (identifyRelativePath($url) === '/') {
-            if (str_contains($url, $folder)) {
-                $url = explode('/', $url);
-                $url = array_pop($url);
-            } else {
-                $url = '..' . $url;
-            }
-            return sprintf('[%s](%s.md)', $text, $url);
-        }
-
-        return sprintf('[%s](%s.md)', $text, $url);
+        return sprintf('[%s](%s)', $text, docTarget($matches[1], $directory));
     }, $data);
+}
+
+/**
+ * Markdown link target of the `:doc:` path `$target`, written in the source directory `$directory`.
+ */
+function docTarget(string $target, string $directory): string {
+    if (str_starts_with($target, '/')) {
+        return relativeLink($directory, normalizePath($target));
+    }
+
+    return (str_starts_with($target, './') ? substr($target, 2) : $target) . '.md';
 }
 
 /**
@@ -99,17 +64,6 @@ function sphinxSetting(string $name): string {
     $config ??= (string) @file_get_contents(SOURCE_DIR . 'conf.py');
 
     return preg_match(sprintf("/^%s\s*=\s*'([^']*)'/m", preg_quote($name, '/')), $config, $matches) === 1 ? $matches[1] : $name;
-}
-
-function identifyRelativePath(string $input): string|false
-{
-    $pattern = '/^(\.\.\/|\.\/|\/)/';
-
-    if (preg_match($pattern, $input, $matches) === 1) {
-        return $matches[1];
-    }
-
-    return false;
 }
 
 /**
