@@ -1,6 +1,8 @@
 <?php
 
-function before_filter_docLink($data, $folder) {
+declare(strict_types=1);
+
+function before_filter_docLink(string $data, string $folder): ?string {
     // We only need a parent folder
     $folder = explode('/', trim($folder,  '/'));
     $folder = array_pop($folder);
@@ -9,7 +11,7 @@ function before_filter_docLink($data, $folder) {
     // :doc:`View Decorators <../outgoing/view_decorators>`
     // :doc:`Feature Tests </testing/feature>`
     // :doc:`configuration <configuration>`
-    $data = preg_replace_callback('/:doc:`(.*?) <(.*?)>`/', function ($matches) use ($folder) {
+    $data = preg_replace_callback('/:doc:`(.*?) <(.*?)>`/', function (array $matches) use ($folder): string {
         $text = $matches[1];
         $url  = $matches[2];
 
@@ -38,7 +40,7 @@ function before_filter_docLink($data, $folder) {
 
     // Handle RST cross-references like `CodeIgniter URLs <urls-remove-index-php-apache>`
     // Convert them to proper markdown links, and convert external URLs to HTML with target="_blank"
-    $data = preg_replace_callback('/`([^`]+?) <([^>]+?)>`_?/', function ($matches) {
+    $data = preg_replace_callback('/`([^`]+?) <([^>]+?)>`_?/', function (array $matches): string {
         $text = $matches[1];
         $reference = $matches[2];
 
@@ -67,7 +69,7 @@ function before_filter_docLink($data, $folder) {
 
     // :doc:`../outgoing/view_decorators`
     // :doc:`./backward_compatibility_notes`
-    return preg_replace_callback('/:doc:`(.*?)`/', function ($matches) use ($folder) {
+    return preg_replace_callback('/:doc:`(.*?)`/', function (array $matches) use ($folder): string {
         $url  = $matches[1];
         $text = explode('/', $url);
         $text = ucwords(str_replace('_', ' ', array_pop($text)));
@@ -96,7 +98,7 @@ function before_filter_docLink($data, $folder) {
 }
 
 // helper function
-function identifyRelativePath($input)
+function identifyRelativePath(string $input): string|false
 {
     $pattern = '/^(\.\.\/|\.\/|\/)/';
 
@@ -108,9 +110,7 @@ function identifyRelativePath($input)
 }
 
 // Helper function to find matching files based on reference patterns
-function findMatchingFile($reference) {
-    $docsDir = __DIR__ . '/../../docs/';
-
+function findMatchingFile(string $reference): ?string {
     // Common reference patterns and their likely file locations
     $patterns = [
         'urls-remove-index-php' => 'general/urls.md#removing-indexphp',
@@ -129,7 +129,7 @@ function findMatchingFile($reference) {
         return '../' . $filePath;
     }
 
-    // Try to find files by scanning the docs directory
+    // Try to find files by scanning the source directory
     $possiblePaths = [
         "general/{$reference}.md",
         "concepts/{$reference}.md",
@@ -138,7 +138,7 @@ function findMatchingFile($reference) {
     ];
 
     foreach ($possiblePaths as $path) {
-        if (file_exists($docsDir . $path)) {
+        if (file_exists(SOURCE_DIR . substr($path, 0, -3) . '.rst')) {
             return '../' . $path;
         }
     }
@@ -146,7 +146,7 @@ function findMatchingFile($reference) {
     return null;
 }
 
-function after_filter_docLink($data, $folder) {
+function after_filter_docLink(string $data, string $folder): ?string {
     // Clean up any remaining RST-style references and fix escaped markdown links
 
     // Remove escaping backslashes that break markdown links
@@ -177,7 +177,7 @@ function after_filter_docLink($data, $folder) {
     $data = preg_replace('/`([^`]+)`_/', '[$1]', $data);
 
     // Convert external markdown links to placeholder format
-    $data = preg_replace_callback('/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/', function ($matches) {
+    $data = preg_replace_callback('/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/', function (array $matches): string {
         $text = $matches[1];
         $url = $matches[2];
         return "{{EXTERNAL_LINK_START}}{$url}{{EXTERNAL_LINK_MIDDLE}}{$text}{{EXTERNAL_LINK_END}}";

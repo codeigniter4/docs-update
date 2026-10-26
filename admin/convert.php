@@ -73,6 +73,7 @@ function checkPandocVersion(): void {
 }
 
 define('PANDOC_VERSION', '3.12.1');
+define('PANDOC_WORKERS', 8);
 define('SOURCE_DIR', getSourceDirectory());
 define('TARGET_DIR', __DIR__ . '/../docs/');
 
@@ -342,26 +343,75 @@ function createMkDocsThemeCSS(): void {
 }
 
 // Core conversion function that handles the actual pandoc conversion
-function convertRstToMd(string $sourceFile, string $targetFile): bool {
-    echo "Converting $sourceFile to $targetFile\n";
+/**
+ * @param list<array{source: string, target: string}> $jobs
+ *
+ * @return int Number of files that pandoc failed on
+ */
+function convertRstToMd(array $jobs): int {
+    $copies = [];
 
-    // Work with source copy
-    $sourceFileCopy = applyBeforeFilters($sourceFile);
-    exec("pandoc -f rst -t commonmark --wrap=none -o $targetFile $sourceFileCopy", $output, $exitCode);
-    applyAfterFilters($targetFile, $sourceFileCopy);
-
-    if ($exitCode !== 0) {
-        fwrite(STDERR, "Error: pandoc failed with exit code $exitCode on $sourceFile\n");
+    foreach ($jobs as $i => $job) {
+        echo "Converting {$job['source']} to {$job['target']}\n";
+        $copies[$i] = applyBeforeFilters($job['source']);
     }
 
-    return $exitCode === 0;
+    $exitCodes = runPandoc($jobs, $copies);
+    $failures  = 0;
+
+    foreach ($jobs as $i => $job) {
+        applyAfterFilters($job['target'], $copies[$i]);
+
+        if ($exitCodes[$i] !== 0) {
+            fwrite(STDERR, "Error: pandoc failed with exit code {$exitCodes[$i]} on {$job['source']}\n");
+            $failures++;
+        }
+    }
+
+    return $failures;
+}
+
+/**
+ * @param list<array{source: string, target: string}> $jobs
+ * @param list<string>                                $copies
+ *
+ * @return array<int, int> Exit codes keyed like `$jobs`
+ */
+function runPandoc(array $jobs, array $copies): array {
+    $exitCodes = [];
+    $running   = [];
+    $next      = 0;
+
+    while ($next < count($jobs) || $running !== []) {
+        while ($next < count($jobs) && count($running) < PANDOC_WORKERS) {
+            $command        = ['pandoc', '-f', 'rst', '-t', 'commonmark', '--wrap=none', '-o', $jobs[$next]['target'], $copies[$next]];
+            $running[$next] = proc_open($command, [1 => STDOUT, 2 => STDERR], $pipes);
+            $next++;
+        }
+
+        foreach ($running as $i => $process) {
+            $status = proc_get_status($process);
+
+            if (! $status['running']) {
+                $exitCodes[$i] = $status['exitcode'];
+                proc_close($process);
+                unset($running[$i]);
+            }
+        }
+
+        usleep(5000);
+    }
+
+    return $exitCodes;
 }
 
 // Recursively scan the source directory,
 // using pandoc to convert any .rst files to .md
 // and copying any other files and directories as-is
-function convert(string $source, string $target): int {
-    $failures = 0;
+/**
+ * @param list<array{source: string, target: string}> $jobs Accumulated RST conversion jobs
+ */
+function convert(string $source, string $target, array &$jobs): void {
     $dir = opendir($source);
 
     if (! is_dir($target)) {
@@ -385,18 +435,15 @@ function convert(string $source, string $target): int {
         $targetFile = $target . '/' . $file;
 
         if (is_dir($sourceFile)) {
-            $failures += convert($sourceFile, $targetFile);
+            convert($sourceFile, $targetFile, $jobs);
         } else if (preg_match('/\.rst$/', $file)) {
-            $targetFile = preg_replace('/\.rst$/', '.md', $targetFile);
-            $failures += convertRstToMd($sourceFile, $targetFile) ? 0 : 1;
+            $jobs[] = ['source' => $sourceFile, 'target' => preg_replace('/\.rst$/', '.md', $targetFile)];
         } else {
             echo "Copying $sourceFile\n";
             copy($sourceFile, $targetFile);
         }
     }
     closedir($dir);
-
-    return $failures;
 }
 
 // Convert a single RST file
@@ -420,7 +467,7 @@ function convertSingleFile(string $filename): bool {
         mkdir($targetDir, 0755, true);
     }
 
-    if (! convertRstToMd($sourceFile, $targetFile)) {
+    if (convertRstToMd([['source' => $sourceFile, 'target' => $targetFile]]) > 0) {
         return false;
     }
 
@@ -454,7 +501,9 @@ if (isset($argv[1])) {
     loadFilters();
 
     echo "Converting RST files to Markdown...\n";
-    $failures = convert(SOURCE_DIR, TARGET_DIR);
+    $jobs = [];
+    convert(SOURCE_DIR, TARGET_DIR, $jobs);
+    $failures = convertRstToMd($jobs);
 
     if ($failures > 0) {
         fwrite(STDERR, "Conversion failed for $failures file(s).\n");
