@@ -3,20 +3,15 @@
 declare(strict_types=1);
 
 function before_filter_docLink(string $data, string $folder): ?string {
-    // We only need a parent folder
     $folder = explode('/', trim($folder,  '/'));
     $folder = array_pop($folder);
 
-    // Handle :doc: directives FIRST before general backtick patterns
-    // :doc:`View Decorators <../outgoing/view_decorators>`
-    // :doc:`Feature Tests </testing/feature>`
-    // :doc:`configuration <configuration>`
+    // Runs before the generic `Text <target>` pattern below, which also matches :doc:`Text <path>`.
     $data = preg_replace_callback('/:doc:`(.*?) <(.*?)>`/', function (array $matches) use ($folder): string {
         $text = $matches[1];
         $url  = $matches[2];
 
         if (identifyRelativePath($url) === '../') {
-            // Convert directly to markdown link for relative paths
             return "[{$text}]({$url}.md)";
         }
 
@@ -38,37 +33,29 @@ function before_filter_docLink(string $data, string $folder): ?string {
         return "[{$text}]({$url}.md)";
     }, $data);
 
-    // Handle RST cross-references like `CodeIgniter URLs <urls-remove-index-php-apache>`
-    // Convert them to proper markdown links, and convert external URLs to HTML with target="_blank"
     $data = preg_replace_callback('/`([^`]+?) <([^>]+?)>`_?/', function (array $matches): string {
         $text = $matches[1];
         $reference = $matches[2];
 
-        // Handle external URLs - use placeholder that won't get escaped
+        // A placeholder, since pandoc escapes raw HTML written into the RST.
         if (preg_match('/^https?:\/\//', $reference)) {
             return "{{EXTERNAL_LINK_START}}{$reference}{{EXTERNAL_LINK_MIDDLE}}{$text}{{EXTERNAL_LINK_END}}";
         }
 
-        // Try to find actual files that match the reference
         $targetFile = findMatchingFile($reference);
 
         if ($targetFile) {
             return "[{$text}]({$targetFile})";
         }
 
-        // For unmapped references, try to convert to a reasonable link
-        // Convert underscore/dash patterns to section anchors
         if (strpos($reference, '-') !== false || strpos($reference, '_') !== false) {
             $sectionLink = '#' . str_replace('_', '-', $reference);
             return "[{$text}]({$sectionLink})";
         }
 
-        // If we can't map it, at least make it a proper link format
         return "[{$text}](#{$reference})";
     }, $data);
 
-    // :doc:`../outgoing/view_decorators`
-    // :doc:`./backward_compatibility_notes`
     return preg_replace_callback('/:doc:`(.*?)`/', function (array $matches) use ($folder): string {
         $url  = $matches[1];
         $text = explode('/', $url);
@@ -97,7 +84,6 @@ function before_filter_docLink(string $data, string $folder): ?string {
     }, $data);
 }
 
-// helper function
 function identifyRelativePath(string $input): string|false
 {
     $pattern = '/^(\.\.\/|\.\/|\/)/';
@@ -109,9 +95,11 @@ function identifyRelativePath(string $input): string|false
     return false;
 }
 
-// Helper function to find matching files based on reference patterns
+/**
+ * Link to the page holding the `$reference` label, or null when no page is known.
+ */
 function findMatchingFile(string $reference): ?string {
-    // Common reference patterns and their likely file locations
+    // Labels whose page cannot be guessed from the label itself.
     $patterns = [
         'urls-remove-index-php' => 'general/urls.md#removing-indexphp',
         'urls-remove-index-php-apache' => 'general/urls.md#removing-indexphp-with-apache',
@@ -122,14 +110,11 @@ function findMatchingFile(string $reference): ?string {
         'dotenv-file' => 'general/configuration.md#environment-variables'
     ];
 
-    // Check if we have a direct mapping
     if (isset($patterns[$reference])) {
         $filePath = $patterns[$reference];
-        // Convert to relative path from installation folder
         return '../' . $filePath;
     }
 
-    // Try to find files by scanning the source directory
     $possiblePaths = [
         "general/{$reference}.md",
         "concepts/{$reference}.md",
@@ -147,43 +132,32 @@ function findMatchingFile(string $reference): ?string {
 }
 
 function after_filter_docLink(string $data, string $folder): ?string {
-    // Clean up any remaining RST-style references and fix escaped markdown links
-
-    // Remove escaping backslashes that break markdown links
+    // pandoc escapes brackets and parentheses that it reads as plain text.
     $data = str_replace('\\]', ']', $data);
     $data = str_replace('\\(', '(', $data);
     $data = str_replace('\\)', ')', $data);
 
-    // Fix escaped markdown links (pandoc often escapes square brackets)
     $data = str_replace('\\[', '[', $data);
 
-    // Handle the literal backslash-escaped format as it appears in the output
-    // Pattern: :ref:\[text\](url) -> [text](url)
     $data = str_replace(':ref:\\[', '[', $data);
     $data = str_replace(':doc:\\[', '[', $data);
     $data = str_replace('\\]\\(', '](', $data);
 
-    // Handle any remaining :ref: and :doc: patterns
     $data = preg_replace('/:ref:\[([^\]]+)\]\(([^)]+)\)/', '[$1]($2)', $data);
     $data = preg_replace('/:doc:\[([^\]]+)\]\(([^)]+)\)/', '[$1]($2)', $data);
 
-    // Handle :ref: directives that may have been created without links
     $data = preg_replace('/:ref:`([^`]+)`_?/', '[$1]', $data);
 
-    // Handle :doc: directives that may have been created without links
     $data = preg_replace('/:doc:`([^`]+)`_?/', '[$1]', $data);
 
-    // Clean up any remaining RST-style backtick references with trailing underscores
     $data = preg_replace('/`([^`]+)`_/', '[$1]', $data);
 
-    // Convert external markdown links to placeholder format
     $data = preg_replace_callback('/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/', function (array $matches): string {
         $text = $matches[1];
         $url = $matches[2];
         return "{{EXTERNAL_LINK_START}}{$url}{{EXTERNAL_LINK_MIDDLE}}{$text}{{EXTERNAL_LINK_END}}";
     }, $data);
 
-    // Convert all external link placeholders to final HTML with target="_blank"
     $data = preg_replace('/{{EXTERNAL_LINK_START}}([^{]+){{EXTERNAL_LINK_MIDDLE}}([^{]+){{EXTERNAL_LINK_END}}/', '<a href="$1" target="_blank">$2</a>', $data);
 
     return $data;

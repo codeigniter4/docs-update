@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-// Load environment configuration
 /**
  * @return array<string, string>
  */
@@ -39,7 +38,6 @@ function loadEnvConfig(): array {
     return $config;
 }
 
-// Get source directory based on configuration
 function getSourceDirectory(): string {
     $config = loadEnvConfig();
 
@@ -53,7 +51,6 @@ function getSourceDirectory(): string {
         return $projectPath;
     }
 
-    // Default to local docs-rst directory
     return __DIR__ . '/../docs-rst/';
 }
 
@@ -98,7 +95,6 @@ define('AFTER_FILTERS', [
     'codeBlocks',
 ]);
 
-// Load all filters
 function loadFilters(): void {
     $filters = array_unique(array_merge(BEFORE_FILTERS, AFTER_FILTERS));
     foreach ($filters as $filter) {
@@ -106,18 +102,17 @@ function loadFilters(): void {
     }
 }
 
-// Apply before filters
+/**
+ * Filtered copy of `$path`, saved next to it as `$path_` until applyAfterFilters() deletes it.
+ */
 function applyBeforeFilters(string $path): string {
     $file = [
         'path'   => $path . '_',
         'folder' => dirname($path),
     ];
 
-    // Make a copy, so we can apply before filters
-    // without consequences to source file
     copy($path, $file['path']);
 
-    // Iterate over after filter
     foreach (BEFORE_FILTERS as $action) {
         $function = 'before_filter_' . $action;
 
@@ -126,11 +121,9 @@ function applyBeforeFilters(string $path): string {
         }
     }
 
-    // Return new file name (copy)
     return $file['path'];
 }
 
-// Apply after filters
 function applyAfterFilters(string $path, string $sourceCopy): void {
     if (file_exists($sourceCopy)) {
         unlink($sourceCopy);
@@ -140,7 +133,6 @@ function applyAfterFilters(string $path, string $sourceCopy): void {
       'path'   => $path,
       'folder' => dirname($path),
     ];
-    // Iterate over after filter
     foreach (AFTER_FILTERS as $action) {
         $function = 'after_filter_' . $action;
 
@@ -150,7 +142,6 @@ function applyAfterFilters(string $path, string $sourceCopy): void {
     }
 }
 
-// Modify file
 /**
  * @param array{path: string, folder: string} $file
  * @param callable-string                     $function
@@ -168,10 +159,8 @@ function updateFile(array $file, string $function): void {
 }
 
 
-// Completely empties the target directory
 function clean(string $target): void {
     if (!is_dir($target)) {
-        // Directory doesn't exist, create it
         mkdir($target, 0755, true);
         return;
     }
@@ -195,7 +184,6 @@ function clean(string $target): void {
     closedir($dir);
 }
 
-// Copy a directory and all its contents recursively
 function copyDirectory(string $source, string $target): bool {
     if (!is_dir($source)) {
         return false;
@@ -225,7 +213,6 @@ function copyDirectory(string $source, string $target): bool {
     return true;
 }
 
-// Copy essential assets that are needed for the docs
 function copyAssets(): void {
     $assetsToTransfer = [
         '_static' => '_static',
@@ -247,11 +234,9 @@ function copyAssets(): void {
         }
     }
 
-    // Create MkDocs assets structure from _static
     createMkDocsAssets();
 }
 
-// Create the assets folder structure that MkDocs expects
 function createMkDocsAssets(): void {
     $staticDir = TARGET_DIR . '_static/';
     $assetsDir = TARGET_DIR . 'assets/';
@@ -265,13 +250,6 @@ function createMkDocsAssets(): void {
         mkdir($assetsDir, 0755, true);
     }
 
-    // CSS files are now handled by createMkDocsThemeCSS() from admin/assets
-    // No need to copy from _static/css anymore
-
-    // CSS and JS files are now handled by createMkDocsThemeCSS() from admin/assets
-    // No need to copy from _static/css or _static/js anymore
-
-    // Copy logo and favicon
     $iconMapping = [
         'ci-logo-text.svg' => 'flame.svg',
         'favicon.ico' => 'favicon.ico'
@@ -287,11 +265,12 @@ function createMkDocsAssets(): void {
         }
     }
 
-    // Create MkDocs Material theme-compatible CSS
     createMkDocsThemeCSS();
 }
 
-// Copy CSS files from admin/assets folder
+/**
+ * Copies the theme CSS and JavaScript from `admin/assets`.
+ */
 function createMkDocsThemeCSS(): void {
     $assetsDir = TARGET_DIR . 'assets/';
     $assetsCssDir = $assetsDir . 'css/';
@@ -306,7 +285,6 @@ function createMkDocsThemeCSS(): void {
         mkdir($assetsJsDir, 0755, true);
     }
 
-    // Copy the pre-built CSS files from admin/assets
     $cssFiles = [
         'codeigniter.css' => 'codeigniter.css',
         'codeigniter_dark_mode.css' => 'codeigniter_dark_mode.css'
@@ -324,7 +302,6 @@ function createMkDocsThemeCSS(): void {
         }
     }
 
-    // Copy the pre-built JavaScript files from admin/assets
     $jsFiles = [
         'hljs.js' => 'hljs.js'
     ];
@@ -342,8 +319,9 @@ function createMkDocsThemeCSS(): void {
     }
 }
 
-// Core conversion function that handles the actual pandoc conversion
 /**
+ * Runs the before-filters, pandoc and the after-filters as three passes, so every after-filter sees every page's pandoc output.
+ *
  * @param list<array{source: string, target: string}> $jobs
  *
  * @return int Number of files that pandoc failed on
@@ -405,10 +383,9 @@ function runPandoc(array $jobs, array $copies): array {
     return $exitCodes;
 }
 
-// Recursively scan the source directory,
-// using pandoc to convert any .rst files to .md
-// and copying any other files and directories as-is
 /**
+ * Mirrors `$source` into `$target`, copying every file except the RST pages, which it appends to `$jobs`.
+ *
  * @param list<array{source: string, target: string}> $jobs Accumulated RST conversion jobs
  */
 function convert(string $source, string $target, array &$jobs): void {
@@ -418,7 +395,7 @@ function convert(string $source, string $target, array &$jobs): void {
         mkdir($target);
     }
 
-    // Assets that are handled separately by copyAssets()
+    // Copied by copyAssets() instead.
     $skipAssets = ['_static', 'images', '.nojekyll', 'conf.py', 'assets'];
 
     while (($file = readdir($dir)) !== false) {
@@ -426,7 +403,6 @@ function convert(string $source, string $target, array &$jobs): void {
             continue;
         }
 
-        // Skip assets that are copied separately
         if (in_array($file, $skipAssets)) {
             continue;
         }
@@ -446,11 +422,9 @@ function convert(string $source, string $target, array &$jobs): void {
     closedir($dir);
 }
 
-// Convert a single RST file
 function convertSingleFile(string $filename): bool {
     loadFilters();
 
-    // Remove .rst extension if provided
     $filename = preg_replace('/\.rst$/', '', $filename);
 
     $sourceFile = realpath(SOURCE_DIR . $filename . '.rst');
@@ -461,7 +435,6 @@ function convertSingleFile(string $filename): bool {
         return false;
     }
 
-    // Ensure target directory exists
     $targetDir = dirname($targetFile);
     if (!is_dir($targetDir)) {
         mkdir($targetDir, 0755, true);
@@ -477,15 +450,12 @@ function convertSingleFile(string $filename): bool {
 
 checkPandocVersion();
 
-// Check for CLI argument
 if (isset($argv[1])) {
     $filename = $argv[1];
     exit(convertSingleFile($filename) ? 0 : 1);
 } else {
-    // Do full conversion
     echo "Starting full conversion...\n";
 
-    // Ensure target directory exists
     if (!is_dir(TARGET_DIR)) {
         echo "Creating target directory...\n";
         mkdir(TARGET_DIR, 0755, true);
