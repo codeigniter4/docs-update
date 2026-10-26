@@ -84,14 +84,13 @@ define('AFTER_FILTERS', [
     'images',
     'alerts',
     'dollarSign',
-    'versionAdded',
-    'versionDeprecated',
     'classReference',
     'listIndentation',
     'toctree',
     'contents',
     'docLink',
     'codeBlocks',
+    'admonitions',
     'includes',
 ]);
 
