@@ -108,8 +108,7 @@ function before_filter_class_reference(string $data, string $folder): string {
 }
 
 function after_filter_class_reference(string $data, string $folder): string {
-    // Python-Markdown nests list items by four spaces, not two.
-    return str_replace(['\#', '  -'], ['#', '    -'], $data);
+    return str_replace('\#', '#', $data);
 }
 
 function remove_indent_level(string $data, string $indent): string {

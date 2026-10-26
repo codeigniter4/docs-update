@@ -25,8 +25,8 @@ all before filters on every page, then pandoc on every page, then all after filt
 | --- | --- | --- |
 | `includes` | Replaces each `literalinclude`, `code-block` and `::` literal block with a `CodeBlockPlaceholder<n>` line | Runs last, and replaces each placeholder with its code as a fenced block |
 | `doc_link` | Converts `:doc:`, `:ref:` and `:php:*:` roles, external links and `\|version\|` | Unescapes the link syntax and converts `title-ref` and label spans |
-| `class_reference` | Converts `php:namespace`, `php:class`, `php:method`, `php:function`, `php:attr` and their fields into headings and lists | Fixes list nesting for Python-Markdown |
-| `list_indentation` | Outdents deeply indented RST list items | Outdents list items and adds the blank line that Python-Markdown needs before a list |
+| `class_reference` | Converts `php:namespace`, `php:class`, `php:method`, `php:function`, `php:attr` and their fields into headings and lists | Unescapes `\#` |
+| `list_indentation` | Adds the blank line that pandoc needs between a directive and a list that starts its body | Re-indents nested lists by four spaces per level and adds the blank line that Python-Markdown needs before a list |
 | `images` | | Converts image tags to Markdown |
 | `alerts` | | Converts `> [!NOTE]` alerts and unwraps the blockquotes left by indented RST text |
 | `dollar_sign` | | Unescapes `\$` |
