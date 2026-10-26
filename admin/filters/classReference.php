@@ -47,7 +47,7 @@ function before_filter_classReference(string $data, string $folder): ?string {
         }
 
         if (str_starts_with($line, $stringMethod)) {
-            $line = str_replace([$stringMethod, '\\'], ['####', '\\\\'], $line) . PHP_EOL;
+            $line = str_replace([$stringMethod, '\\', '|'], ['####', '\\\\', '\\|'], $line) . PHP_EOL;
         }
 
         if ($insideBlock) {
@@ -59,13 +59,9 @@ function before_filter_classReference(string $data, string $folder): ?string {
                     $lines[$no - 1] = $lines[$no - 1] . PHP_EOL . "* **Parameters**";
                 }
                 $line = str_replace($stringParam, "     *", $line);
-                $pattern = '/\*\s*(\w+(?:\|\w+)*)\s*\$(\w+):\s*(.+)$/';
+                $pattern = '/\*\s*(\w+(?:\|\w+)*)\s*\$(\w+):\s*(.*)$/';
                 if (preg_match($pattern, $line, $matches) === 1) {
-                    $dataType     = $matches[1];
-                    $variableName = $matches[2];
-                    $description  = $matches[3];
-
-                    $line = "     * **\$$variableName** ``$dataType`` $description";
+                    $line = rtrim(sprintf('     * **$%s** ``%s`` %s', $matches[2], $matches[1], $matches[3]));
                 } else {
                     $line = preg_replace('/\$([^\s:]+):/', '``\$$1``', $line);
                 }
@@ -84,12 +80,12 @@ function before_filter_classReference(string $data, string $folder): ?string {
             if (str_starts_with($line, $stringReturnType)) {
                 $pattern = "/$stringReturnType:(.*)$/m";
                 $line = preg_replace_callback($pattern, function (array $matches): string {
-                    return sprintf('* **Return type**: ``%s``', str_replace('\\\\', '\\', trim($matches[1])));
+                    return sprintf('* **Return type**: ``%s``', str_replace('\\\\', '\\', trim($matches[1], " \t`")));
                 }, $line);
             }
 
             if (str_starts_with($line, $stringType)) {
-                $line = sprintf('* **Type**: ``%s``', trim(substr($line, strlen($stringType))));
+                $line = sprintf('* **Type**: ``%s``', trim(substr($line, strlen($stringType)), " \t`"));
             }
 
             if (str_starts_with($line, $stringThrows)) {
