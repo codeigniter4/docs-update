@@ -6,18 +6,23 @@ function before_filter_docLink(string $data, string $folder): ?string {
     $folder = explode('/', trim($folder,  '/'));
     $folder = array_pop($folder);
 
+    // Sphinx shows only a PHP role's display text, with RST's escaped backslashes collapsed.
+    $data = preg_replace_callback('/:php:[a-z]+:`([^`]+?)(?:\s*<[^>`]+>)?`/', function (array $matches): string {
+        return sprintf('``%s``', str_replace('\\\\', '\\', $matches[1]));
+    }, $data);
+
     // Runs before the generic `Text <target>` pattern below, which also matches :doc:`Text <path>`.
     $data = preg_replace_callback('/:doc:`(.*?) <(.*?)>`/', function (array $matches) use ($folder): string {
         $text = $matches[1];
         $url  = $matches[2];
 
         if (identifyRelativePath($url) === '../') {
-            return "[{$text}]({$url}.md)";
+            return sprintf('[%s](%s.md)', $text, $url);
         }
 
         if (identifyRelativePath($url) === './') {
             $url = str_replace('./', '', $url);
-            return "[{$text}]({$url}.md)";
+            return sprintf('[%s](%s.md)', $text, $url);
         }
 
         if (identifyRelativePath($url) === '/') {
@@ -27,10 +32,10 @@ function before_filter_docLink(string $data, string $folder): ?string {
             } else {
                 $url = '..' . $url;
             }
-            return "[{$text}]({$url}.md)";
+            return sprintf('[%s](%s.md)', $text, $url);
         }
 
-        return "[{$text}]({$url}.md)";
+        return sprintf('[%s](%s.md)', $text, $url);
     }, $data);
 
     $data = preg_replace_callback('/(?<!`)`(?!`)([^`]+?) <([^>]+?)>`(?!`)_?/', function (array $matches): string {
@@ -39,21 +44,20 @@ function before_filter_docLink(string $data, string $folder): ?string {
 
         // A placeholder, since pandoc escapes raw HTML written into the RST.
         if (preg_match('/^https?:\/\//', $reference)) {
-            return "{{EXTERNAL_LINK_START}}{$reference}{{EXTERNAL_LINK_MIDDLE}}{$text}{{EXTERNAL_LINK_END}}";
+            return sprintf('{{EXTERNAL_LINK_START}}%s{{EXTERNAL_LINK_MIDDLE}}%s{{EXTERNAL_LINK_END}}', $reference, $text);
         }
 
         $targetFile = findMatchingFile($reference);
 
         if ($targetFile) {
-            return "[{$text}]({$targetFile})";
+            return sprintf('[%s](%s)', $text, $targetFile);
         }
 
         if (strpos($reference, '-') !== false || strpos($reference, '_') !== false) {
-            $sectionLink = '#' . str_replace('_', '-', $reference);
-            return "[{$text}]({$sectionLink})";
+            return sprintf('[%s](#%s)', $text, str_replace('_', '-', $reference));
         }
 
-        return "[{$text}](#{$reference})";
+        return sprintf('[%s](#%s)', $text, $reference);
     }, $data);
 
     return preg_replace_callback('/:doc:`(.*?)`/', function (array $matches) use ($folder): string {
@@ -62,12 +66,12 @@ function before_filter_docLink(string $data, string $folder): ?string {
         $text = ucwords(str_replace('_', ' ', array_pop($text)));
 
         if (identifyRelativePath($url) === '../') {
-            return "[{$text}]({$url}.md)";
+            return sprintf('[%s](%s.md)', $text, $url);
         }
 
         if (identifyRelativePath($url) === './') {
             $url = str_replace('./', '', $url);
-            return "[{$text}]({$url}.md)";
+            return sprintf('[%s](%s.md)', $text, $url);
         }
 
         if (identifyRelativePath($url) === '/') {
@@ -77,10 +81,10 @@ function before_filter_docLink(string $data, string $folder): ?string {
             } else {
                 $url = '..' . $url;
             }
-            return "[{$text}]({$url}.md)";
+            return sprintf('[%s](%s.md)', $text, $url);
         }
 
-        return "[{$text}]({$url}.md)";
+        return sprintf('[%s](%s.md)', $text, $url);
     }, $data);
 }
 
@@ -149,13 +153,13 @@ function after_filter_docLink(string $data, string $folder): ?string {
     $data = preg_replace('/:doc:`([^`]+)`_?/', '[$1]', $data);
 
     $data = preg_replace('/(?<!`)`([^`\n]+)`_/', '[$1]', $data);
-    $data = preg_replace_callback('/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/', function (array $matches): string {
-        $text = $matches[1];
-        $url = $matches[2];
-        return "{{EXTERNAL_LINK_START}}{$url}{{EXTERNAL_LINK_MIDDLE}}{$text}{{EXTERNAL_LINK_END}}";
+
+    $data = preg_replace('/{{EXTERNAL_LINK_START}}([^{]+){{EXTERNAL_LINK_MIDDLE}}([^{]+){{EXTERNAL_LINK_END}}/', '[$2]($1)', $data);
+
+    // pandoc writes RST's default role as a title-ref span, which the guide uses for code.
+    $data = preg_replace_callback('/<span class="title-ref">(.*?)<\/span>/', function (array $matches): string {
+        return sprintf('`%s`', preg_replace('/\\\\([!-\/:-@\[-`{-~])/', '$1', $matches[1]));
     }, $data);
 
-    $data = preg_replace('/{{EXTERNAL_LINK_START}}([^{]+){{EXTERNAL_LINK_MIDDLE}}([^{]+){{EXTERNAL_LINK_END}}/', '<a href="$1" target="_blank">$2</a>', $data);
-
-    return $data;
+    return preg_replace('/<span id="[^"]*">(.*?)<\/span>/', '$1', $data);
 }
