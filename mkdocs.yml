@@ -38,7 +38,6 @@ theme:
     - search.highlight
     - search.share
     - navigation.path
-    - navigation.indexes
     - toc.follow
 
 extra:
