@@ -7,11 +7,15 @@ to share a common documentation format.
 ## Configuration
 
 The converter reads the user guide from the `user_guide_src/source` folder of a CodeIgniter4 checkout.
-To configure it, copy `.env.dist` to `.env` and set the path:
+To configure it, copy `.env.dist` to `.env`:
 
 ```bash
 cp .env.dist .env
+```
 
+Then set the path in `.env`:
+
+```ini
 DOCS_PROJECT_PATH=/path/to/CodeIgniter4/user_guide_src/source/
 ```
 
@@ -19,16 +23,23 @@ An environment variable of the same name takes precedence over `.env`.
 
 ## The Conversion Process
 
-The conversion process is being done using pandoc to do the initial conversion.
-From there, each section and file will be manually reviewed and cleaned up as needed.
+Each RST page goes through three passes:
 
-Once the conversion is complete, we will start taking a look at the overall structure of the documentation
-and see what changes need to be made for consistency, clarity, and ease of understanding.
+1. The `before` filters rewrite a copy of the page. Among other things, they inline each
+   `literalinclude`, `code-block` and `::` literal block as a placeholder, so no later step touches sample code.
+2. pandoc converts every copy to CommonMark with pipe tables, eight pages at a time.
+3. The `after` filters turn the result into MkDocs Markdown: admonitions, class references, links,
+   and finally the fenced code blocks that replace the placeholders.
+
+See [how to use filters](./admin/how_to_use_filters.md) for details.
+Once the conversion is complete, the converted pages will be reviewed by hand, and the overall structure
+of the documentation revisited for consistency, clarity, and ease of understanding.
 
 ## Requirements
 
-To convert, pandoc 3.12.1 is required. The converter warns when another version is installed.
-To install it, see <https://github.com/jgm/pandoc/releases/tag/3.12.1>.
+- PHP 8.1 or newer.
+- pandoc 3.12.1. The converter warns when another version is installed.
+  To install it, see <https://github.com/jgm/pandoc/releases/tag/3.12.1>.
 
 Generation of the final documentation uses [MkDocs](https://www.mkdocs.org/) with the
 [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) theme.
@@ -53,16 +64,15 @@ php ./admin/convert.php
 ```
 
 > [!NOTE]
-> This will first delete all files and directories in the `./docs` directory, except for the `assets` directory,
-which contains images and other assets used by the documentation.
+> This first deletes everything in the `./docs` directory, then copies the images and theme assets back in.
 
-You can also convert individual files:
+It exits non-zero when pandoc fails on any page.
+
+You can also convert a single page, given by its path relative to the source folder, without the extension:
 
 ```bash
-php ./admin/convert.php filename
+php ./admin/convert.php models/model
 ```
-
-See [how to use filters](./admin/how_to_use_filters.md) for more details about the conversion process.
 
 ### Verifying the converted files
 
@@ -74,7 +84,8 @@ php ./admin/verify.php --source /path/to/CodeIgniter4/user_guide_src/source --ou
 
 It prints a table of checks, lists the first failures of each, and exits non-zero when any check fails.
 `--summary <file>` also appends the results as Markdown to that file.
-The [Verify conversion](./.github/workflows/verify.yml) workflow runs both against the `develop` and `4.8` branches of CodeIgniter4.
+The [Verify conversion](./.github/workflows/verify.yml) workflow converts and verifies the `develop` and `4.8`
+branches of CodeIgniter4 on every push, on every pull request, and nightly.
 
 ### Previewing the converted files
 

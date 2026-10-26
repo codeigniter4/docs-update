@@ -1,31 +1,43 @@
 # How to use filters
 
-Filters are simple function that automate changes in the docs conversion process.
+Filters are plain functions that automate changes in the docs conversion process.
 
-All filters are declared in the `convert.php` file.
+All filters are declared in `convert.php`, in two lists:
 
-We have two types of filters:
-* `before`
-* `after`
+- `BEFORE_FILTERS` run on a copy of the original page (`.rst`), saved next to it as `.rst_` until the page is converted.
+- `AFTER_FILTERS` run on the converted page (`.md`).
 
-They are executed in the order declared in the array. The name in the array should correspond to the file name without the `.php` extension.
+They run in the order listed. Each name matches a file in the `filters` directory, without the `.php` extension.
+The file defines `before_filter_<name>()`, `after_filter_<name>()`, or both, each taking the page content and its folder:
 
-The `before` filters are executed on a copy of the original file (`rst`) while `after` filters are executed on an already converted file (`md`).
+```php
+function after_filter_example(string $data, string $folder): ?string
+```
 
-Each filter is located in a separate file, in the "filters" directory.
+A filter returns the new content, or `null` when a `preg_*` call fails, in which case the page keeps its previous content and the converter reports the error.
 
-Each should have at least one function: `before_filter_*` and/or `after_filter_*`, where `*` corresponds to the file name.
+The conversion runs in three passes, so every after filter sees the pandoc output of every page:
+all before filters on every page, then pandoc on every page, then all after filters on every page.
 
-Available filters:
+## Available filters
 
-- `alerts` - converts notes and warnings to format known from `admonition` extension
-- `classReference` - converts class reference (classes, methods and it's parameters)
-- `docLink` - converts the `:doc:'Name <url>'` syntax to links
-- `dollarsign` - converts `\$` next to variables to the proper form
-- `images` - converts image tags to markdown
-- `includes` - converts all code snippets included from other files to format known from `pymdownx.snippets` extension
-- `versionadded` - converts info about from which version given method/option is available
+| Filter | Before | After |
+| --- | --- | --- |
+| `includes` | Replaces each `literalinclude`, `code-block` and `::` literal block with a `CodeBlockPlaceholder<n>` line | Runs last, and replaces each placeholder with its code as a fenced block |
+| `docLink` | Converts `:doc:`, `:ref:` and `:php:*:` roles, external links and `\|version\|` | Unescapes the link syntax and converts `title-ref` and label spans |
+| `classReference` | Converts `php:namespace`, `php:class`, `php:method`, `php:function`, `php:attr` and their fields into headings and lists | Fixes list nesting for Python-Markdown |
+| `listIndentation` | Outdents deeply indented RST list items | Outdents list items and adds the blank line that Python-Markdown needs before a list |
+| `images` | | Converts image tags to Markdown |
+| `alerts` | | Converts `> [!NOTE]` alerts and unwraps the blockquotes left by indented RST text |
+| `dollarSign` | | Unescapes `\$` |
+| `toctree` | | Converts `toctree` directives into link lists, with titles from the converted pages |
+| `contents` | | Removes `contents` directives, since the sidebar shows the page contents |
+| `admonitions` | | Converts note, warning, version and other admonitions into `!!!` blocks, nested ones included |
 
-Usage:
+## Usage
 
-    php ./admin/convert.php
+```console
+php ./admin/convert.php
+```
+
+Then check the result with `admin/verify.php`, as described in the [README](../README.md).
