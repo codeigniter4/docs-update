@@ -116,8 +116,8 @@ function proseTokens(string $text, bool $markdown): array {
     if ($markdown) {
         $text = preg_replace('/\]\([^)]*\)/', ']', $text);
     } else {
-        // pandoc titles a text-less :doc: link after the target page, so its path never reaches the output.
-        $text = preg_replace('/:doc:`[^`<]*`/', '', $text);
+        // A text-less :doc: or :ref: link shows the target's title, so its path or label never reaches the output.
+        $text = preg_replace('/:(?:doc|ref):`[^`<]*`/', '', $text);
         $text = preg_replace('/:[a-z:]+:`/', '`', $text);
         $text = preg_replace('/\s*<[^<>`]*>`/', '`', $text);
     }
