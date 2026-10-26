@@ -16,7 +16,7 @@ function &includedSamples(): array {
 /**
  * Replaces each `literalinclude` and `code-block` with a `CodeBlockPlaceholder<n>` marker line at the directive's indentation.
  */
-function before_filter_includes(string $data, string $folder): ?string {
+function before_filter_includes(string $data, string $folder): string {
     $samples = &includedSamples();
     $lines   = explode("\n", $data);
     $result  = [];

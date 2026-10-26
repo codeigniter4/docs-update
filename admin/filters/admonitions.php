@@ -13,7 +13,7 @@ const VERSION_ADMONITIONS = [
     'deprecated'     => ['danger', 'Deprecated since version %s'],
 ];
 
-function after_filter_admonitions(string $data, string $folder): ?string {
+function after_filter_admonitions(string $data, string $folder): string {
     return implode("\n", convertAdmonitions(explode("\n", $data)));
 }
 
