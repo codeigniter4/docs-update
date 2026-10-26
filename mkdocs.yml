@@ -58,6 +58,7 @@ extra:
       link: https://join.slack.com/t/codeigniterchat/shared_invite/zt-244xrrslc-l_I69AJSi5y2a2RVN~xIdQ
       name: Slack
 
+repo_name: codeigniter4/CodeIgniter4
 repo_url: https://github.com/codeigniter4/CodeIgniter4
 edit_uri: edit/develop/docs/
 # overrides/partials/copyright.html replaces {year} with the build year.
