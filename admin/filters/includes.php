@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Samples held back from the other filters, keyed by the number in their `CI4SAMPLE<n>` marker.
+ * Samples held back from the other filters, keyed by the number in their `CodeBlockPlaceholder<n>` marker.
  *
  * @return list<array{language: string, lines: list<string>}>
  */
@@ -14,7 +14,7 @@ function &includedSamples(): array {
 }
 
 /**
- * Replaces each `literalinclude` and `code-block` with a `CI4SAMPLE<n>` marker line at the directive's indentation.
+ * Replaces each `literalinclude` and `code-block` with a `CodeBlockPlaceholder<n>` marker line at the directive's indentation.
  */
 function before_filter_includes(string $data, string $folder): ?string {
     $samples = &includedSamples();
@@ -44,7 +44,7 @@ function before_filter_includes(string $data, string $folder): ?string {
                 $body[] = $lines[++$i];
             }
 
-            array_push($result, $indent . 'CI4SAMPLE' . count($samples), '');
+            array_push($result, sprintf('%sCodeBlockPlaceholder%d', $indent, count($samples)), '');
             $samples[] = ['language' => $matches[3], 'lines' => dedentLines(trimBlankLines($body))];
 
             continue;
@@ -53,7 +53,7 @@ function before_filter_includes(string $data, string $folder): ?string {
         $file = str_starts_with($matches[3], '/') ? rtrim(SOURCE_DIR, '/') . $matches[3] : $folder . '/' . $matches[3];
 
         if (! is_file($file)) {
-            fwrite(STDERR, "Warning: sample {$matches[3]} not found for literalinclude in {$folder}\n");
+            fwrite(STDERR, sprintf("Warning: sample %s not found for literalinclude in %s\n", $matches[3], $folder));
             array_push($result, ...$directive);
 
             continue;
@@ -65,7 +65,7 @@ function before_filter_includes(string $data, string $folder): ?string {
             $sample = selectSampleLines($sample, $options['lines']);
         }
 
-        $result[]  = $indent . 'CI4SAMPLE' . count($samples);
+        $result[]  = sprintf('%sCodeBlockPlaceholder%d', $indent, count($samples));
         $samples[] = ['language' => $options['language'] ?? 'php', 'lines' => trimBlankLines($sample)];
     }
 
@@ -73,14 +73,13 @@ function before_filter_includes(string $data, string $folder): ?string {
 }
 
 /**
- * Replaces each `CI4SAMPLE<n>` marker line with its sample as a fenced block, prefixed like the marker.
+ * Replaces each `CodeBlockPlaceholder<n>` marker line with its sample as a fenced block, prefixed like the marker.
  */
 function after_filter_includes(string $data, string $folder): ?string {
     $samples = &includedSamples();
 
-    return preg_replace_callback('/^(.*?)CI4SAMPLE(\d+)[ \t]*$/m', function (array $matches) use ($samples): string {
-        // Sphinx renders an indented sample outside any container as a plain block, not a blockquote.
-        $prefix = preg_replace('/> ?/', '', $matches[1]);
+    return preg_replace_callback('/^(.*?)CodeBlockPlaceholder(\d+)[ \t]*$/m', function (array $matches) use ($samples): string {
+        $prefix = $matches[1];
         $sample = $samples[(int) $matches[2]];
 
         preg_match_all('/`+/', implode("\n", $sample['lines']), $runs);

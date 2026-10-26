@@ -14,7 +14,10 @@ function after_filter_alerts(string $data, string $folder): ?string {
     $result = preg_replace('/^  > ``` /m', '    ``` ', $result);
     $result = preg_replace('/^  > ([^!])/m', '    $1', $result);
 
-    $result = preg_replace('/^> (?!\d+\.|!)/', '    ', $result);
+    // Sphinx renders indented RST text as a plain block, not a quotation.
+    do {
+        $result = preg_replace('/^([ \t]*)>(?: |$)/m', '$1', $result, -1, $count);
+    } while ($result !== null && $count > 0);
 
-    return preg_replace('/^> (\d+\.\s+)/m', '$1', $result);
+    return $result;
 }
