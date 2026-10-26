@@ -37,13 +37,14 @@ function before_filter_doc_link(string $data, string $folder, string $path): ?st
     // Runs before the generic `Text <target>` pattern below, which also matches :doc:`Text <path>`.
     $data = preg_replace_callback('/:doc:`([^`]*?)\s*<([^`>]*)>`/', fn (array $matches): string => sprintf('[%s](%s)', $matches[1], doc_target($matches[2], $directory)), $data);
 
-    $data = preg_replace_callback('/(?<!`)`(?!`)([^`]+?) <([^>]+?)>`(?!`)_?/', function (array $matches) use ($directory, $page): string {
+    $data = preg_replace_callback('/(?<!`)`(?!`)([^`]+?) <([^>]+?)>`(?!`)_{0,2}/', function (array $matches) use ($directory, $page): string {
         $text = $matches[1];
         $reference = $matches[2];
 
         // A placeholder, since pandoc escapes raw HTML written into the RST.
         if (preg_match('/^https?:\/\//', $reference)) {
-            return sprintf('{{EXTERNAL_LINK_START}}%s{{EXTERNAL_LINK_MIDDLE}}%s{{EXTERNAL_LINK_END}}', $reference, $text);
+            // An escaped `@` stops pandoc reading the marker and a `@handle` text as an email address.
+            return sprintf('{{EXTERNAL_LINK_START}}%s{{EXTERNAL_LINK_MIDDLE}}%s{{EXTERNAL_LINK_END}}', $reference, str_replace('@', '\\@', $text));
         }
 
         if (preg_match('/^(?:(.+)\.html)?#(.+)$/', $reference, $url) === 1) {
