@@ -69,6 +69,11 @@ function before_filter_class_reference(string $data, string $folder): string {
                 continue;
             }
 
+            if ($paramsStarted && preg_match('/^\s+[^\s:]/', $line) === 1) {
+                $line = '       ' . ltrim($line);
+                continue;
+            }
+
             if ($paramsStarted) {
                 $paramsStarted = false;
             }
