@@ -11,6 +11,8 @@ function before_filter_docLink(string $data, string $folder): ?string {
         return sprintf('``%s``', str_replace('\\\\', '\\', $matches[1]));
     }, $data);
 
+    $data = preg_replace_callback('/\|(version|release)\|/', fn (array $matches): string => sphinxSetting($matches[1]), $data);
+
     // Runs before the generic `Text <target>` pattern below, which also matches :doc:`Text <path>`.
     $data = preg_replace_callback('/:doc:`(.*?) <(.*?)>`/', function (array $matches) use ($folder): string {
         $text = $matches[1];
@@ -86,6 +88,17 @@ function before_filter_docLink(string $data, string $folder): ?string {
 
         return sprintf('[%s](%s.md)', $text, $url);
     }, $data);
+}
+
+/**
+ * A string setting such as `version` from the source's Sphinx `conf.py`, which Sphinx substitutes for `|version|`.
+ */
+function sphinxSetting(string $name): string {
+    static $config = null;
+
+    $config ??= (string) @file_get_contents(SOURCE_DIR . 'conf.py');
+
+    return preg_match(sprintf("/^%s\s*=\s*'([^']*)'/m", preg_quote($name, '/')), $config, $matches) === 1 ? $matches[1] : $name;
 }
 
 function identifyRelativePath(string $input): string|false
