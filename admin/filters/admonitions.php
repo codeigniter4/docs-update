@@ -26,6 +26,14 @@ function convertAdmonitions(array $lines): array {
     $result = [];
 
     for ($i = 0; $i < count($lines); $i++) {
+        // pandoc wraps a paragraph that follows an RST label in a div carrying the label as its id.
+        if (preg_match('/^\s*<div id="[^"]*">\s*$/', $lines[$i]) && ($end = closingDivLine($lines, $i)) !== null) {
+            array_push($result, ...convertAdmonitions(array_slice($lines, $i + 1, $end - $i - 1)));
+            $i = $end;
+
+            continue;
+        }
+
         if (
             ! preg_match('/^(\s*)<div class="([a-z]+)"[^>]*>\s*$/', $lines[$i], $matches)
             || ! (in_array($matches[2], ADMONITION_CLASSES, true) || isset(VERSION_ADMONITIONS[$matches[2]]))
