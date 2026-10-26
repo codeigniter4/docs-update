@@ -33,7 +33,7 @@ function before_filter_docLink(string $data, string $folder): ?string {
         return "[{$text}]({$url}.md)";
     }, $data);
 
-    $data = preg_replace_callback('/`([^`]+?) <([^>]+?)>`_?/', function (array $matches): string {
+    $data = preg_replace_callback('/(?<!`)`(?!`)([^`]+?) <([^>]+?)>`(?!`)_?/', function (array $matches): string {
         $text = $matches[1];
         $reference = $matches[2];
 
@@ -136,7 +136,6 @@ function after_filter_docLink(string $data, string $folder): ?string {
     $data = str_replace('\\]', ']', $data);
     $data = str_replace('\\(', '(', $data);
     $data = str_replace('\\)', ')', $data);
-
     $data = str_replace('\\[', '[', $data);
 
     $data = str_replace(':ref:\\[', '[', $data);
@@ -147,11 +146,9 @@ function after_filter_docLink(string $data, string $folder): ?string {
     $data = preg_replace('/:doc:\[([^\]]+)\]\(([^)]+)\)/', '[$1]($2)', $data);
 
     $data = preg_replace('/:ref:`([^`]+)`_?/', '[$1]', $data);
-
     $data = preg_replace('/:doc:`([^`]+)`_?/', '[$1]', $data);
 
-    $data = preg_replace('/`([^`]+)`_/', '[$1]', $data);
-
+    $data = preg_replace('/(?<!`)`([^`\n]+)`_/', '[$1]', $data);
     $data = preg_replace_callback('/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/', function (array $matches): string {
         $text = $matches[1];
         $url = $matches[2];
