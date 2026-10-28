@@ -62,7 +62,7 @@ jobs:
       - name: Convert
         env:
           DOCS_PROJECT_PATH: ${{ github.workspace }}/ci4/user_guide_src/source/
-        run: php admin/convert.php > convert.log 2>&1
+        run: php admin/convert.php 2>&1
 
       - name: Verify
         run: php admin/verify.php --source ci4/user_guide_src/source --output docs --summary "$GITHUB_STEP_SUMMARY"

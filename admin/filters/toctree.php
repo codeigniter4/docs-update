@@ -7,7 +7,8 @@ declare(strict_types=1);
  *
  * @return list<string>
  */
-function &toctree_lists(): array {
+function &toctree_lists(): array
+{
     static $lists = [];
 
     return $lists;
@@ -16,11 +17,12 @@ function &toctree_lists(): array {
 /**
  * Replaces each visible toctree with a `TocTreePlaceholder<n>` marker line and drops each hidden one.
  */
-function before_filter_toctree(string $data, string $folder, string $path): ?string {
-    $page  = source_relative(preg_replace('/\.rst_?$/', '', $path));
+function before_filter_toctree(string $data, string $folder, string $path): ?string
+{
+    $page = source_relative(preg_replace('/\.rst_?$/', '', $path));
     $lists = &toctree_lists();
 
-    return preg_replace_callback(TOCTREE_PATTERN, function (array $matches) use ($page, &$lists): string {
+    return preg_replace_callback(toctree_pattern(), function (array $matches) use ($page, &$lists): string {
         $toctree = parse_toctree($matches[1], $page);
 
         if ($toctree['hidden']) {
@@ -33,20 +35,25 @@ function before_filter_toctree(string $data, string $folder, string $path): ?str
     }, $data);
 }
 
-function after_filter_toctree(string $data, string $folder): ?string {
+function after_filter_toctree(string $data, string $folder): ?string
+{
     $lists = &toctree_lists();
 
     return preg_replace_callback('/^TocTreePlaceholder(\d+)[ \t]*$/m', fn (array $matches): string => $lists[(int) $matches[1]], $data);
 }
 
-const TOCTREE_PATTERN = '/^\.\. toctree::[ \t]*\r?\n((?:[ \t]+[^\r\n]*\r?\n|[ \t]*\r?\n)*)/m';
+function toctree_pattern(): string
+{
+    return '/^\.\. toctree::[ \t]*\r?\n((?:[ \t]+[^\r\n]*\r?\n|[ \t]*\r?\n)*)/m';
+}
 
 /**
  * Toctree with the directive body `$body`, its entries resolved against the source page `$page`.
  *
  * @return array{hidden: bool, includeHidden: bool, maxDepth: int, entries: list<array{title: ?string, page: string}>}
  */
-function parse_toctree(string $body, string $page): array {
+function parse_toctree(string $body, string $page): array
+{
     $options = [];
     $entries = [];
     $directory = dirname($page) === '.' ? '' : dirname($page);
@@ -72,7 +79,7 @@ function parse_toctree(string $body, string $page): array {
         $target = normalize_path(str_starts_with($line, '/') ? $line : $directory . '/' . $line);
 
         if (isset($options['glob']) && strpbrk($target, '*?[') !== false) {
-            $matched = array_map(fn (string $file): string => source_relative(substr($file, 0, -4)), glob(SOURCE_DIR . $target . '.rst'));
+            $matched = array_map(fn (string $file): string => source_relative(substr($file, 0, -4)), glob(source_dir() . $target . '.rst'));
             sort($matched);
 
             foreach (array_diff($matched, [$page]) as $match) {
@@ -86,10 +93,10 @@ function parse_toctree(string $body, string $page): array {
     }
 
     return [
-        'hidden'        => isset($options['hidden']),
+        'hidden' => isset($options['hidden']),
         'includeHidden' => isset($options['includehidden']),
-        'maxDepth'      => (int) ($options['maxdepth'] ?? 0) > 0 ? (int) $options['maxdepth'] : PHP_INT_MAX,
-        'entries'       => $entries,
+        'maxDepth' => (int) ($options['maxdepth'] ?? 0) > 0 ? (int) $options['maxdepth'] : PHP_INT_MAX,
+        'entries' => $entries,
     ];
 }
 
@@ -98,11 +105,12 @@ function parse_toctree(string $body, string $page): array {
  *
  * @return list<array{hidden: bool, includeHidden: bool, maxDepth: int, entries: list<array{title: ?string, page: string}>}>
  */
-function page_toctrees(string $page): array {
+function page_toctrees(string $page): array
+{
     static $cache = [];
 
-    if (! isset($cache[$page])) {
-        preg_match_all(TOCTREE_PATTERN, (string) @file_get_contents(SOURCE_DIR . $page . '.rst'), $matches);
+    if (!isset($cache[$page])) {
+        preg_match_all(toctree_pattern(), (string) @file_get_contents(source_dir() . $page . '.rst'), $matches);
 
         $cache[$page] = array_map(fn (string $body): array => parse_toctree($body, $page), $matches[1]);
     }
@@ -118,7 +126,8 @@ function page_toctrees(string $page): array {
  *
  * @return list<string>
  */
-function render_toctree(array $toctree, string $directory, int $depth, array $ancestors): array {
+function render_toctree(array $toctree, string $directory, int $depth, array $ancestors): array
+{
     $lines = [];
 
     foreach ($toctree['entries'] as $entry) {
@@ -129,11 +138,11 @@ function render_toctree(array $toctree, string $directory, int $depth, array $an
         }
 
         foreach (page_toctrees($entry['page']) as $child) {
-            if ($child['hidden'] && ! $toctree['includeHidden']) {
+            if ($child['hidden'] && !$toctree['includeHidden']) {
                 continue;
             }
 
-            $child['maxDepth']      = $toctree['maxDepth'];
+            $child['maxDepth'] = $toctree['maxDepth'];
             $child['includeHidden'] = $toctree['includeHidden'];
 
             array_push($lines, ...render_toctree($child, $directory, $depth + 1, [...$ancestors, $entry['page']]));
@@ -146,8 +155,9 @@ function render_toctree(array $toctree, string $directory, int $depth, array $an
 /**
  * Title of the source page `$page`, in Markdown, or its file name in title case when it has none.
  */
-function page_title(string $page): string {
-    $rst = (string) @file_get_contents(SOURCE_DIR . $page . '.rst');
+function page_title(string $page): string
+{
+    $rst = (string) @file_get_contents(source_dir() . $page . '.rst');
     $punctuation = '[!-\/:-@\[-`{-~]';
 
     if (preg_match(sprintf('/^(?:(%1$s)\1{2,}[ \t]*\r?\n)?(?!%1$s+[ \t]*\r?$)(\S[^\r\n]*?)[ \t]*\r?\n(%1$s)\3{2,}[ \t]*\r?$/m', $punctuation), $rst, $matches) === 1) {
@@ -157,7 +167,8 @@ function page_title(string $page): string {
     return ucwords(str_replace(['_', '-'], ' ', basename($page)));
 }
 
-function normalize_path(string $path): string {
+function normalize_path(string $path): string
+{
     $parts = [];
 
     foreach (explode('/', $path) as $part) {

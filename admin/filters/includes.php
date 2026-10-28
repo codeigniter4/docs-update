@@ -7,7 +7,8 @@ declare(strict_types=1);
  *
  * @return list<array{language: string, lines: list<string>}>
  */
-function &included_samples(): array {
+function &included_samples(): array
+{
     static $samples = [];
 
     return $samples;
@@ -16,10 +17,11 @@ function &included_samples(): array {
 /**
  * Replaces each `literalinclude` and `code-block` with a `CodeBlockPlaceholder<n>` marker line at the directive's indentation.
  */
-function before_filter_includes(string $data, string $folder): string {
+function before_filter_includes(string $data, string $folder): string
+{
     $samples = &included_samples();
-    $lines   = explode("\n", $data);
-    $result  = [];
+    $lines = explode("\n", $data);
+    $result = [];
 
     for ($i = 0; $i < count($lines); $i++) {
         if (preg_match('/^(\s*)(?!\.\.\s)(.*)::\s*$/', $lines[$i], $literal) && literal_block_follows($lines, $i, strlen($literal[1]))) {
@@ -36,7 +38,7 @@ function before_filter_includes(string $data, string $folder): string {
                 $body[] = $lines[++$i];
             }
 
-            $body   = trim_blank_lines($body);
+            $body = trim_blank_lines($body);
             $indent = str_repeat(' ', min(array_map(indent_width(...), array_filter($body, fn (string $line): bool => trim($line) !== ''))));
 
             array_push($result, sprintf('%sCodeBlockPlaceholder%d', $indent, count($samples)), '');
@@ -45,19 +47,19 @@ function before_filter_includes(string $data, string $folder): string {
             continue;
         }
 
-        if (! preg_match('/^(\s*)\.\.\s+(literalinclude|code-block)::\s*(\S*)\s*$/', $lines[$i], $matches)) {
+        if (!preg_match('/^(\s*)\.\.\s+(literalinclude|code-block)::\s*(\S*)\s*$/', $lines[$i], $matches)) {
             $result[] = $lines[$i];
 
             continue;
         }
 
-        $indent    = $matches[1];
+        $indent = $matches[1];
         $directive = [$lines[$i]];
-        $options   = [];
+        $options = [];
 
         while (isset($lines[$i + 1]) && preg_match('/^(\s+):([a-z-]+):\s*(.*)$/', $lines[$i + 1], $option) && strlen($option[1]) > strlen($indent)) {
             $options[$option[2]] = trim($option[3]);
-            $directive[]         = $lines[++$i];
+            $directive[] = $lines[++$i];
         }
 
         if ($matches[2] === 'code-block') {
@@ -73,10 +75,10 @@ function before_filter_includes(string $data, string $folder): string {
             continue;
         }
 
-        $file = str_starts_with($matches[3], '/') ? rtrim(SOURCE_DIR, '/') . $matches[3] : $folder . '/' . $matches[3];
+        $file = str_starts_with($matches[3], '/') ? rtrim(source_dir(), '/') . $matches[3] : $folder . '/' . $matches[3];
 
-        if (! is_file($file)) {
-            write_line(sprintf('Warning: sample %s not found for literalinclude in %s', $matches[3], $folder), STYLE_WARNING, STDERR);
+        if (!is_file($file)) {
+            write_line(sprintf('Warning: sample %s not found for literalinclude in %s', $matches[3], $folder), '33');
             array_push($result, ...$directive);
 
             continue;
@@ -88,7 +90,7 @@ function before_filter_includes(string $data, string $folder): string {
             $sample = select_sample_lines($sample, $options['lines']);
         }
 
-        $result[]  = sprintf('%sCodeBlockPlaceholder%d', $indent, count($samples));
+        $result[] = sprintf('%sCodeBlockPlaceholder%d', $indent, count($samples));
         $samples[] = ['language' => $options['language'] ?? 'php', 'lines' => trim_blank_lines($sample)];
     }
 
@@ -98,7 +100,8 @@ function before_filter_includes(string $data, string $folder): string {
 /**
  * Replaces each `CodeBlockPlaceholder<n>` marker line with its sample as a fenced block, prefixed like the marker.
  */
-function after_filter_includes(string $data, string $folder): ?string {
+function after_filter_includes(string $data, string $folder): ?string
+{
     $samples = &included_samples();
 
     return preg_replace_callback('/^(.*?)CodeBlockPlaceholder(\d+)[ \t]*$/m', function (array $matches) use ($samples): string {
@@ -127,7 +130,8 @@ function after_filter_includes(string $data, string $folder): ?string {
  *
  * @return list<string>
  */
-function select_sample_lines(array $lines, string $spec): array {
+function select_sample_lines(array $lines, string $spec): array
+{
     $selected = [];
 
     foreach (explode(',', $spec) as $part) {
@@ -135,7 +139,7 @@ function select_sample_lines(array $lines, string $spec): array {
 
         if (preg_match('/^(\d*)-(\d*)$/', $part, $matches)) {
             $from = $matches[1] === '' ? 1 : (int) $matches[1];
-            $to   = $matches[2] === '' ? count($lines) : (int) $matches[2];
+            $to = $matches[2] === '' ? count($lines) : (int) $matches[2];
         } else {
             $from = $to = (int) $part;
         }
@@ -148,7 +152,8 @@ function select_sample_lines(array $lines, string $spec): array {
     return $selected;
 }
 
-function indent_width(string $line): int {
+function indent_width(string $line): int
+{
     return strlen($line) - strlen(ltrim($line));
 }
 
@@ -157,7 +162,8 @@ function indent_width(string $line): int {
  *
  * @param list<string> $lines
  */
-function literal_block_follows(array $lines, int $start, int $indent): bool {
+function literal_block_follows(array $lines, int $start, int $indent): bool
+{
     for ($i = $start + 1; $i < count($lines); $i++) {
         if (trim($lines[$i]) !== '') {
             return indent_width($lines[$i]) > $indent;
@@ -172,7 +178,8 @@ function literal_block_follows(array $lines, int $start, int $indent): bool {
  *
  * @return list<string>
  */
-function dedent_lines(array $lines): array {
+function dedent_lines(array $lines): array
+{
     $indents = array_map(indent_width(...), array_filter($lines, fn (string $line): bool => trim($line) !== ''));
     $indent = $indents === [] ? 0 : min($indents);
 
@@ -184,7 +191,8 @@ function dedent_lines(array $lines): array {
  *
  * @return list<string>
  */
-function trim_blank_lines(array $lines): array {
+function trim_blank_lines(array $lines): array
+{
     while ($lines !== [] && trim($lines[0]) === '') {
         array_shift($lines);
     }

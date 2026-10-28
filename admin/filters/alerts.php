@@ -5,7 +5,8 @@ declare(strict_types=1);
 /**
  * Converts GitHub-style `> [!NOTE]` alerts and unwraps the blockquotes left by indented RST text.
  */
-function after_filter_alerts(string $data, string $folder): ?string {
+function after_filter_alerts(string $data, string $folder): ?string
+{
     $result = preg_replace_callback('/> \[!([A-Z]+)]/', function (array $matches): string {
         return '!!! ' . strtolower($matches[1]);
     }, $data);

@@ -2,18 +2,30 @@
 
 declare(strict_types=1);
 
-const ADMONITION_CLASSES = ['attention', 'caution', 'danger', 'error', 'hint', 'important', 'note', 'seealso', 'tip', 'warning'];
+/**
+ * @return list<string>
+ */
+function admonition_classes(): array
+{
+    return ['attention', 'caution', 'danger', 'error', 'hint', 'important', 'note', 'seealso', 'tip', 'warning'];
+}
 
 /**
  * Admonition type and `sprintf()` title for each Sphinx version directive.
+ *
+ * @return array<string, array{string, string}>
  */
-const VERSION_ADMONITIONS = [
-    'versionadded'   => ['success', 'Available from version %s'],
-    'versionchanged' => ['info', 'Changed in version %s'],
-    'deprecated'     => ['danger', 'Deprecated since version %s'],
-];
+function version_admonitions(): array
+{
+    return [
+        'versionadded' => ['success', 'Available from version %s'],
+        'versionchanged' => ['info', 'Changed in version %s'],
+        'deprecated' => ['danger', 'Deprecated since version %s'],
+    ];
+}
 
-function after_filter_admonitions(string $data, string $folder): string {
+function after_filter_admonitions(string $data, string $folder): string
+{
     return implode("\n", convert_admonitions(explode("\n", $data)));
 }
 
@@ -22,7 +34,8 @@ function after_filter_admonitions(string $data, string $folder): string {
  *
  * @return list<string>
  */
-function convert_admonitions(array $lines): array {
+function convert_admonitions(array $lines): array
+{
     $result = [];
 
     for ($i = 0; $i < count($lines); $i++) {
@@ -35,8 +48,8 @@ function convert_admonitions(array $lines): array {
         }
 
         if (
-            ! preg_match('/^(\s*)<div class="([a-z]+)"[^>]*>\s*$/', $lines[$i], $matches)
-            || ! (in_array($matches[2], ADMONITION_CLASSES, true) || isset(VERSION_ADMONITIONS[$matches[2]]))
+            !preg_match('/^(\s*)<div class="([a-z]+)"[^>]*>\s*$/', $lines[$i], $matches)
+            || !(in_array($matches[2], admonition_classes(), true) || isset(version_admonitions()[$matches[2]]))
             || ($end = closing_div_line($lines, $i)) === null
         ) {
             $result[] = $lines[$i];
@@ -45,7 +58,7 @@ function convert_admonitions(array $lines): array {
         }
 
         $indent = $matches[1];
-        $body   = array_map(
+        $body = array_map(
             fn (string $line): string => str_starts_with($line, $indent) ? substr($line, strlen($indent)) : ltrim($line),
             array_slice($lines, $i + 1, $end - $i - 1),
         );
@@ -67,7 +80,8 @@ function convert_admonitions(array $lines): array {
 /**
  * @param list<string> $lines
  */
-function closing_div_line(array $lines, int $start): ?int {
+function closing_div_line(array $lines, int $start): ?int
+{
     $depth = 0;
 
     for ($i = $start; $i < count($lines); $i++) {
@@ -88,11 +102,12 @@ function closing_div_line(array $lines, int $start): ?int {
  *
  * @return array{string, string, list<string>}
  */
-function admonition_header(string $class, array $body): array {
+function admonition_header(string $class, array $body): array
+{
     $first = array_key_first(array_filter($body, fn (string $line): bool => trim($line) !== ''));
 
-    if (isset(VERSION_ADMONITIONS[$class])) {
-        [$type, $title] = VERSION_ADMONITIONS[$class];
+    if (isset(version_admonitions()[$class])) {
+        [$type, $title] = version_admonitions()[$class];
 
         if ($first !== null && preg_match('/^(\d+(?:\.\d+)*)\s*(.*)$/', trim($body[$first]), $matches)) {
             $body[$first] = $matches[2];
@@ -104,7 +119,7 @@ function admonition_header(string $class, array $body): array {
     }
 
     if ($first !== null && preg_match('/^<div class="title">\s*$/', trim($body[$first])) && ($end = closing_div_line($body, $first)) !== null) {
-        $title = trim(implode(' ', array_map(trim(...),array_slice($body, $first + 1, $end - $first - 1))));
+        $title = trim(implode(' ', array_map(trim(...), array_slice($body, $first + 1, $end - $first - 1))));
 
         return [$class, $title, array_values(array_slice($body, $end + 1))];
     }

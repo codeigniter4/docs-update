@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-function before_filter_class_reference(string $data, string $folder): string {
+function before_filter_class_reference(string $data, string $folder): string
+{
     // Sphinx renders static methods, functions and attributes the same way as methods.
     $data = str_replace(
         ['.. php:staticmethod::', '.. php:function::', '..  php:function::', '.. php:attr::', '.. attribute::'],
@@ -15,22 +16,22 @@ function before_filter_class_reference(string $data, string $folder): string {
         $data = remove_indent_level($data, $indent);
     }
 
-    $stringNamespace  = '.. php:namespace::';
-    $stringClass      = '.. php:class::';
-    $stringMethod     = '.. php:method::';
-    $stringParam      = ':param';
-    $stringReturn     = ':returns';
+    $stringNamespace = '.. php:namespace::';
+    $stringClass = '.. php:class::';
+    $stringMethod = '.. php:method::';
+    $stringParam = ':param';
+    $stringReturn = ':returns';
     $stringReturnType = ':rtype';
-    $stringType       = ':type:';
-    $stringThrows     = ':throws';
+    $stringType = ':type:';
+    $stringThrows = ':throws';
 
-    if (! str_contains($data, $stringMethod)) {
+    if (!str_contains($data, $stringMethod)) {
         return $data;
     }
 
     $lines = explode(PHP_EOL, $data);
 
-    $insideBlock   = false;
+    $insideBlock = false;
     $paramsStarted = false;
 
     foreach ($lines as $no => &$line) {
@@ -54,7 +55,7 @@ function before_filter_class_reference(string $data, string $folder): string {
             $line = preg_replace('/^ {1,4}/', '', $line);
 
             if (str_starts_with($line, $stringParam)) {
-                if (! $paramsStarted) {
+                if (!$paramsStarted) {
                     $paramsStarted = true;
                     $lines[$no - 1] = $lines[$no - 1] . PHP_EOL . "* **Parameters**";
                 }
@@ -96,15 +97,16 @@ function before_filter_class_reference(string $data, string $folder): string {
             if (str_starts_with($line, $stringThrows)) {
                 $line = str_replace($stringThrows, '* **Throws**', $line);
             }
-
         }
 
         $next = $no + 1;
 
-        if ($insideBlock
+        if (
+            $insideBlock
             && isset($lines[$next])
             && $lines[$next] !== ''
-            && $lines[$next] === ltrim($lines[$next])) {
+            && $lines[$next] === ltrim($lines[$next])
+        ) {
             $insideBlock = false;
         }
     }
@@ -112,11 +114,13 @@ function before_filter_class_reference(string $data, string $folder): string {
     return implode(PHP_EOL, $lines);
 }
 
-function after_filter_class_reference(string $data, string $folder): string {
+function after_filter_class_reference(string $data, string $folder): string
+{
     return str_replace('\#', '#', $data);
 }
 
-function remove_indent_level(string $data, string $indent): string {
+function remove_indent_level(string $data, string $indent): string
+{
     $lines = explode(PHP_EOL, $data);
 
     $insideBlock = false;
