@@ -41,7 +41,7 @@ function convert_admonitions(array $lines): array
     for ($i = 0; $i < count($lines); $i++) {
         // pandoc wraps a paragraph that follows an RST label in a div carrying the label as its id.
         if (preg_match('/^\s*<div id="[^"]*">\s*$/', $lines[$i]) && ($end = closing_div_line($lines, $i)) !== null) {
-            array_push($result, ...convert_admonitions(array_slice($lines, $i + 1, $end - $i - 1)));
+            array_push($result, ...trim_blank_lines(convert_admonitions(array_slice($lines, $i + 1, $end - $i - 1))));
             $i = $end;
 
             continue;
