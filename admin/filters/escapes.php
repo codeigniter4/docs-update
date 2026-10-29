@@ -25,11 +25,12 @@ function after_filter_escapes(string $data, string $folder): ?string
 }
 
 /**
- * `$text` with pandoc's `\<`, `\&` and `\|` written the way Python-Markdown shows them, and with `**strong**` restored after a quote.
+ * `$text` with pandoc's `\<`, `\&` and `\|` written the way Python-Markdown shows them, its needless `\>`, `\_` and `&lt;` unescaped, and with `**strong**` restored after a quote.
  */
 function escape_prose(string $text, bool $isTableRow): string
 {
     $text = str_replace(['\\<', '\\&'], ['&lt;', '&amp;'], $text);
+    $text = preg_replace(['/(?<=\S)\\\\>/', '/(?<=[\w$])\\\\_/', '/&lt;(?![A-Za-z\/!?])/'], ['>', '_', '<'], $text);
 
     if (!$isTableRow) {
         $text = str_replace('\\|', '|', $text);
