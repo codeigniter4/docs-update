@@ -44,8 +44,8 @@ function before_filter_doc_link(string $data, string $folder, string $path): ?st
 
         // A placeholder, since pandoc escapes raw HTML written into the RST.
         if (preg_match('/^https?:\/\//', $reference)) {
-            // An escaped `@` stops pandoc reading the marker and a `@handle` text as an email address.
-            return sprintf('{{EXTERNAL_LINK_START}}%s{{EXTERNAL_LINK_MIDDLE}}%s{{EXTERNAL_LINK_END}}', $reference, str_replace('@', '\\@', $text));
+            // An escaped `@` stops pandoc reading the marker and a `@handle` text as an email address, and an escaped `_` stops it reading `Name_` in the URL as a reference.
+            return sprintf('{{EXTERNAL_LINK_START}}%s{{EXTERNAL_LINK_MIDDLE}}%s{{EXTERNAL_LINK_END}}', str_replace('_', '\\_', $reference), str_replace('@', '\\@', $text));
         }
 
         if (preg_match('/^(?:(.+)\.html)?#(.+)$/', $reference, $url) === 1) {
