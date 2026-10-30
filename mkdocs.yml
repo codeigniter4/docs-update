@@ -3,6 +3,7 @@ INHERIT: docs/.nav.yml
 
 site_name: CodeIgniter
 site_description: Main user guide for the CodeIgniter 4 framework
+use_directory_urls: false
 
 theme:
   name: material
