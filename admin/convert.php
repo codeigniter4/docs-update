@@ -180,10 +180,7 @@ function clean_dir(string $directory): void
     }
 }
 
-/**
- * @param array<string, string>  $only
- */
-function mirror_directory(string $sourceDir, string $outputDir, array $only = []): void
+function mirror_directory(string $sourceDir, string $outputDir): void
 {
     if (!is_dir($sourceDir)) {
         write_line(sprintf('Source directory does not exist: %s', $sourceDir), '31');
@@ -197,12 +194,8 @@ function mirror_directory(string $sourceDir, string $outputDir, array $only = []
     }
 
     foreach ($files as $file) {
-        if ($only !== [] && !array_key_exists($file, $only)) {
-            continue;
-        }
-
         $sourcePath = $sourceDir . DIRECTORY_SEPARATOR . $file;
-        $outputPath = $outputDir . DIRECTORY_SEPARATOR . ($only[$file] ?? $file);
+        $outputPath = $outputDir . DIRECTORY_SEPARATOR . $file;
 
         if (is_dir($sourcePath)) {
             mirror_directory($sourcePath, $outputPath);
@@ -439,17 +432,6 @@ function convert_whole_docs(string $sourceDir, string $outputDir): int
 
     write_line(sprintf('Copying images from %simages/ to %simages/', $sourceDir, $outputDir), '32');
     mirror_directory($sourceDir . 'images', $outputDir . 'images');
-
-    write_line(sprintf('Copying static files from %s_static/ to %sassets/', $sourceDir, $outputDir), '32');
-    mirror_directory($sourceDir . '_static', $outputDir . 'assets', [
-        'ci-logo-text.svg' => 'flame.svg',
-        'favicon.ico' => 'favicon.ico'
-    ]);
-
-    $cssDir = dirname(__DIR__) . '/admin/assets';
-
-    write_line(sprintf('Copying CSS files from %s to %sassets/css', $cssDir, $outputDir), '32');
-    mirror_directory($cssDir, $outputDir . 'assets/css');
 
     write_line(sprintf('Loading filters from %s/admin/filters/', dirname(__DIR__)), '32');
     $filters = load_filters();

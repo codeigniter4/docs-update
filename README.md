@@ -70,7 +70,7 @@ php ./admin/convert.php
 ```
 
 > [!NOTE]
-> This first deletes everything in the `./docs` directory, then copies the images and theme assets back in.
+> This first deletes everything in the `./docs` directory, then copies the images back in. The theme's assets live in `./overrides`.
 
 It also writes the MkDocs nav to `docs/.nav.yml`, built from the toctrees, which `mkdocs.yml` inherits.
 It exits non-zero when pandoc fails on any page.
