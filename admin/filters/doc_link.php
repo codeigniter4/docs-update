@@ -266,7 +266,12 @@ function after_filter_doc_link(string $data, string $folder): ?string
     $data = preg_replace('/:ref:`([^`]+)`_?/', '[$1]', $data);
     $data = preg_replace('/:doc:`([^`]+)`_?/', '[$1]', $data);
 
-    $data = preg_replace('/(?<!`)`([^`\n]+)`_/', '[$1]', $data);
+    // Whole code spans are consumed so a closing backtick cannot open a reference before a "_".
+    $data = preg_replace_callback('/(`+)([^\n]+?)(?<!`)\1(?!`)(_?)/', function (array $matches): string {
+        return $matches[1] === '`' && $matches[3] === '_'
+            ? sprintf('[%s]', $matches[2])
+            : $matches[0];
+    }, $data);
 
     $data = preg_replace('/{{EXTERNAL_LINK_START}}([^{]+){{EXTERNAL_LINK_MIDDLE}}([^{]+){{EXTERNAL_LINK_END}}/', '[$2]($1)', $data);
 
