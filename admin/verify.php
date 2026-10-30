@@ -491,6 +491,7 @@ function check_leftovers(array &$checks, array $markdown, string $outputFile): v
         'leftover-a' => '/<a\s/i',
         'leftover-directives' => '/^\s*\.\.\s+[A-Za-z][\w:-]*::/',
         'leftover-roles' => '/:(doc|ref|php:[a-z]+):/',
+        'leftover-empty-links' => '/\]\(\)/',
     ];
 
     foreach ($markdown['lines'] as $no => $line) {
@@ -564,7 +565,7 @@ function main(): void
     $sourceRoot = rtrim(realpath($options['source']), '/');
     $outputRoot = rtrim(realpath($options['output']), '/');
 
-    $names = ['pages', 'signatures', 'samples', 'admonitions', 'notes-samples', 'leftover-snippets', 'leftover-table', 'leftover-div', 'leftover-span', 'leftover-a', 'leftover-directives', 'leftover-roles'];
+    $names = ['pages', 'signatures', 'samples', 'admonitions', 'notes-samples', 'leftover-snippets', 'leftover-table', 'leftover-div', 'leftover-span', 'leftover-a', 'leftover-directives', 'leftover-roles', 'leftover-empty-links'];
     $checks = array_fill_keys($names, new_check());
 
     foreach (source_pages($sourceRoot) as $page) {
