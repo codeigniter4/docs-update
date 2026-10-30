@@ -83,6 +83,42 @@
     font-size: .6rem;
 }
 
+/* The version list opens on click, not on the theme's hover or focus. */
+.md-version:hover .md-version__list,
+.md-version:focus-within .md-version__list {
+    animation: none;
+    max-height: 0;
+    opacity: 0;
+}
+
+.md-version {
+    position: relative;
+}
+
+/* Lets the title shrink on narrow screens instead of pushing the header's buttons off screen. */
+.md-header__title {
+    min-width: 0;
+}
+
+.md-version__current {
+    line-height: 2.4rem;
+    margin: 0 .4rem;
+    white-space: nowrap;
+}
+
+.md-version__list {
+    margin: 0;
+    right: 0;
+    top: 2.2rem;
+    visibility: hidden;
+}
+
+.md-version.md-version--open .md-version__list {
+    max-height: 10rem;
+    opacity: 1;
+    visibility: visible;
+}
+
 /* A transparent border keeps images the same size in the scheme without a visible one. */
 .md-typeset img {
     border: 1px solid transparent;

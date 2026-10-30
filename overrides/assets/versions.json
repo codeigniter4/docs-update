@@ -1,0 +1,5 @@
+[
+    {"title": "Stable (v4.7.5)", "url": "https://codeigniter.com/user_guide/"},
+    {"title": "Latest (develop)", "url": "https://codeigniter4.github.io/CodeIgniter4/develop/"},
+    {"title": "Next minor (4.8)", "url": "https://codeigniter4.github.io/CodeIgniter4/4.8/"}
+]

@@ -3,6 +3,8 @@ INHERIT: docs/.nav.yml
 
 site_name: CodeIgniter
 site_description: Main user guide for the CodeIgniter 4 framework
+# Set per deployment, since instant navigation and the sitemap need the site's own URL.
+site_url: !ENV SITE_URL
 use_directory_urls: false
 
 theme:
@@ -97,3 +99,4 @@ extra_css:
 extra_javascript:
   - assets/js/shortcuts.js
   - assets/js/code.js
+  - assets/js/versions.js
