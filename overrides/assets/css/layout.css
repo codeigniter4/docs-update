@@ -96,7 +96,12 @@
 }
 
 .md-version {
+    font-size: .7rem;
     position: relative;
+}
+
+.md-version__item {
+    line-height: 1.5rem;
 }
 
 /* Lets the title shrink on narrow screens instead of pushing the header's buttons off screen. */
