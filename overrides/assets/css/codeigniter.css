@@ -16,7 +16,6 @@
         color: #1a202c;
         border-bottom: 2px solid #dd4814;
         padding-bottom: 0.3em;
-        margin-top: 1.5em;
     }
 
     .md-typeset h2 {
@@ -24,19 +23,16 @@
         color: #2d3748;
         border-bottom: 1px solid #cbd5e0;
         padding-bottom: 0.2em;
-        margin-top: 1.2em;
     }
 
     .md-typeset h3 {
         font-weight: 600;
         color: #1a202c;
-        margin-top: 1em;
     }
 
     .md-typeset h4 {
         font-weight: 600;
         color: #2d3748;
-        margin-top: 0.8em;
     }
 
     .md-typeset h5 {
@@ -44,14 +40,12 @@
         font-weight: 600;
         font-size: 1em;
         color: #1a202c;
-        margin-top: 0.8em;
     }
 
     .md-typeset h6 {
         font-weight: 600;
         font-size: 1em;
         color: #2d3748;
-        margin-top: 0.6em;
     }
 
     /* Inline code styling - orange color like links */
@@ -126,30 +120,23 @@
 
     /* Image styling for better visibility in light mode */
     .md-typeset img {
-        border: 1px solid #d1d4d8;
-        border-radius: 6px;
+        border-color: #d1d4d8;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-        max-width: 100%;
-        height: auto;
-        margin: 0.5rem 0;
     }
 
-    /* Remove border for inline images or icons */
+    /* Remove the shadow from inline images or icons */
     .md-typeset p img[src*="icon"],
     .md-typeset p img[width="16"],
     .md-typeset p img[width="24"],
     .md-typeset p img[height="16"],
     .md-typeset p img[height="24"] {
-        border: none;
         box-shadow: none;
-        margin: 0;
-        border-radius: 0;
     }
 
     /* Table of Contents list styling */
     .md-typeset ul li {
-        margin-bottom: 0.25em; /* Reduce vertical spacing between list items */
-        margin-top: 0.25em;
+        margin-bottom: 0; /* Reduce vertical spacing between list items */
+        margin-top: 0;
     }
 
     /* Nested list bullet styles */
@@ -167,8 +154,8 @@
 
     /* Additional spacing adjustments for nested lists */
     .md-typeset ul ul {
-        margin-top: 0.25em;
-        margin-bottom: 0.25em;
+        margin-top: 0;
+        margin-bottom: 0;
     }
 
     /* Navigation adjustments for better spacing in dark mode */

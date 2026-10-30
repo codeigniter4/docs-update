@@ -82,3 +82,22 @@
 .md-footer__direction {
     font-size: .6rem;
 }
+
+/* A transparent border keeps images the same size in the scheme without a visible one. */
+.md-typeset img {
+    border: 1px solid transparent;
+    border-radius: 6px;
+    height: auto;
+    margin: .5rem 0;
+    max-width: 100%;
+}
+
+.md-typeset p img[src*="icon"],
+.md-typeset p img[width="16"],
+.md-typeset p img[width="24"],
+.md-typeset p img[height="16"],
+.md-typeset p img[height="24"] {
+    border: none;
+    border-radius: 0;
+    margin: 0;
+}
