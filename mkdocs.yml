@@ -9,6 +9,7 @@ theme:
   custom_dir: overrides
   logo: assets/flame.svg
   favicon: assets/favicon.ico
+  font: false
   icon:
     repo: fontawesome/brands/github
   palette:
@@ -83,6 +84,7 @@ markdown_extensions:
   - tables
 
 extra_css:
+  - assets/css/fonts.css
   - assets/css/codeigniter.css
   - assets/css/codeigniter_dark_mode.css
   - assets/css/layout.css
