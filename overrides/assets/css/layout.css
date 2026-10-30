@@ -43,11 +43,11 @@
 
 /* Wider content column */
 .md-grid {
-    max-width: 68rem;
+    max-width: 71.4rem;
 }
 
 .md-sidebar--secondary {
-    width: 9.6rem;
+    width: 13rem;
 }
 
 /* Translucent header */
@@ -81,6 +81,10 @@
 
 .md-footer__direction {
     font-size: .6rem;
+}
+
+.md-sidebar--secondary .md-nav .md-nav .md-nav__list {
+    padding-left: .6rem !important;
 }
 
 /* The version list opens on click, not on the theme's hover or focus. */
