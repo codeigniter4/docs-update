@@ -100,3 +100,4 @@ extra_javascript:
   - assets/js/shortcuts.js
   - assets/js/code.js
   - assets/js/versions.js
+  - assets/js/sidebar.js
