@@ -116,7 +116,12 @@ function before_filter_class_reference(string $data, string $folder): string
 
 function after_filter_class_reference(string $data, string $folder): string
 {
-    return str_replace('\#', '#', $data);
+    $data = str_replace('\#', '#', $data);
+
+    // Python-Markdown reads "#1361" in list text as a heading even without a space.
+    return preg_replace_callback('/^(\h*(?:[-+*]|\d+[.)])\h+)(#+)(?=[^\s#])/m', function (array $matches): string {
+        return $matches[1] . '\\' . $matches[2];
+    }, $data);
 }
 
 function remove_indent_level(string $data, string $indent): string
