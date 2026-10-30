@@ -68,6 +68,9 @@ copyright: Copyright &copy; 2019-{year} CodeIgniter Foundation.
 validation:
   anchors: warn
 
+watch:
+  - overrides
+
 markdown_extensions:
   - admonition
   - pymdownx.superfences
