@@ -1,3 +1,9 @@
+/* The theme turns ligatures off in code. */
+.md-typeset code,
+.md-typeset pre {
+    font-variant-ligatures: normal;
+}
+
 /* Pygments marks most PHP identifiers Name.Other, which the theme leaves at body color. */
 .highlight .nx {
     color: var(--md-code-hl-function-color);
