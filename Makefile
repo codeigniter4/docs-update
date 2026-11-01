@@ -13,7 +13,7 @@ help:
 	@echo 'make convert               Convert the user guide into ./docs'
 	@echo 'make convert PAGE=<page>   Convert one page, such as models/model'
 	@echo 'make verify                Compare ./docs with the RST source'
-	@echo 'make build                 Build the site into ./site, failing on warnings'
+	@echo 'make build                 Build the site and its llms files into ./site, failing on warnings'
 	@echo 'make serve                 Preview the site at http://127.0.0.1:8000'
 
 install: $(MKDOCS)
@@ -31,6 +31,7 @@ verify:
 
 build: $(MKDOCS)
 	$(MKDOCS) build --strict
+	$(VENV)/bin/python admin/llms.py
 
 serve: $(MKDOCS)
 	$(MKDOCS) serve

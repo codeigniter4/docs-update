@@ -72,11 +72,7 @@ validation:
   anchors: warn
 
 watch:
-  - hooks
   - overrides
-
-hooks:
-  - hooks/llms.py
 
 markdown_extensions:
   - admonition
