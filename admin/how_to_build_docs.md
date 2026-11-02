@@ -5,7 +5,7 @@ See https://squidfunk.github.io/mkdocs-material/getting-started/.
 
 ## Requirements
 
-- Python 3
+- Python 3.11 or newer
 - pip
 
 ## Installation

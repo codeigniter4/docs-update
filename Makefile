@@ -1,4 +1,4 @@
-PYTHON ?= python3
+PYTHON ?= $(shell for p in python3.14 python3.13 python3.12 python3.11 python3; do command -v $$p && break; done)
 VENV   := venv
 MKDOCS := $(VENV)/bin/mkdocs
 
@@ -19,7 +19,8 @@ help:
 install: $(MKDOCS)
 
 $(MKDOCS): requirements.txt
-	$(PYTHON) -m venv $(VENV)
+	$(PYTHON) -c 'import sys; sys.exit(None if sys.version_info >= (3, 11) else "mkdocs-material needs Python 3.11 or newer. Run make install PYTHON=python3.12.")'
+	$(PYTHON) -m venv --clear $(VENV)
 	$(VENV)/bin/pip install --quiet -r requirements.txt
 	touch $@
 
