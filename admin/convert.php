@@ -55,6 +55,7 @@ function load_filters(): array
         'doc_link',
         'class_reference',
         'list_indentation',
+        'underscores',
     ];
     $afterFilters = [
         'images',
