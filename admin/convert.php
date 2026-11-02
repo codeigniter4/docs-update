@@ -491,7 +491,7 @@ function main(): void
         exit(1);
     }
 
-    if (!check_pandoc('3.12.1')) {
+    if (!check_pandoc('3.13')) {
         exit(1);
     }
 

@@ -58,7 +58,7 @@ jobs:
 
       - name: Install pandoc
         env:
-          PANDOC_VERSION: 3.12.1
+          PANDOC_VERSION: 3.13
         run: |
           curl -fsSL -o pandoc.deb "https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-1-amd64.deb"
           sudo dpkg -i pandoc.deb

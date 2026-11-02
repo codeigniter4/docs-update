@@ -38,8 +38,8 @@ of the documentation revisited for consistency, clarity, and ease of understandi
 ## Requirements
 
 - PHP 8.1 or newer, with the intl extension.
-- pandoc 3.12.1. The converter warns when another version is installed.
-  To install it, see <https://github.com/jgm/pandoc/releases/tag/3.12.1>.
+- pandoc 3.13. The converter warns when another version is installed.
+  To install it, see <https://github.com/jgm/pandoc/releases/tag/3.13>.
 - Python 3.11 or newer, to build the site.
 - `make`, optionally, for the shortcuts below.
 
