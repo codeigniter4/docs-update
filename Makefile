@@ -6,7 +6,7 @@ MKDOCS := $(VENV)/bin/mkdocs
 DOCS_PROJECT_PATH ?= $(shell sed -n 's/^DOCS_PROJECT_PATH=//p' .env 2>/dev/null)
 export DOCS_PROJECT_PATH
 
-.PHONY: help install convert verify build serve
+.PHONY: help install convert verify build serve watch
 
 help:
 	@echo 'make install               Install MkDocs into ./$(VENV)'
@@ -15,6 +15,7 @@ help:
 	@echo 'make verify                Compare ./docs with the RST source'
 	@echo 'make build                 Build the site and its llms files into ./site, failing on warnings'
 	@echo 'make serve                 Preview the site at http://127.0.0.1:8000'
+	@echo 'make watch                 Preview the site, reconverting the RST source as it changes'
 
 install: $(MKDOCS)
 
@@ -36,3 +37,6 @@ build: $(MKDOCS)
 
 serve: $(MKDOCS)
 	$(MKDOCS) serve
+
+watch: $(MKDOCS)
+	php admin/watch.php & watcher=$$!; trap 'kill $$watcher' EXIT INT TERM; $(MKDOCS) serve
