@@ -384,6 +384,26 @@ function write_nav(string $outputDir): void
 }
 
 /**
+ * Writes the anchor aliases recorded by the `anchor_aliases` filter to `.anchors.json` in `$outputDir`, keeping the entries of pages not converted in this run.
+ */
+function write_anchors(string $outputDir): void
+{
+    $file = $outputDir . '.anchors.json';
+    $anchors = is_file($file) ? json_decode((string) file_get_contents($file), true, 512, JSON_THROW_ON_ERROR) : [];
+
+    foreach (anchor_alias_store() as $page => $aliases) {
+        unset($anchors[$page]);
+
+        if ($aliases !== []) {
+            $anchors[$page] = $aliases;
+        }
+    }
+
+    ksort($anchors);
+    file_put_contents($file, json_encode($anchors, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR) . "\n");
+}
+
+/**
  * Nav lines for `$entry`, as a section holding the page and its toctree entries when it has any, skipping pages already in `$seen`.
  *
  * @param array{title: ?string, page: string} $entry
@@ -449,6 +469,9 @@ function convert_whole_docs(string $sourceDir, string $outputDir): int
     write_line(sprintf('Writing the MkDocs nav to %s.nav.yml', $outputDir), '32');
     write_nav($outputDir);
 
+    write_line(sprintf('Writing the anchor aliases to %s.anchors.json', $outputDir), '32');
+    write_anchors($outputDir);
+
     write_line('Conversion completed successfully.', '32');
 
     return 0;
@@ -472,6 +495,8 @@ function convert_single_doc(string $page, string $sourceDir, string $outputDir):
     if (apply_conversion([['source' => (string) realpath($sourcePath), 'output' => $outputDir . $page . '.md']], load_filters()) > 0) {
         return 1;
     }
+
+    write_anchors($outputDir);
 
     write_line('Conversion completed successfully.', '32');
 

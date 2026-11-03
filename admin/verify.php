@@ -337,7 +337,7 @@ function parse_markdown(string $path): array
         $result['prose'][$no + 1] = $line;
 
         if (preg_match('/^#{1,6}\s+(.+?)\s*$/', $line, $matches)) {
-            $result['headings'][] = ['line' => $no + 1, 'text' => normalise_signature(html_entity_decode(preg_replace('/<a id="[^"]*"><\/a>/', '', $matches[1]), ENT_QUOTES | ENT_HTML5))];
+            $result['headings'][] = ['line' => $no + 1, 'text' => normalise_signature(html_entity_decode($matches[1], ENT_QUOTES | ENT_HTML5))];
         }
 
         if (preg_match('/^(\s*)!!!\s+\w+(.*)$/', $line, $matches)) {
@@ -488,7 +488,7 @@ function check_leftovers(array &$checks, array $markdown, string $outputFile): v
         'leftover-div' => '/<div\b/i',
         'leftover-table' => '/<table\b/i',
         'leftover-span' => '/<span\b/i',
-        'leftover-a' => '/<a\s(?!id="[^"]*"><\/a>)/i',
+        'leftover-a' => '/<a\s/i',
         'leftover-directives' => '/^\s*\.\.\s+[A-Za-z][\w:-]*::/',
         'leftover-roles' => '/:(doc|ref|php:[a-z]+):/',
         'leftover-empty-links' => '/\]\(\)/',

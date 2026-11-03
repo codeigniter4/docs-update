@@ -3,26 +3,22 @@
 declare(strict_types=1);
 
 /**
- * Appends the ids that Sphinx gave each heading, so that links to the old anchors still land.
+ * Records the ids that Sphinx gave each heading, so that links to the old anchors can still land.
  */
 function after_filter_anchor_aliases(string $data, string $folder, string $path): ?string
 {
+    $page = substr($path, strlen(dirname(__DIR__, 2) . '/docs/'));
     $queues = [];
 
-    $page = substr($path, strlen(dirname(__DIR__, 2) . '/docs/'), -strlen('.md'));
-
-    foreach (alias_entries($page) as $entry) {
+    foreach (alias_entries(substr($page, 0, -strlen('.md'))) as $entry) {
         $queues[$entry['slug']][] = $entry['ids'];
     }
 
-    if ($queues === []) {
-        return $data;
-    }
-
+    $aliases = [];
+    $used = [];
     $fence = null;
-    $lines = explode("\n", $data);
 
-    foreach ($lines as $i => $line) {
+    foreach (explode("\n", $data) as $line) {
         if (preg_match('/^\s*(```+|~~~+)/', $line, $matches) === 1) {
             $fence = $fence === null ? $matches[1][0] : ($matches[1][0] === $fence ? null : $fence);
 
@@ -33,14 +29,32 @@ function after_filter_anchor_aliases(string $data, string $folder, string $path)
             continue;
         }
 
-        $slug = heading_slug(html_entity_decode(preg_replace('/\[([^\]]*)\]\([^)]*\)/', '$1', $matches[1]), ENT_QUOTES | ENT_HTML5));
+        $text = html_entity_decode(preg_replace('/\[([^\]]*)\]\([^)]*\)/', '$1', $matches[1]), ENT_QUOTES | ENT_HTML5);
+        $slug = heading_slug($text);
+        $ids = isset($queues[$slug]) ? array_shift($queues[$slug]) : [];
+        $id = unique_anchor(markdown_slug($text), $used);
 
-        foreach (isset($queues[$slug]) ? array_shift($queues[$slug]) : [] as $id) {
-            $lines[$i] .= sprintf('<a id="%s"></a>', $id);
+        if ($ids !== []) {
+            $aliases[$id] = $ids;
         }
     }
 
-    return implode("\n", $lines);
+    $store = &anchor_alias_store();
+    $store[$page] = $aliases;
+
+    return $data;
+}
+
+/**
+ * The aliases recorded by the filter, as a list of heading ids by page, shared by reference.
+ *
+ * @return array<string, array<string, list<string>>>
+ */
+function &anchor_alias_store(): array
+{
+    static $store = [];
+
+    return $store;
 }
 
 /**
