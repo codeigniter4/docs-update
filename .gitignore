@@ -9,6 +9,7 @@ composer.lock
 .vscode/
 site/
 venv/
+__pycache__/
 .envrc
 .autoenv
 .env

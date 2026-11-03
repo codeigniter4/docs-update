@@ -34,6 +34,7 @@ verify:
 build: $(MKDOCS)
 	$(MKDOCS) build --strict
 	$(VENV)/bin/python admin/llms.py
+	$(VENV)/bin/python admin/anchors.py
 
 serve: $(MKDOCS)
 	$(MKDOCS) serve

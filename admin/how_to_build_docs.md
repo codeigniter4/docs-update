@@ -30,6 +30,8 @@ This runs `mkdocs build --strict`, which fails on a broken link or a nav entry w
 It then runs `admin/llms.py`, which writes `llms.txt`, `llms-full.txt` and a Markdown copy of
 each page beside its HTML in `site/`.
 The script reads only the nav and the Markdown, so it does not depend on MkDocs.
+Finally it runs `admin/anchors.py`, which adds the ids listed in `docs/.anchors.json` to the headings in `site/`, so that links to the anchors of the old Sphinx guide still land.
+It warns when a listed heading no longer exists.
 
 ## See the Docs
 
@@ -44,6 +46,7 @@ python3 -m venv venv
 venv/bin/pip install -r requirements.txt
 venv/bin/mkdocs build --strict
 venv/bin/python admin/llms.py
+venv/bin/python admin/anchors.py
 venv/bin/mkdocs serve
 ```
 
