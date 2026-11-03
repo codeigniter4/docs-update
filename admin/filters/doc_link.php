@@ -16,7 +16,7 @@ function before_filter_doc_link(string $data, string $folder, string $path): ?st
 
         return sprintf(
             '[%s](%s#%s)',
-            isset($matches[2]) ? $matches[1] : $target['title'],
+            str_replace('::', '\\::', isset($matches[2]) ? $matches[1] : $target['title']),
             $target['page'] === $page ? '' : relative_link($directory, $target['page']),
             $target['anchor'],
         );
@@ -68,9 +68,10 @@ function before_filter_doc_link(string $data, string $folder, string $path): ?st
     }, $data);
 
     return preg_replace_callback('/:doc:`(.*?)`/', function (array $matches) use ($directory): string {
-        $text = ucwords(str_replace('_', ' ', basename($matches[1])));
+        $target = ltrim(str_starts_with($matches[1], '/') ? normalize_path($matches[1]) : normalize_path($directory . '/' . $matches[1]), '/');
+        $text = rst_anchors()['titles'][$target] ?? ucwords(str_replace('_', ' ', basename($matches[1])));
 
-        return sprintf('[%s](%s)', $text, doc_target($matches[1], $directory));
+        return sprintf('[%s](%s)', str_replace('::', '\\::', $text), doc_target($matches[1], $directory));
     }, $data);
 }
 
@@ -87,9 +88,9 @@ function doc_target(string $target, string $directory): string
 }
 
 /**
- * MkDocs heading anchors in the source, for each `.. _label:` by its lowercased label, and for each section title by page and reference name.
+ * MkDocs heading anchors in the source, for each `.. _label:` by its lowercased label, and for each section title by page and reference name, plus each page's first title.
  *
- * @return array{labels: array<string, array{page: string, title: string, anchor: string}>, sections: array<string, array<string, string>>}
+ * @return array{labels: array<string, array{page: string, title: string, anchor: string}>, sections: array<string, array<string, string>>, titles: array<string, string>}
  */
 function rst_anchors(): array
 {
@@ -99,7 +100,7 @@ function rst_anchors(): array
         return $targets;
     }
 
-    $targets = ['labels' => [], 'sections' => []];
+    $targets = ['labels' => [], 'sections' => [], 'titles' => []];
 
     foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator(source_dir(), FilesystemIterator::SKIP_DOTS)) as $file) {
         if ($file->getExtension() !== 'rst') {
@@ -118,6 +119,7 @@ function rst_anchors(): array
                 $text = preg_replace(['/:[\w:.+-]+:(?=`)/', '/\s*<[^`<>]*>(?=`)/'], '', $line);
                 $anchor = unique_anchor(markdown_slug($text), $anchors);
 
+                $targets['titles'][$page] ??= trim($line);
                 $targets['sections'][$page][reference_name(str_replace(['`', '*', '\\'], '', $text))] ??= $anchor;
 
                 foreach ($labels as $label) {
