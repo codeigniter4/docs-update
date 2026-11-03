@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Escapes the underscore that starts a path segment and the `::` between two words, which pandoc 3.13 reads as an RST inline target and as a link.
+ * Escapes the underscore that starts a name or path segment and the `::` between two words, which pandoc 3.13 reads as an RST inline target and as a link.
  */
 function before_filter_underscores(string $data, string $folder): ?string
 {
@@ -28,12 +28,16 @@ function before_filter_underscores(string $data, string $folder): ?string
 
 function escape_inline_targets(string $line): string
 {
+    if (preg_match('/^\s*\.\. _/', $line) === 1) {
+        return $line;
+    }
+
     return preg_replace_callback('/(`[^`]+`|``.+?``)|[^\s`]+/', function (array $matches): string {
         if (isset($matches[1]) || str_contains($matches[0], '://') || str_contains($matches[0], '](')) {
             return $matches[0];
         }
 
-        return preg_replace(['#(?<=/)_(?=\w)#', '/(?<=\w)::(?=\w)/'], ['\\\\_', '\\\\::'], $matches[0]);
+        return preg_replace(['/(?<![\w\\\\$])_(?=[A-Za-z])/', '/(?<=\w)::(?=\w)/'], ['\\\\_', '\\\\::'], $matches[0]);
     }, $line);
 }
 
