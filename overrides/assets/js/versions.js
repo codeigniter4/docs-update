@@ -2,7 +2,47 @@ const root = new URL(JSON.parse(document.querySelector('#__config').textContent)
 const isLocal = ['localhost', '127.0.0.1', ''].includes(location.hostname);
 const versionsUrl = isLocal ? new URL('assets/versions.json', root) : 'https://codeigniter4.github.io/CodeIgniter4/versions.json';
 
-const samePageIn = (version) => version.url + location.pathname.slice(new URL(root).pathname.length) + location.hash;
+const releaseUrl = 'https://api.github.com/repos/codeigniter4/CodeIgniter4/releases/latest';
+const releaseKey = 'version.latest';
+
+const latestTag = async () => {
+    try {
+        const cached = sessionStorage.getItem(releaseKey);
+
+        if (cached !== null) {
+            return cached;
+        }
+    } catch {}
+
+    const response = await fetch(releaseUrl);
+
+    if (!response.ok) {
+        throw new Error(response.status);
+    }
+
+    const { tag_name: tag } = await response.json();
+
+    try {
+        sessionStorage.setItem(releaseKey, tag);
+    } catch {}
+
+    return tag;
+};
+
+const withLatestTag = async (versions) => {
+    if (!versions.some((version) => version.title.includes('{tag}'))) {
+        return versions;
+    }
+
+    const tag = await latestTag().catch(() => null);
+
+    return versions.map((version) => ({
+        ...version,
+        title: tag === null ? version.title.replace(' ({tag})', '') : version.title.replace('{tag}', tag),
+    }));
+};
+
+const samePageIn =(version) => version.url + location.pathname.slice(new URL(root).pathname.length) + location.hash;
 
 const goTo = async (version) => {
     const target = samePageIn(version);
@@ -84,5 +124,6 @@ const renderVersions = (deployed) => {
 
 fetch(versionsUrl)
     .then((response) => (response.ok ? response.json() : Promise.reject(response.status)))
+    .then(withLatestTag)
     .then(renderVersions)
     .catch(() => {});
