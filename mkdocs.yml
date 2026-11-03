@@ -65,8 +65,7 @@ extra:
 repo_name: codeigniter4/CodeIgniter4
 repo_url: https://github.com/codeigniter4/CodeIgniter4
 edit_uri: edit/develop/docs/
-# overrides/partials/copyright.html replaces {year} with the build year.
-copyright: Copyright &copy; 2019-{year} CodeIgniter Foundation.
+copyright: Copyright &copy; 2019-<span data-current-year>2026</span> CodeIgniter Foundation.
 
 validation:
   anchors: warn
@@ -101,3 +100,4 @@ extra_javascript:
   - assets/js/code.js
   - assets/js/versions.js
   - assets/js/sidebar.js
+  - assets/js/year.js
