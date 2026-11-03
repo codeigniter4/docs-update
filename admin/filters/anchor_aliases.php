@@ -83,7 +83,7 @@ function alias_entries(string $page): array
                 $entries[] = alias_entry(heading_slug($name), [$class]);
             } else {
                 $owner = $class !== '' && !in_array($kind, ['function', 'const'], true) ? $class . '::' : $prefix;
-                $entries[] = alias_entry(heading_slug($kind === 'const' ? $name : $signature), [$owner . $name]);
+                $entries[] = alias_entry(heading_slug($kind === 'const' ? $name : $signature), [$owner . ($kind === 'attr' ? '$' : '') . $name]);
             }
         }
     }
