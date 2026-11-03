@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 function before_filter_class_reference(string $data, string $folder): string
 {
-    // Sphinx renders static methods, functions and attributes the same way as methods.
+    // Sphinx renders static methods, functions, constants and attributes the same way as methods, and interfaces and traits the same way as classes.
     $data = str_replace(
-        ['.. php:staticmethod::', '.. php:function::', '..  php:function::', '.. php:attr::', '.. attribute::'],
+        ['.. php:staticmethod::', '.. php:function::', '..  php:function::', '.. php:attr::', '.. attribute::', '.. php:const::'],
         '.. php:method::',
         $data,
     );
+    $data = str_replace(['.. php:interface::', '.. php:trait::'], '.. php:class::', $data);
 
     $indent = '    .. php:method::';
     if (str_contains($data, $indent)) {
@@ -44,7 +45,7 @@ function before_filter_class_reference(string $data, string $folder): string
         }
 
         if (str_starts_with($line, $stringClass)) {
-            $line = str_replace($stringClass, '###', $line);
+            $line = str_replace([$stringClass, '\\'], ['###', '\\\\'], $line);
         }
 
         if (str_starts_with($line, $stringMethod)) {

@@ -25,7 +25,7 @@ all before filters on every page, then pandoc on every page, then all after filt
 | --- | --- | --- |
 | `includes` | Replaces each `literalinclude`, `code-block` and `::` literal block with a `CodeBlockPlaceholder<n>` line | Runs last, and replaces each placeholder with its code as a fenced block |
 | `doc_link` | Converts `:doc:`, `:ref:` and `:php:*:` roles, external links and `\|version\|` | Unescapes the link syntax and converts `title-ref` and label spans |
-| `class_reference` | Converts `php:namespace`, `php:class`, `php:method`, `php:function`, `php:attr` and their fields into headings and lists | Unescapes `\#` |
+| `class_reference` | Converts `php:namespace`, `php:class`, `php:interface`, `php:trait`, `php:method`, `php:function`, `php:attr`, `php:const` and their fields into headings and lists | Unescapes `\#` |
 | `list_indentation` | Adds the blank line that pandoc needs between a directive and a list that starts its body | Re-indents nested lists by four spaces per level and adds the blank line that Python-Markdown needs before a list |
 | `underscores` | Escapes the underscore that starts a path segment, such as `tests/_support`, which pandoc 3.13 reads as an inline target | |
 | `images` | | Converts image tags to Markdown |
