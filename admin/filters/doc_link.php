@@ -116,7 +116,7 @@ function rst_anchors(): array
             if (preg_match('/^\s*\.\. _([^:`]+):\s*$/', $line, $matches) === 1) {
                 $labels[] = strtolower($matches[1]);
             } elseif (is_rst_heading($lines, $i)) {
-                $text = preg_replace(['/:[\w:.+-]+:(?=`)/', '/\s*<[^`<>]*>(?=`)/'], '', $line);
+                $text = rst_heading_text($line);
                 $anchor = unique_anchor(markdown_slug($text), $anchors);
 
                 $targets['titles'][$page] ??= trim($line);
@@ -132,6 +132,14 @@ function rst_anchors(): array
     }
 
     return $targets;
+}
+
+/**
+ * The RST section title `$line` without its role names and link targets.
+ */
+function rst_heading_text(string $line): string
+{
+    return preg_replace(['/:[\w:.+-]+:(?=`)/', '/\s*<[^`<>]*>(?=`)/'], '', $line);
 }
 
 /**

@@ -70,6 +70,7 @@ function load_filters(): array
         'doc_link',
         'admonitions',
         'includes',
+        'anchor_aliases',
     ];
 
     foreach (array_unique(array_merge($beforeFilters, $afterFilters)) as $filter) {

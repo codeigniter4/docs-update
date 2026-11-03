@@ -23,7 +23,8 @@ all before filters on every page, then pandoc on every page, then all after filt
 
 | Filter | Before | After |
 | --- | --- | --- |
-| `includes` | Replaces each `literalinclude`, `code-block` and `::` literal block with a `CodeBlockPlaceholder<n>` line | Runs last, and replaces each placeholder with its code as a fenced block |
+| `includes` | Replaces each `literalinclude`, `code-block` and `::` literal block with a `CodeBlockPlaceholder<n>` line | Replaces each placeholder with its code as a fenced block |
+| `anchor_aliases` | | Runs last, and appends an empty `<a id>` to each heading for the ids that Sphinx gave it: its RST labels, its docutils id and its PHP object id, so that links to the old anchors still land |
 | `doc_link` | Converts `:doc:`, `:ref:` and `:php:*:` roles, external links and `\|version\|` | Unescapes the link syntax and converts `title-ref` and label spans |
 | `class_reference` | Converts `php:namespace`, `php:class`, `php:interface`, `php:trait`, `php:method`, `php:function`, `php:attr`, `php:const` and their fields into headings and lists | Unescapes `\#` |
 | `list_indentation` | Adds the blank line that pandoc needs between a directive and a list that starts its body | Re-indents nested lists by four spaces per level and adds the blank line that Python-Markdown needs before a list |
