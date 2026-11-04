@@ -5,8 +5,6 @@ on:
     branches:
       - develop
   pull_request:
-  schedule:
-    - cron: '0 3 * * *'
   workflow_dispatch:
 
 concurrency:
@@ -18,16 +16,18 @@ permissions:
 
 jobs:
   verify:
-    name: Convert and verify (CI4 ${{ matrix.ci4-ref }})
+    name: Convert and verify (CI4 ${{ matrix.name }})
     runs-on: ubuntu-24.04
     timeout-minutes: 15
 
     strategy:
       fail-fast: false
       matrix:
-        ci4-ref:
-          - develop
-          - '4.8'
+        include:
+          - name: develop
+            ci4-ref: rst-user-guide/develop
+          - name: '4.8'
+            ci4-ref: rst-user-guide/4.8
 
     steps:
       - name: Checkout
@@ -79,7 +79,7 @@ jobs:
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: docs-${{ matrix.ci4-ref }}
+          name: docs-${{ matrix.name }}
           path: docs/
           include-hidden-files: true
           retention-days: 7
